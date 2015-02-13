@@ -31,8 +31,8 @@ public class SleddingSmash extends ApplicationAdapter {
         modelBatch = new ModelBatch();
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(0f, 10f, 30f);
-        cam.lookAt(0, 0, 0);
+        cam.position.set(0f, 10f, 10f);
+        cam.lookAt(0, 0, -20);
         cam.near = 1f;
         cam.far = 300f;
         cam.update();
@@ -41,11 +41,11 @@ public class SleddingSmash extends ApplicationAdapter {
         Gdx.input.setInputProcessor(camController);
 
         ModelBuilder modelBuilder = new ModelBuilder();
-//        model = modelBuilder.createRect(10, 0, 0, 10, 0, -30, -10, 0, -30, -10, 0, 0, 0, 0, -1, new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-//                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-
-        model = LevelBuilder.generate(150, 30);
+        float width = 40.0f;
+        float length = 250.0f;
+        model = LevelBuilder.generate(width, length);
         instance = new ModelInstance(model);
+        instance.transform.setToTranslation(-width * 0.5f, 0, 0);
     }
 
     @Override

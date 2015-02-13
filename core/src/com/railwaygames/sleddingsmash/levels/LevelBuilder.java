@@ -11,12 +11,9 @@ import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 
-/**
- * Created by mpietal on 2/3/15.
- */
 public class LevelBuilder {
 
-    public static Model generate(float l, float w) {
+    public static Model generate(float w, float l) {
         Model model = new Model();
 
         // Assume we are going to split our plane into chunks this size
