@@ -2,6 +2,7 @@ package com.railwaygames.sleddingsmash;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -54,6 +55,8 @@ public class SleddingSmash extends ApplicationAdapter {
     public Array<GameObject> instances;
     public CameraInputController camController;
 
+    GameObject sphere;
+
     btCollisionConfiguration collisionConfig;
     btDispatcher dispatcher;
     MyContactListener contactListener;
@@ -93,11 +96,12 @@ public class SleddingSmash extends ApplicationAdapter {
 
         constructors.put("sphere", new GameObject.Constructor(model, new btSphereShape(0.5f), 1f));
 
-        GameObject object = constructors.get("sphere").construct();
-        object.transform.setToTranslation(9f, 9f, -9f);
-        object.getBody().setWorldTransform(object.transform);
-        instances.add(object);
-        dynamicsWorld.addRigidBody(object.getBody());
+        sphere = constructors.get("sphere").construct();
+        sphere.transform.setToTranslation(9f, 9f, -9f);
+        sphere.getBody().setWorldTransform(sphere.transform);
+
+        instances.add(sphere);
+        dynamicsWorld.addRigidBody(sphere.getBody());
 
     }
 
@@ -131,7 +135,7 @@ public class SleddingSmash extends ApplicationAdapter {
         broadphase = new btDbvtBroadphase();
         constraintSolver = new btSequentialImpulseConstraintSolver();
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
-        dynamicsWorld.setGravity(new Vector3(0, -10f, 1f));
+        dynamicsWorld.setGravity(new Vector3(0, -10f, 0));
         contactListener = new MyContactListener();
     }
 
@@ -146,8 +150,17 @@ public class SleddingSmash extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)){
+            sphere.getBody().applyCentralForce(new Vector3(-9f,0,0));
+        }else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)){
+            sphere.getBody().applyCentralForce(new Vector3(9f,0,0));
+        }
+
+
         for (GameObject obj : instances)
             obj.getBody().getWorldTransform(obj.transform);
+
+
 
 
         camController.update();
