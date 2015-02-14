@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
+import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
+
+import java.util.HashMap;
 
 public class SleddingSmash extends ApplicationAdapter {
     public Environment lights;
@@ -26,7 +29,7 @@ public class SleddingSmash extends ApplicationAdapter {
     public void create() {
         lights = new Environment();
         lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, 0.8f, -0.2f));
+        lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         modelBatch = new ModelBatch();
 
@@ -41,9 +44,17 @@ public class SleddingSmash extends ApplicationAdapter {
         Gdx.input.setInputProcessor(camController);
 
         ModelBuilder modelBuilder = new ModelBuilder();
-        float width = 40.0f;
-        float length = 250.0f;
+        float width = 30.0f;
+        float length = 500.0f;
         model = LevelBuilder.generate(width, length);
+
+        SlopeModifier slopeModifier = new SlopeModifier();
+        slopeModifier.modify(model, new HashMap<String, Object>());
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.6f);
+            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
+        }});
+
         instance = new ModelInstance(model);
         instance.transform.setToTranslation(-width * 0.5f, 0, 0);
     }
@@ -56,7 +67,7 @@ public class SleddingSmash extends ApplicationAdapter {
         camController.update();
 
         modelBatch.begin(cam);
-        modelBatch.render(instance);
+        modelBatch.render(instance, lights);
         modelBatch.end();
     }
 
