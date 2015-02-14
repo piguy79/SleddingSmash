@@ -34,7 +34,7 @@ public class GameObject extends ModelInstance implements Disposable {
         public final btRigidBody.btRigidBodyConstructionInfo constructionInfo;
         private static Vector3 localInertia = new Vector3();
 
-        public Constructor (Model model, btCollisionShape shape, float mass) {
+        public Constructor(Model model, btCollisionShape shape, float mass) {
             this.model = model;
             this.shape = shape;
             if (mass > 0f)
@@ -44,12 +44,12 @@ public class GameObject extends ModelInstance implements Disposable {
             this.constructionInfo = new btRigidBody.btRigidBodyConstructionInfo(mass, null, shape, localInertia);
         }
 
-        public GameObject construct () {
+        public GameObject construct() {
             return new GameObject(model, constructionInfo);
         }
 
         @Override
-        public void dispose () {
+        public void dispose() {
             shape.dispose();
             constructionInfo.dispose();
         }

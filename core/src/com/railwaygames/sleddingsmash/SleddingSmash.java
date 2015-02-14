@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
@@ -101,10 +102,18 @@ public class SleddingSmash extends ApplicationAdapter {
         model = LevelBuilder.generate(width, length);
 
         SlopeModifier slopeModifier = new SlopeModifier();
-        slopeModifier.modify(model, new HashMap<String, Object>());
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.00f);
+            put(SlopeModifier.IMPACT_AMOUNT, -50.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
+            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
+        }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.6f);
-            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, -10.0f);
         }});
 
 
