@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
@@ -98,24 +97,25 @@ public class SleddingSmash extends ApplicationAdapter {
 
     private void createPlane() {
         ModelBuilder modelBuilder = new ModelBuilder();
-        float width = 30.0f;
-        float length = 500.0f;
+        float width = 60.0f;
+        float length = 750.0f;
         model = LevelBuilder.generate(width, length);
 
         SlopeModifier slopeModifier = new SlopeModifier();
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.00f);
-            put(SlopeModifier.IMPACT_AMOUNT, -50.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, -350.0f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.7f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
-            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, 30.0f);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, -20.0f);
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.5f);
+            put(SlopeModifier.IMPACT_AMOUNT, -120.0f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
@@ -141,7 +141,7 @@ public class SleddingSmash extends ApplicationAdapter {
         cam.position.set(0f, 10f, 10f);
         cam.lookAt(0, 0, -20);
         cam.near = 1f;
-        cam.far = 500f;
+        cam.far = 1500f;
         cam.update();
 
         camController = new CameraInputController(cam);
@@ -173,12 +173,9 @@ public class SleddingSmash extends ApplicationAdapter {
             sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
         }
 
-
         for (GameObject obj : instances) {
             obj.getBody().getWorldTransform(obj.transform);
         }
-
-
 
         camController.camera.position.set(sphere.getPosition().x, sphere.getPosition().y + 10f, sphere.getPosition().z + 10f);
         camController.camera.update();
