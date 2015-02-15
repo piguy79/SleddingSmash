@@ -88,7 +88,7 @@ public class SleddingSmash extends ApplicationAdapter {
         constructors.put("sphere", new GameObject.Constructor(model, new btSphereShape(0.5f), 1f));
 
         sphere = constructors.get("sphere").construct();
-        sphere.transform.setToTranslation(9f, 9f, -9f);
+        sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
 
         instances.add(sphere);
@@ -112,14 +112,25 @@ public class SleddingSmash extends ApplicationAdapter {
             put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.6f);
-            put(SlopeModifier.IMPACT_AMOUNT, -10.0f);
+            put(SlopeModifier.IMPACT_AXIS, "x");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
+            put(SlopeModifier.IMPACT_AMOUNT, -20.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
-
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.EVAL_AXIS, "x");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.0f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 1.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, -10.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
 
         constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
         GameObject plane = constructors.get("plane").construct();
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
+        plane.getBody().setWorldTransform(plane.transform);
+
         instances.add(plane);
         dynamicsWorld.addRigidBody(plane.getBody());
     }
@@ -129,7 +140,7 @@ public class SleddingSmash extends ApplicationAdapter {
         cam.position.set(0f, 10f, 10f);
         cam.lookAt(0, 0, -20);
         cam.near = 1f;
-        cam.far = 300f;
+        cam.far = 500f;
         cam.update();
 
         camController = new CameraInputController(cam);
