@@ -3,9 +3,11 @@ package com.railwaygames.sleddingsmash.entity;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Disposable;
+
 
 /**
  * Created by conormullen on 2/13/15.
@@ -17,6 +19,12 @@ public class GameObject extends ModelInstance implements Disposable {
     public GameObject(Model model, btRigidBody.btRigidBodyConstructionInfo constructionInfo) {
         super(model);
         body = new btRigidBody(constructionInfo);
+    }
+
+    public Vector3 getPosition() {
+        Vector3 output = new Vector3();
+        transform.getTranslation(output);
+        return output;
     }
 
     public btRigidBody getBody() {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
@@ -166,6 +167,10 @@ public class SleddingSmash extends ApplicationAdapter {
             obj.getBody().getWorldTransform(obj.transform);
         }
 
+
+
+        camController.camera.position.set(sphere.getPosition().x, sphere.getPosition().y + 10f, sphere.getPosition().z + 10f);
+        camController.camera.update();
         camController.update();
 
         modelBatch.begin(cam);
