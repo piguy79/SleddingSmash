@@ -63,7 +63,7 @@ public class SleddingSmash extends ApplicationAdapter {
         instances = new Array<GameObject>();
 
         lights = new Environment();
-        lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         constructors = new ArrayMap<String, GameObject.Constructor>(String.class, GameObject.Constructor.class);
@@ -121,11 +121,13 @@ public class SleddingSmash extends ApplicationAdapter {
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS, "x");
             put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 1.0f);
-            put(SlopeModifier.IMPACT_AMOUNT, -10.0f);
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.5f);
+            put(SlopeModifier.IMPACT_AMOUNT, -20.0f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
+
+        LevelBuilder.calculateNormals(model);
 
         constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
         GameObject plane = constructors.get("plane").construct();

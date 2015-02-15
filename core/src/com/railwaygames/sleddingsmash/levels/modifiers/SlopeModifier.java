@@ -59,7 +59,7 @@ public class SlopeModifier implements TerrainModifier {
 
         Mesh mesh = model.meshes.get(0);
 
-        float[] vertices = new float[mesh.getNumVertices() * 3];
+        float[] vertices = new float[mesh.getNumVertices() * 3 * 2];
         mesh.getVertices(vertices);
 
         // divide by 4 b/c size is in bytes

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.math.Vector3;
 
 public class LevelBuilder {
 
@@ -25,7 +26,7 @@ public class LevelBuilder {
         int widthCount = (int) (w / chunkSize);
         w = (int) (chunkSize * widthCount);
 
-        int vertexCount = (lengthCount + 1) * (widthCount + 1) * 3;
+        int vertexCount = (lengthCount + 1) * (widthCount + 1) * 3 * 2;
         float[] vertices = new float[vertexCount];
 
         int count = 0;
@@ -34,6 +35,11 @@ public class LevelBuilder {
                 vertices[count++] = x;
                 vertices[count++] = 0.0f;
                 vertices[count++] = z;
+
+                // skip normals until all terrain modifiers have been run
+                count++;
+                count++;
+                count++;
             }
         }
 
@@ -58,7 +64,7 @@ public class LevelBuilder {
             }
         }
 
-        Mesh mesh = new Mesh(false, vertexCount, indexCount, VertexAttribute.Position());
+        Mesh mesh = new Mesh(false, vertexCount, indexCount, VertexAttribute.Position(), VertexAttribute.Normal());
         mesh.setVertices(vertices);
         mesh.setIndices(indices);
 
@@ -76,5 +82,59 @@ public class LevelBuilder {
         model.nodes.add(node);
 
         return model;
+    }
+
+    /**
+     * Given the current model with vertices and indices, will calculate the normals for each
+     *
+     * @param model
+     */
+    public static void calculateNormals(Model model) {
+        for (Mesh mesh : model.meshes) {
+            int numIndices = mesh.getNumIndices();
+            int numVertices = mesh.getNumVertices() * 3 * 2;
+
+            int vertexSize = mesh.getVertexSize() / 4;
+
+            float[] vertices = new float[numVertices];
+            mesh.getVertices(vertices);
+
+            short[] indices = new short[numIndices];
+            mesh.getIndices(indices);
+
+            Vector3 one = new Vector3();
+            Vector3 two = new Vector3();
+            Vector3 twoCopy = new Vector3();
+            Vector3 three = new Vector3();
+            for (int i = 0; i < numIndices; i += 3) {
+                int vertexOffset = indices[i] * vertexSize;
+                one.set(vertices[vertexOffset], vertices[vertexOffset + 1], vertices[vertexOffset + 2]);
+
+                vertexOffset = indices[i + 1] * vertexSize;
+                two.set(vertices[vertexOffset], vertices[vertexOffset + 1], vertices[vertexOffset + 2]);
+
+                vertexOffset = indices[i + 2] * vertexSize;
+                three.set(vertices[vertexOffset], vertices[vertexOffset + 1], vertices[vertexOffset + 2]);
+
+                one.sub(two).crs(twoCopy.set(two).sub(three)).nor();
+
+                vertexOffset = indices[i] * vertexSize + 3;
+                vertices[vertexOffset] = one.x;
+                vertices[vertexOffset + 1] = one.y;
+                vertices[vertexOffset + 2] = one.z;
+
+                vertexOffset = indices[i + 1] * vertexSize + 3;
+                vertices[vertexOffset] = one.x;
+                vertices[vertexOffset + 1] = one.y;
+                vertices[vertexOffset + 2] = one.z;
+
+                vertexOffset = indices[i + 2] * vertexSize + 3;
+                vertices[vertexOffset] = one.x;
+                vertices[vertexOffset + 1] = one.y;
+                vertices[vertexOffset + 2] = one.z;
+            }
+
+            mesh.setVertices(vertices);
+        }
     }
 }
