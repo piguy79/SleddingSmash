@@ -128,6 +128,10 @@ public class SlopeModifier implements TerrainModifier {
     private AxisEvaluator createAxisEvaluator(String evalAxis, String impactAxis, Interpolation interpolation, float impactAmount) {
         if (evalAxis.equals("z") && impactAxis.equals("y")) {
             return new ZYAxisEvaluator(interpolation, impactAmount);
+        } else if (evalAxis.equals("z") && impactAxis.equals("x")) {
+            return new ZXAxisEvaluator(interpolation, impactAmount);
+        } else if (evalAxis.equals("x") && impactAxis.equals("y")) {
+            return new XYAxisEvaluator(interpolation, impactAmount);
         }
 
         throw new RuntimeException("Class not defined for evalAxis '" + evalAxis + "' and impactAxis '" + impactAxis + "'");
@@ -182,6 +186,41 @@ public class SlopeModifier implements TerrainModifier {
         @Override
         public void setEvaluatedValue(float newVal, Vector3 vec) {
             vec.y = vec.y + getImpactAmount() * newVal;
+        }
+    }
+
+    public class XYAxisEvaluator extends AxisEvaluator {
+
+        public XYAxisEvaluator(Interpolation interpolation, float impactAmount) {
+            super(interpolation, impactAmount);
+        }
+
+        @Override
+        public float getValueToEvaluate(float x, float y, float z) {
+            return x;
+        }
+
+        @Override
+        public void setEvaluatedValue(float newVal, Vector3 vec) {
+            vec.y = vec.y + getImpactAmount() * newVal;
+        }
+    }
+
+    public class ZXAxisEvaluator extends AxisEvaluator {
+
+        public ZXAxisEvaluator(Interpolation interpolation, float impactAmount) {
+            super(interpolation, impactAmount);
+        }
+
+        @Override
+        public float getValueToEvaluate(float x, float y, float z) {
+            // z axis goes in negative direction
+            return Math.abs(z);
+        }
+
+        @Override
+        public void setEvaluatedValue(float newVal, Vector3 vec) {
+            vec.x = vec.x + getImpactAmount() * newVal;
         }
     }
 }
