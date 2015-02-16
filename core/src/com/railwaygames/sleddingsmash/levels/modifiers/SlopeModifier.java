@@ -92,18 +92,18 @@ public class SlopeModifier implements TerrainModifier {
         mesh.setVertices(vertices);
     }
 
-    private float calculateAxisLength(String evalAxis, float [] vertices, float newVertexOffset) {
+    private float calculateAxisLength(String evalAxis, float[] vertices, float newVertexOffset) {
         float min = Integer.MAX_VALUE;
         float max = Integer.MIN_VALUE;
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
             float val;
-            if(evalAxis.equals("x")) {
+            if (evalAxis.equals("x")) {
                 val = vertices[i];
-            } else if(evalAxis.equals("y")) {
-                val = vertices[i+1];
+            } else if (evalAxis.equals("y")) {
+                val = vertices[i + 1];
             } else {
-                val = vertices[i+2];
+                val = vertices[i + 2];
             }
 
             min = Math.min(val, min);
@@ -114,13 +114,13 @@ public class SlopeModifier implements TerrainModifier {
     }
 
     private void checkValidAxis(Map<String, Object> params) {
-        String val = (String)params.get(EVAL_AXIS);
-        if(!(val.equals("x") || val.equals("y") || val.equals("z"))) {
+        String val = (String) params.get(EVAL_AXIS);
+        if (!(val.equals("x") || val.equals("y") || val.equals("z"))) {
             throw new IllegalArgumentException("EVAL_AXIS must be x, y, or z");
         }
 
-        val = (String)params.get(IMPACT_AXIS);
-        if(!(val.equals("x") || val.equals("y") || val.equals("z"))) {
+        val = (String) params.get(IMPACT_AXIS);
+        if (!(val.equals("x") || val.equals("y") || val.equals("z"))) {
             throw new IllegalArgumentException("IMPACT_AXIS must be x, y, or z");
         }
     }
