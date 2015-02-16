@@ -104,13 +104,13 @@ public class SleddingSmash extends ApplicationAdapter {
         SlopeModifier slopeModifier = new SlopeModifier();
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.00f);
-            put(SlopeModifier.IMPACT_AMOUNT, -350.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, 225.0f);
             put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.7f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
-            put(SlopeModifier.IMPACT_AMOUNT, 30.0f);
+            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
         }});
         slopeModifier.modify(model, new HashMap<String, Object>() {{
             put(SlopeModifier.IMPACT_AXIS, "x");
@@ -124,6 +124,14 @@ public class SleddingSmash extends ApplicationAdapter {
             put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
             put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.5f);
             put(SlopeModifier.IMPACT_AMOUNT, -20.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.EVAL_AXIS, "x");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.9f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.5f);
+            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
 
