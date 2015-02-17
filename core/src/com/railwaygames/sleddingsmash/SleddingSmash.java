@@ -1,6 +1,7 @@
 package com.railwaygames.sleddingsmash;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -10,14 +11,17 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
@@ -32,6 +36,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
@@ -73,8 +78,32 @@ public class SleddingSmash extends ApplicationAdapter {
 
         createPlane();
         createBall();
+        createTree();
 
         setupCamera();
+    }
+
+    private void createTree(){
+        // Model loader needs a binary json reader to decode
+        UBJsonReader jsonReader = new UBJsonReader();
+        // Create a model loader passing in our json reader
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal));
+        // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
+        ModelInstance modelInstance = new ModelInstance(model);
+
+        constructors.put("tree", new GameObject.Constructor(model, new btBoxShape(new Vector3(2f, 2f, 2f)), 0));
+        GameObject obj = constructors.get("tree").construct();
+
+        obj.transform.rotate(1, 0, 0, -90);
+        obj.transform.setToTranslation(10f, -39f, -40f);
+        obj.getBody().setWorldTransform(obj.transform);
+
+        instances.add(obj);
+        dynamicsWorld.addRigidBody(obj.getBody());
+
     }
 
     private void createBall() {
@@ -88,6 +117,7 @@ public class SleddingSmash extends ApplicationAdapter {
         constructors.put("sphere", new GameObject.Constructor(model, new btSphereShape(0.5f), 1f));
 
         sphere = constructors.get("sphere").construct();
+        sphere.getBody().setFriction(100f);
         sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
 
@@ -192,6 +222,10 @@ public class SleddingSmash extends ApplicationAdapter {
             sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
         } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
             sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
+            sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
+            sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
         }
 
         for (GameObject obj : instances) {
