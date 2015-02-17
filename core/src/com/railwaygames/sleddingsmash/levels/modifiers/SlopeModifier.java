@@ -45,8 +45,6 @@ public class SlopeModifier implements TerrainModifier {
     public static final String EVAL_AXIS_INTERPOLATION_DURATION = "evalAxisInterpolationDuration";
 
     private Map<String, Object> defaultParams = new HashMap<String, Object>() {{
-        put(EVAL_AXIS, "z");
-        put(IMPACT_AXIS, "y");
         put(INTERPOLATION, Interpolation.pow2);
         put(IMPACT_AMOUNT, -30.0f);
         put(EVAL_AXIS_START_RATIO, 0.1f);
