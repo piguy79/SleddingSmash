@@ -117,6 +117,7 @@ public class SleddingSmash extends ApplicationAdapter {
         constructors.put("sphere", new GameObject.Constructor(model, new btSphereShape(0.5f), 1f));
 
         sphere = constructors.get("sphere").construct();
+        sphere.getBody().setFriction(100f);
         sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
 
@@ -220,6 +221,10 @@ public class SleddingSmash extends ApplicationAdapter {
             sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
         } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
             sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
+            sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
+            sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
         }
 
         for (GameObject obj : instances) {
