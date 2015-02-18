@@ -1,5 +1,6 @@
 package com.railwaygames.sleddingsmash;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
@@ -226,15 +227,8 @@ public class SleddingSmash extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-            sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-            sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
-            sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
-            sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
-        }
+        applyForce();
+
 
         for (GameObject obj : instances) {
             obj.getBody().getWorldTransform(obj.transform);
@@ -248,6 +242,24 @@ public class SleddingSmash extends ApplicationAdapter {
         modelBatch.render(instances, lights);
         modelBatch.end();
     }
+
+    private void applyForce() {
+        // TODO possibly scale based on Linear velocity of the object.
+        if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
+            sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2, 0, 0));
+        }else{
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
+                sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
+                sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
+            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
+                sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
+            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
+                sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
+            }
+        }
+    }
+
 
     @Override
     public void dispose() {
