@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.railwaygames.sleddingsmash.utils.MapUtils;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
+import com.railwaygames.sleddingsmash.utils.MathUtils.MinMax;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SlopeModifier implements TerrainModifier {
@@ -51,8 +51,6 @@ public class SlopeModifier implements TerrainModifier {
         put(EVAL_AXIS_INTERPOLATION_DURATION, 0.25f);
     }};
 
-    private List<Float> evalReturn = new ArrayList<Float>(2);
-
     @Override
     public void modify(Model model, Map<String, Object> params) {
         MapUtils.addDefaults(params, defaultParams);
@@ -61,34 +59,29 @@ public class SlopeModifier implements TerrainModifier {
 
         Mesh mesh = model.meshes.get(0);
 
-        float[] vertices = new float[mesh.getNumVertices() * 3 * 2];
-        mesh.getVertices(vertices);
-
         // divide by 4 b/c size is in bytes
         int newVertexOffset = mesh.getVertexSize() / 4;
 
+        float[] vertices = new float[mesh.getNumVertices() * newVertexOffset];
+        mesh.getVertices(vertices);
+
         String evalAxis = (String) params.get(EVAL_AXIS);
         String impactAxis = (String) params.get(IMPACT_AXIS);
-        Interpolation interpolation = (Interpolation) params.get(INTERPOLATION);
-        float impactAmount = (Float) params.get(IMPACT_AMOUNT);
 
         // invert for Z-axis, since it's backwards
         if (evalAxis.equals("z")) {
             params.put(EVAL_AXIS_START_RATIO, 1.0f - ((Float) params.get(EVAL_AXIS_START_RATIO)));
         }
 
-        AxisEvaluator pointEvaluator = createAxisEvaluator(evalAxis, impactAxis, interpolation, impactAmount);
-
-        calculateAxisLength(evalReturn, evalAxis, vertices, newVertexOffset);
-        float offset = evalReturn.get(0) + ((Float) params.get(EVAL_AXIS_START_RATIO)) * evalReturn.get(1);
-        float duration = ((Float) params.get(EVAL_AXIS_INTERPOLATION_DURATION)) * evalReturn.get(1);
+        Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
+        AxisEvaluator pointEvaluator = createAxisEvaluator(evalAxis, impactAxis, params, minMaxMap);
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
             float x = vertices[i];
             float y = vertices[i + 1];
             float z = vertices[i + 2];
 
-            Vector3 modifiedPoint = pointEvaluator.evaluate(x, y, z, offset, duration);
+            Vector3 modifiedPoint = pointEvaluator.evaluate(x, y, z);
             if (modifiedPoint != null) {
                 vertices[i] = modifiedPoint.x;
                 vertices[i + 1] = modifiedPoint.y;
@@ -97,29 +90,6 @@ public class SlopeModifier implements TerrainModifier {
         }
 
         mesh.setVertices(vertices);
-    }
-
-    private void calculateAxisLength(List<Float> returnFloat, String evalAxis, float[] vertices, float newVertexOffset) {
-        float min = Integer.MAX_VALUE;
-        float max = Integer.MIN_VALUE;
-
-        for (int i = 0; i < vertices.length; i += newVertexOffset) {
-            float val;
-            if (evalAxis.equals("x")) {
-                val = vertices[i];
-            } else if (evalAxis.equals("y")) {
-                val = vertices[i + 1];
-            } else {
-                val = vertices[i + 2];
-            }
-
-            min = Math.min(val, min);
-            max = Math.max(val, max);
-        }
-
-        returnFloat.clear();
-        returnFloat.add(min);
-        returnFloat.add(max - min);
     }
 
     private void checkValidAxis(Map<String, Object> params) {
@@ -134,13 +104,13 @@ public class SlopeModifier implements TerrainModifier {
         }
     }
 
-    private AxisEvaluator createAxisEvaluator(String evalAxis, String impactAxis, Interpolation interpolation, float impactAmount) {
+    private AxisEvaluator createAxisEvaluator(String evalAxis, String impactAxis, Map<String, Object> params, Map<String, MinMax> minMaxMap) {
         if (evalAxis.equals("z") && impactAxis.equals("y")) {
-            return new ZYAxisEvaluator(interpolation, impactAmount);
+            return new ZYTranslatingAxisEvaluator(params, minMaxMap);
         } else if (evalAxis.equals("z") && impactAxis.equals("x")) {
-            return new ZXAxisEvaluator(interpolation, impactAmount);
+            return new ZXTranslatingAxisEvaluator(params, minMaxMap);
         } else if (evalAxis.equals("x") && impactAxis.equals("y")) {
-            return new XYAxisEvaluator(interpolation, impactAmount);
+            return new XYTranslatingAxisEvaluator(params, minMaxMap);
         }
 
         throw new RuntimeException("Class not defined for evalAxis '" + evalAxis + "' and impactAxis '" + impactAxis + "'");
@@ -151,19 +121,28 @@ public class SlopeModifier implements TerrainModifier {
         private Vector3 tmpVec = new Vector3();
         private Interpolation interpolation;
         private float impactAmount;
+        private Map<String, MinMax> minMaxMap;
+        private float evalAxisStartRatio;
+        private float evalAxisInterpolationDuration;
 
-        public AxisEvaluator(Interpolation interpolation, float impactAmount) {
-            this.interpolation = interpolation;
-            this.impactAmount = impactAmount;
+        public AxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+            this.interpolation = (Interpolation) params.get(INTERPOLATION);
+            this.impactAmount = (Float) params.get(IMPACT_AMOUNT);
+            this.evalAxisStartRatio = ((Float) params.get(EVAL_AXIS_START_RATIO));
+            this.evalAxisInterpolationDuration = ((Float) params.get(EVAL_AXIS_INTERPOLATION_DURATION));
+            this.minMaxMap = minMaxMap;
         }
 
-        public Vector3 evaluate(float x, float y, float z, float start, float duration) {
+        public Vector3 evaluate(float x, float y, float z) {
             float val = getValueToEvaluate(x, y, z);
-            if ((getEvalAxis().equals("z") && val <= start) || ((!getEvalAxis().equals("z") && val >= start))) {
+            float length = getAxisMinMax().max - getAxisMinMax().min;
+            float start = getAxisMinMax().min + evalAxisStartRatio * length;
+            if ((invert() && val <= start) || ((!invert() && val >= start))) {
                 tmpVec.set(x, y, z);
 
-                float newVal = interpolation.apply((val - start) / duration);
-                setEvaluatedValue(Math.max(-1.0f, Math.min(1.0f, newVal)), tmpVec);
+                float duration = length * evalAxisInterpolationDuration;
+                float ratio = interpolation.apply((val - start) / duration);
+                setEvaluatedValue(Math.max(-1.0f, Math.min(1.0f, ratio)), tmpVec);
 
                 return tmpVec;
             }
@@ -171,21 +150,29 @@ public class SlopeModifier implements TerrainModifier {
             return null;
         }
 
+        protected boolean invert() {
+            return false;
+        }
+
         public abstract float getValueToEvaluate(float x, float y, float z);
 
         public abstract void setEvaluatedValue(float newVal, Vector3 vec);
 
-        public abstract String getEvalAxis();
+        public abstract MinMax getAxisMinMax();
 
         public float getImpactAmount() {
             return impactAmount;
         }
+
+        public Map<String, MinMax> getMinMaxMap() {
+            return minMaxMap;
+        }
     }
 
-    public class ZYAxisEvaluator extends AxisEvaluator {
+    public class ZXScalingAxisEvaluator extends AxisEvaluator {
 
-        public ZYAxisEvaluator(Interpolation interpolation, float impactAmount) {
-            super(interpolation, impactAmount);
+        public ZXScalingAxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+            super(params, minMaxMap);
         }
 
         @Override
@@ -194,20 +181,52 @@ public class SlopeModifier implements TerrainModifier {
         }
 
         @Override
-        public void setEvaluatedValue(float newVal, Vector3 vec) {
-            vec.y = vec.y + getImpactAmount() * newVal;
+        public void setEvaluatedValue(float ratio, Vector3 vec) {
+            vec.x = (vec.x - getMinMaxMap().get("x").mid) * getImpactAmount() * ratio;
         }
 
         @Override
-        public String getEvalAxis() {
-            return "z";
+        public boolean invert() {
+            return true;
+        }
+
+        @Override
+        public MinMax getAxisMinMax() {
+            return getMinMaxMap().get("z");
         }
     }
 
-    public class XYAxisEvaluator extends AxisEvaluator {
+    public class ZYTranslatingAxisEvaluator extends AxisEvaluator {
 
-        public XYAxisEvaluator(Interpolation interpolation, float impactAmount) {
-            super(interpolation, impactAmount);
+        public ZYTranslatingAxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+            super(params, minMaxMap);
+        }
+
+        @Override
+        public float getValueToEvaluate(float x, float y, float z) {
+            return z;
+        }
+
+        @Override
+        public void setEvaluatedValue(float ratio, Vector3 vec) {
+            vec.y += getImpactAmount() * ratio;
+        }
+
+        @Override
+        public boolean invert() {
+            return true;
+        }
+
+        @Override
+        public MinMax getAxisMinMax() {
+            return getMinMaxMap().get("z");
+        }
+    }
+
+    public class XYTranslatingAxisEvaluator extends AxisEvaluator {
+
+        public XYTranslatingAxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+            super(params, minMaxMap);
         }
 
         @Override
@@ -216,20 +235,20 @@ public class SlopeModifier implements TerrainModifier {
         }
 
         @Override
-        public void setEvaluatedValue(float newVal, Vector3 vec) {
-            vec.y = vec.y + getImpactAmount() * newVal;
+        public void setEvaluatedValue(float ratio, Vector3 vec) {
+            vec.y += getImpactAmount() * ratio;
         }
 
         @Override
-        public String getEvalAxis() {
-            return "x";
+        public MinMax getAxisMinMax() {
+            return getMinMaxMap().get("x");
         }
     }
 
-    public class ZXAxisEvaluator extends AxisEvaluator {
+    public class ZXTranslatingAxisEvaluator extends AxisEvaluator {
 
-        public ZXAxisEvaluator(Interpolation interpolation, float impactAmount) {
-            super(interpolation, impactAmount);
+        public ZXTranslatingAxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+            super(params, minMaxMap);
         }
 
         @Override
@@ -238,13 +257,18 @@ public class SlopeModifier implements TerrainModifier {
         }
 
         @Override
-        public void setEvaluatedValue(float newVal, Vector3 vec) {
-            vec.x = vec.x + getImpactAmount() * newVal;
+        public void setEvaluatedValue(float ratio, Vector3 vec) {
+            vec.x += getImpactAmount() * ratio;
         }
 
         @Override
-        public String getEvalAxis() {
-            return "z";
+        public boolean invert() {
+            return true;
+        }
+
+        @Override
+        public MinMax getAxisMinMax() {
+            return getMinMaxMap().get("z");
         }
     }
 }
