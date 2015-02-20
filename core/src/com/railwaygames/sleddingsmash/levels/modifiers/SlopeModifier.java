@@ -13,6 +13,11 @@ import java.util.Map;
 
 public class SlopeModifier implements TerrainModifier {
     /**
+     * Modify type: s (scale), t (transform)
+     */
+    public static final String MODIFICATION_TYPE = "modificationType";
+
+    /**
      * Axis to evaluation for changes: x, y, z
      */
     public static final String EVAL_AXIS = "evalAxis";
@@ -55,6 +60,11 @@ public class SlopeModifier implements TerrainModifier {
     public void modify(Model model, Map<String, Object> params) {
         MapUtils.addDefaults(params, defaultParams);
 
+        String modificationType = (String) params.get(MODIFICATION_TYPE);
+        if (modificationType == null || !(modificationType.equals("s") || modificationType.equals("t"))) {
+            throw new IllegalArgumentException("Modification type must be s or t");
+        }
+
         checkValidAxis(params);
 
         Mesh mesh = model.meshes.get(0);
@@ -74,7 +84,7 @@ public class SlopeModifier implements TerrainModifier {
         }
 
         Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
-        AxisEvaluator pointEvaluator = createAxisEvaluator(evalAxis, impactAxis, params, minMaxMap);
+        AxisEvaluator pointEvaluator = createAxisEvaluator(modificationType, evalAxis, impactAxis, params, minMaxMap);
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
             float x = vertices[i];
@@ -104,16 +114,24 @@ public class SlopeModifier implements TerrainModifier {
         }
     }
 
-    private AxisEvaluator createAxisEvaluator(String evalAxis, String impactAxis, Map<String, Object> params, Map<String, MinMax> minMaxMap) {
-        if (evalAxis.equals("z") && impactAxis.equals("y")) {
-            return new ZYTranslatingAxisEvaluator(params, minMaxMap);
-        } else if (evalAxis.equals("z") && impactAxis.equals("x")) {
-            return new ZXTranslatingAxisEvaluator(params, minMaxMap);
-        } else if (evalAxis.equals("x") && impactAxis.equals("y")) {
-            return new XYTranslatingAxisEvaluator(params, minMaxMap);
-        }
+    private AxisEvaluator createAxisEvaluator(String modificationType, String evalAxis, String impactAxis, Map<String, Object> params, Map<String, MinMax> minMaxMap) {
+        if (modificationType.equals("t")) {
+            if (evalAxis.equals("z") && impactAxis.equals("y")) {
+                return new ZYTranslatingAxisEvaluator(params, minMaxMap);
+            } else if (evalAxis.equals("z") && impactAxis.equals("x")) {
+                return new ZXTranslatingAxisEvaluator(params, minMaxMap);
+            } else if (evalAxis.equals("x") && impactAxis.equals("y")) {
+                return new XYTranslatingAxisEvaluator(params, minMaxMap);
+            }
 
-        throw new RuntimeException("Class not defined for evalAxis '" + evalAxis + "' and impactAxis '" + impactAxis + "'");
+            throw new RuntimeException("Translating class not defined for evalAxis '" + evalAxis + "' and impactAxis '" + impactAxis + "'");
+        } else {
+            if (evalAxis.equals("z") && impactAxis.equals("x")) {
+                return new ZXScalingAxisEvaluator(params, minMaxMap);
+            }
+
+            throw new RuntimeException("Scaling class not defined for evalAxis '" + evalAxis + "' and impactAxis '" + impactAxis + "'");
+        }
     }
 
     public abstract class AxisEvaluator {
@@ -182,7 +200,7 @@ public class SlopeModifier implements TerrainModifier {
 
         @Override
         public void setEvaluatedValue(float ratio, Vector3 vec) {
-            vec.x = (vec.x - getMinMaxMap().get("x").mid) * getImpactAmount() * ratio;
+            vec.x = getMinMaxMap().get("x").mid + (vec.x - getMinMaxMap().get("x").mid) * getImpactAmount();
         }
 
         @Override
