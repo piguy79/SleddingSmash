@@ -83,13 +83,14 @@ public class SleddingSmash extends ApplicationAdapter {
         modelBatch = new ModelBatch();
 
         createPhysicsWorld();
+        setupCamera();
+
 
         createPlane();
         createBall();
         createTree();
         createRock();
 
-        setupCamera();
     }
 
     private void createTree(){
@@ -101,7 +102,15 @@ public class SleddingSmash extends ApplicationAdapter {
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
+        TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
+        for(GameObject object : gameObjects){
+            constructors.add(object.constructor);
+            instances.add(object);
+            dynamicsWorld.addRigidBody(object.getBody());
+        }
 
 
     }
@@ -112,14 +121,9 @@ public class SleddingSmash extends ApplicationAdapter {
         // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
 
-        Map<String, Model> rockModels = new HashMap<String, Model>();
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_1.g3db", Files.FileType.Internal));
-        rockModels.put("rock_1", model);
-
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
-        rockModels.put("rock_2", model);
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
         List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
@@ -160,89 +164,7 @@ public class SleddingSmash extends ApplicationAdapter {
         model = LevelBuilder.generate(width, length);
 
         SlopeModifier slopeModifier = new SlopeModifier();
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "s");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 0.5f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.circleOut);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.00f);
-            put(SlopeModifier.IMPACT_AMOUNT, 375.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.7f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
-            put(SlopeModifier.IMPACT_AMOUNT, 90.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.4f);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "s");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.4f);
-            put(SlopeModifier.IMPACT_AMOUNT, 2.5f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.circleOut);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, -40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.9f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.8f);
-            put(SlopeModifier.IMPACT_AMOUNT, -120.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.2f);
-            put(SlopeModifier.IMPACT_AMOUNT, 200.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.5f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
+
 
         LevelBuilder.calculateNormals(model);
 
