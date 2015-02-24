@@ -50,11 +50,25 @@ public class SlopeModifier implements TerrainModifier {
     public static final String EVAL_AXIS_INTERPOLATION_DURATION = "evalAxisInterpolationDuration";
 
     private Map<String, Object> defaultParams = new HashMap<String, Object>() {{
-        put(INTERPOLATION, Interpolation.pow2);
+        put(INTERPOLATION, InterpolationChoice.linear);
         put(IMPACT_AMOUNT, -30.0f);
         put(EVAL_AXIS_START_RATIO, 0.1f);
         put(EVAL_AXIS_INTERPOLATION_DURATION, 0.25f);
     }};
+
+    public enum InterpolationChoice {
+        linear(Interpolation.linear), fade(Interpolation.fade), bounce(Interpolation.bounce), sine(Interpolation.sine), pow2(Interpolation.pow2);
+
+        private Interpolation value;
+
+        private InterpolationChoice(Interpolation value) {
+            this.value = value;
+        }
+
+        public Interpolation getValue() {
+            return value;
+        }
+    }
 
     @Override
     public void modify(Model model, Map<String, Object> params) {
@@ -144,7 +158,7 @@ public class SlopeModifier implements TerrainModifier {
         private float evalAxisInterpolationDuration;
 
         public AxisEvaluator(Map<String, Object> params, Map<String, MinMax> minMaxMap) {
-            this.interpolation = (Interpolation) params.get(INTERPOLATION);
+            this.interpolation = ((InterpolationChoice) params.get(INTERPOLATION)).getValue();
             this.impactAmount = (Float) params.get(IMPACT_AMOUNT);
             this.evalAxisStartRatio = ((Float) params.get(EVAL_AXIS_START_RATIO));
             this.evalAxisInterpolationDuration = ((Float) params.get(EVAL_AXIS_INTERPOLATION_DURATION));
