@@ -47,6 +47,7 @@ import com.railwaygames.sleddingsmash.utils.ModelUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
@@ -88,6 +89,7 @@ public class SleddingSmash extends ApplicationAdapter {
         createPlane();
         createBall();
         createTree();
+        createRock();
 
     }
 
@@ -98,7 +100,7 @@ public class SleddingSmash extends ApplicationAdapter {
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal));
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
         List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
@@ -110,6 +112,34 @@ public class SleddingSmash extends ApplicationAdapter {
             dynamicsWorld.addRigidBody(object.getBody());
         }
 
+    }
+
+    private void createRock(){
+        // Model loader needs a binary json reader to decode
+        UBJsonReader jsonReader = new UBJsonReader();
+        // Create a model loader passing in our json reader
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+
+        Map<String, Model> rockModels = new HashMap<String, Model>();
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_1.g3db", Files.FileType.Internal));
+        rockModels.put("rock_1", model);
+
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
+        rockModels.put("rock_2", model);
+
+        TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
+
+        for(GameObject object : gameObjects){
+            object.transform.rotate(1,0,0,MathUtils.randomInRange(0, 360));
+            object.getBody().setWorldTransform(object.transform);
+            constructors.add(object.constructor);
+            instances.add(object);
+            dynamicsWorld.addRigidBody(object.getBody());
+        }
     }
 
     private void createBall() {
@@ -264,6 +294,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
 
         applyForce();
 
