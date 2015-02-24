@@ -15,16 +15,24 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameObject extends ModelInstance implements Disposable {
 
     private btRigidBody body;
+    public Constructor constructor;
 
-    public GameObject(Model model, btRigidBody.btRigidBodyConstructionInfo constructionInfo) {
+    public GameObject(Model model, btRigidBody.btRigidBodyConstructionInfo constructionInfo, Constructor constructor) {
         super(model);
-        body = new btRigidBody(constructionInfo);
+        this.constructor = constructor;
+        this.body = new btRigidBody(constructionInfo);
     }
 
     public Vector3 getPosition() {
         Vector3 output = new Vector3();
         transform.getTranslation(output);
         return output;
+    }
+
+    public float height(){
+        BoundingBox box = new BoundingBox();
+        calculateBoundingBox(box);
+        return box.getHeight();
     }
 
     public btRigidBody getBody() {
@@ -53,7 +61,7 @@ public class GameObject extends ModelInstance implements Disposable {
         }
 
         public GameObject construct() {
-            return new GameObject(model, constructionInfo);
+            return new GameObject(model, constructionInfo, this);
         }
 
         @Override

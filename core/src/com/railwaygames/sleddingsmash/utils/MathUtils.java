@@ -55,5 +55,9 @@ public class MathUtils {
             this.max = max;
             this.mid = (max - min) * 0.5f;
         }
+
+        public float axisSize(){
+            return this.max - this.min;
+        }
     }
 }

@@ -79,10 +79,11 @@ public class SleddingSmash extends ApplicationAdapter {
         createPlane();
         createBall();
         createTree();
+
         setupCamera();
     }
 
-    private void createTree() {
+    private void createTree(){
         // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
         // Create a model loader passing in our json reader
@@ -148,6 +149,72 @@ public class SleddingSmash extends ApplicationAdapter {
             put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.7f);
             put(SlopeModifier.INTERPOLATION, Interpolation.linear);
         }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "z");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
+            put(SlopeModifier.IMPACT_AMOUNT, 90.0f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.4f);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "s");
+            put(SlopeModifier.EVAL_AXIS, "z");
+            put(SlopeModifier.IMPACT_AXIS, "x");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.4f);
+            put(SlopeModifier.IMPACT_AMOUNT, 2.5f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.circleOut);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "z");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
+            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "x");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.0f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
+            put(SlopeModifier.IMPACT_AMOUNT, -40.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "x");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.9f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
+            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "z");
+            put(SlopeModifier.IMPACT_AXIS, "x");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.8f);
+            put(SlopeModifier.IMPACT_AMOUNT, -120.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "z");
+            put(SlopeModifier.IMPACT_AXIS, "x");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.2f);
+            put(SlopeModifier.IMPACT_AMOUNT, 200.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
+        slopeModifier.modify(model, new HashMap<String, Object>() {{
+            put(SlopeModifier.MODIFICATION_TYPE, "t");
+            put(SlopeModifier.EVAL_AXIS, "x");
+            put(SlopeModifier.IMPACT_AXIS, "y");
+            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.5f);
+            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
+            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
+            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
+        }});
 
         LevelBuilder.calculateNormals(model);
 
@@ -193,6 +260,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
         applyForce();
 
+
         for (GameObject obj : instances) {
             obj.getBody().getWorldTransform(obj.transform);
         }
@@ -210,14 +278,14 @@ public class SleddingSmash extends ApplicationAdapter {
         // TODO possibly scale based on Linear velocity of the object.
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
             sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2, 0, 0));
-        } else {
+        }else{
             if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
                 sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
             } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
                 sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
                 sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
                 sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
             }
         }
