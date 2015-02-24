@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import static com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
 public class SleddingSmash extends ApplicationAdapter {
@@ -60,6 +61,7 @@ public class SleddingSmash extends ApplicationAdapter {
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
+    GameObject plane;
     btCollisionConfiguration collisionConfig;
     btDispatcher dispatcher;
     MyContactListener contactListener;
@@ -67,8 +69,6 @@ public class SleddingSmash extends ApplicationAdapter {
     btDynamicsWorld dynamicsWorld;
     btConstraintSolver constraintSolver;
     List<GameObject.Constructor> constructors;
-
-    GameObject plane;
 
     @Override
     public void create() {
@@ -83,14 +83,13 @@ public class SleddingSmash extends ApplicationAdapter {
         modelBatch = new ModelBatch();
 
         createPhysicsWorld();
-        setupCamera();
-
 
         createPlane();
         createBall();
         createTree();
         createRock();
 
+        setupCamera();
     }
 
     private void createTree(){
@@ -102,15 +101,8 @@ public class SleddingSmash extends ApplicationAdapter {
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
-        TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
-        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
-        for(GameObject object : gameObjects){
-            constructors.add(object.constructor);
-            instances.add(object);
-            dynamicsWorld.addRigidBody(object.getBody());
-        }
+
 
     }
 
@@ -134,7 +126,7 @@ public class SleddingSmash extends ApplicationAdapter {
         gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
         for(GameObject object : gameObjects){
-            object.transform.rotate(1,0,0,MathUtils.randomInRange(0, 360));
+            object.transform.rotate(1,0,0, MathUtils.randomInRange(0, 360));
             object.getBody().setWorldTransform(object.transform);
             constructors.add(object.constructor);
             instances.add(object);
@@ -150,11 +142,10 @@ public class SleddingSmash extends ApplicationAdapter {
                 .sphere(1f, 1f, 1f, 10, 10);
         model = mb.end();
 
-        GameObject.Constructor constructor = new GameObject.Constructor(model, new btSphereShape(0.5f), 1f);
+        sphere = new GameObject.Constructor(model, new btSphereShape(0.5f), 1f).construct();
+        constructors.add(sphere.constructor);
 
-        sphere = constructor.construct();
         sphere.getBody().setFriction(100f);
-
         sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
 
@@ -255,8 +246,8 @@ public class SleddingSmash extends ApplicationAdapter {
 
         LevelBuilder.calculateNormals(model);
 
-        GameObject.Constructor constructor = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f);
-        plane = constructor.construct();
+        plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
+        constructors.add(plane.constructor);
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
         plane.getBody().setWorldTransform(plane.transform);
 
