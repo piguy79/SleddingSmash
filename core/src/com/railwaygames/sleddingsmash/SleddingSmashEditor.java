@@ -2,6 +2,7 @@ package com.railwaygames.sleddingsmash;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -126,6 +127,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("New", createNewRunnable());
         menuHandlerMap.put("Add", createAddRunnable());
         menuHandlerMap.put("Reset", createResetRunnable());
+        menuHandlerMap.put("Camera", switchToCameraRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
 
@@ -143,6 +145,17 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         stage.addActor(rightMenus);
 
         showMenus(true, "New");
+    }
+
+    private Runnable switchToCameraRunnable() {
+        return new Runnable() {
+            public void run() {
+                leftMenus.clear();
+                rightMenus.clear();
+
+                Gdx.input.setInputProcessor(camController);
+            }
+        };
     }
 
     private void showMenus(boolean right, String... menus) {
@@ -199,6 +212,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void finalizePlane() {
         LevelBuilder.calculateNormals(model);
+
         constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
         GameObject plane = constructors.get("plane").construct();
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
@@ -210,13 +224,25 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void setupCamera() {
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(0f, 50f, 50f);
-        cam.lookAt(0, 0, -50);
+        cam.position.set(0f, 80f, 80f);
+        cam.lookAt(0, 0, -60);
         cam.near = 1f;
-        cam.far = 1500f;
+        cam.far = 5000f;
         cam.update();
 
-        camController = new CameraInputController(cam);
+        camController = new CameraInputController(cam) {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    Gdx.input.setInputProcessor(stage);
+                    showLeftMenus();
+                    showMenus(true, "Add", "Reset", "Camera");
+                    return false;
+                }
+                return super.keyDown(keycode);
+            }
+        };
+        camController.translateUnits = 100f;
     }
 
     private void createPhysicsWorld() {
@@ -241,6 +267,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         for (GameObject obj : instances) {
             obj.getBody().getWorldTransform(obj.transform);
         }
+
+        camController.update();
 
         modelBatch.begin(cam);
         modelBatch.render(instances, lights);
@@ -431,7 +459,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 interpolationSelectBox.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        modifier.params.put(INTERPOLATION, interpolationSelectBox.getSelected().getValue());
+                        modifier.params.put(INTERPOLATION, interpolationSelectBox.getSelected());
                     }
                 });
                 if (modifier.params.containsKey(INTERPOLATION)) {
@@ -452,7 +480,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         public void clicked(InputEvent event, float x, float y) {
                             if (applyModifiers(group)) {
                                 group.remove();
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, "Add", "Reset", "Camera");
                                 showLeftMenus();
                             }
                         }
@@ -470,7 +498,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, "Add", "Reset", "Camera");
                             showLeftMenus();
                         }
                     });
@@ -492,7 +520,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                                 group.remove();
                                 modifiers.remove(modToEdit);
                                 applyModifiers(group);
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, "Add", "Reset", "Camera");
                                 showLeftMenus();
                             }
                         });
@@ -554,7 +582,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, "Add", "Reset", "Camera");
                             showLeftMenus();
                         }
                     });
@@ -602,7 +630,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()));
                             finalizePlane();
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, "Add", "Reset", "Camera");
                         }
                     });
                 }
