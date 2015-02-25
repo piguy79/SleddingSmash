@@ -11,17 +11,14 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
@@ -35,7 +32,6 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
@@ -45,10 +41,7 @@ import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 
 import static com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
@@ -93,7 +86,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
     }
 
-    private void createTree(){
+    private void createTree() {
         // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
         // Create a model loader passing in our json reader
@@ -103,19 +96,17 @@ public class SleddingSmash extends ApplicationAdapter {
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, 30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
         gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
-        for(GameObject object : gameObjects){
+        for (GameObject object : gameObjects) {
             constructors.add(object.constructor);
             instances.add(object);
             dynamicsWorld.addRigidBody(object.getBody());
         }
-
-
     }
 
-    private void createRock(){
+    private void createRock() {
         // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
         // Create a model loader passing in our json reader
@@ -126,11 +117,11 @@ public class SleddingSmash extends ApplicationAdapter {
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, 30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
         gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
-        for(GameObject object : gameObjects){
-            object.transform.rotate(1,0,0, MathUtils.randomInRange(0, 360));
+        for (GameObject object : gameObjects) {
+            object.transform.rotate(1, 0, 0, MathUtils.randomInRange(0, 360));
             object.getBody().setWorldTransform(object.transform);
             constructors.add(object.constructor);
             instances.add(object);
@@ -229,14 +220,14 @@ public class SleddingSmash extends ApplicationAdapter {
         // TODO possibly scale based on Linear velocity of the object.
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
             sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2, 0, 0));
-        }else{
+        } else {
             if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
                 sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
             } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
                 sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
-            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
                 sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
-            } else if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
                 sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
             }
         }

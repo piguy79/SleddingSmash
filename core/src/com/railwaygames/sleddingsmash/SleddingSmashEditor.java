@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -44,6 +45,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.Json;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
@@ -84,9 +86,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Group leftMenus;
     private Group rightMenus;
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
-    private List<Modifier> modifiers = new ArrayList<Modifier>();
-    private float width;
-    private float length;
+    private Level level = new Level();
+
+    private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
     @Override
     public void create() {
@@ -128,6 +130,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("Add", createAddRunnable());
         menuHandlerMap.put("Reset", createResetRunnable());
         menuHandlerMap.put("Camera", switchToCameraRunnable());
+        menuHandlerMap.put("Save", saveLevelRunnable(null));
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
 
@@ -154,6 +157,76 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 rightMenus.clear();
 
                 Gdx.input.setInputProcessor(camController);
+            }
+        };
+    }
+
+    private Runnable saveLevelRunnable(final String existingFileName) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                final TextField fileNameTextField;
+                if (existingFileName == null) {
+                    fileNameTextField = createLabelWithTextField(group, "File Name", height * 0.9f, width);
+                } else {
+                    fileNameTextField = null;
+                }
+
+                float y = height * 0.8f;
+                {
+                    String labelText = existingFileName == null ? "save" : "overwrite";
+                    Label label = new Label(labelText, skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Json json = new Json();
+                            String levelAsString = json.prettyPrint(level);
+
+                            String fileName = existingFileName != null ? existingFileName : fileNameTextField.getText();
+                            if (!fileName.trim().isEmpty()) {
+                                FileHandle fh = Gdx.files.local("levels/raw/" + fileName);
+                                if (existingFileName == null && fh.exists()) {
+                                    group.remove();
+                                    saveLevelRunnable(fileName).run();
+                                } else {
+                                    fh.writeString(levelAsString, false);
+                                    group.remove();
+                                    showMenus(true, homeMenu);
+                                    showLeftMenus();
+                                }
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, homeMenu);
+                            showLeftMenus();
+                        }
+                    });
+                }
             }
         };
     }
@@ -198,14 +271,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void edit(String menu) {
         String[] split = menu.split(":");
-        Modifier modifier = modifiers.get(Integer.valueOf(split[0]));
+        Modifier modifier = level.modifiers.get(Integer.valueOf(split[0]));
 
         createSlopeModifierRunnable(modifier.type, modifier).run();
     }
 
     private void createPlane(float width, float length) {
-        this.width = width;
-        this.length = length;
+        this.level.width = width;
+        this.level.length = length;
 
         model = LevelBuilder.generate(width, length);
     }
@@ -215,7 +288,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
         GameObject plane = constructors.get("plane").construct();
-        plane.transform.setToTranslation(-width * 0.5f, 0, 0);
+        plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
         plane.getBody().setWorldTransform(plane.transform);
 
         instances.add(plane);
@@ -236,7 +309,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 if (keycode == Input.Keys.ESCAPE) {
                     Gdx.input.setInputProcessor(stage);
                     showLeftMenus();
-                    showMenus(true, "Add", "Reset", "Camera");
+                    showMenus(true, homeMenu);
                     return false;
                 }
                 return super.keyDown(keycode);
@@ -291,7 +364,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         constructors.clear();
 
         createPhysicsWorld();
-        createPlane(width, length);
+        createPlane(level.width, level.length);
     }
 
     @Override
@@ -358,7 +431,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private boolean applyModifiers(Group group) {
         reset();
-        for (Modifier existingModifier : modifiers) {
+        for (Modifier existingModifier : level.modifiers) {
             try {
                 if (existingModifier.type == ModifierType.TRANSFORM) {
                     SlopeModifier slopeModifier = new SlopeModifier();
@@ -415,7 +488,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     modifier = modToEdit;
                 } else {
                     modifier = new Modifier(type);
-                    modifiers.add(modifier);
+                    level.modifiers.add(modifier);
                 }
                 float height = Gdx.graphics.getHeight();
                 float width = Gdx.graphics.getWidth();
@@ -480,7 +553,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         public void clicked(InputEvent event, float x, float y) {
                             if (applyModifiers(group)) {
                                 group.remove();
-                                showMenus(true, "Add", "Reset", "Camera");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         }
@@ -498,7 +571,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset", "Camera");
+                            showMenus(true, homeMenu);
                             showLeftMenus();
                         }
                     });
@@ -518,9 +591,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 group.remove();
-                                modifiers.remove(modToEdit);
+                                level.modifiers.remove(modToEdit);
                                 applyModifiers(group);
-                                showMenus(true, "Add", "Reset", "Camera");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         });
@@ -564,7 +637,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             instances.clear();
                             createPhysicsWorld();
                             setupCamera();
-                            modifiers.clear();
+                            level.modifiers.clear();
 
                             group.remove();
                             showMenus(true, "New");
@@ -582,7 +655,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset", "Camera");
+                            showMenus(true, homeMenu);
                             showLeftMenus();
                         }
                     });
@@ -592,9 +665,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void showLeftMenus() {
-        String[] strings = new String[modifiers.size()];
-        for (int i = 0; i < modifiers.size(); ++i) {
-            strings[i] = i + ": " + modifiers.get(i).toString();
+        String[] strings = new String[level.modifiers.size()];
+        for (int i = 0; i < level.modifiers.size(); ++i) {
+            strings[i] = i + ": " + level.modifiers.get(i).toString();
         }
         showMenus(false, strings);
     }
@@ -630,7 +703,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()));
                             finalizePlane();
                             group.remove();
-                            showMenus(true, "Add", "Reset", "Camera");
+                            showMenus(true, homeMenu);
                         }
                     });
                 }
@@ -669,6 +742,12 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     public enum ModifierType {
         TRANSFORM, SCALE
+    }
+
+    public static class Level {
+        private List<Modifier> modifiers = new ArrayList<Modifier>();
+        private float width;
+        private float length;
     }
 
     public static class Modifier {
