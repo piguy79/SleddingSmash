@@ -2,6 +2,7 @@ package com.railwaygames.sleddingsmash.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.railwaygames.sleddingsmash.SleddingSmash;
 import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 
 public class DesktopLauncher {
@@ -9,6 +10,6 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = 1000;
         config.height = 600;
-        new LwjglApplication(new SleddingSmashEditor(), config);
+        new LwjglApplication(new SleddingSmash(), config);
     }
 }

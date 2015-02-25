@@ -40,8 +40,15 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
+import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
+import com.railwaygames.sleddingsmash.utils.ModelUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 import static com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
@@ -54,13 +61,14 @@ public class SleddingSmash extends ApplicationAdapter {
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
+    GameObject plane;
     btCollisionConfiguration collisionConfig;
     btDispatcher dispatcher;
     MyContactListener contactListener;
     btBroadphaseInterface broadphase;
     btDynamicsWorld dynamicsWorld;
     btConstraintSolver constraintSolver;
-    ArrayMap<String, GameObject.Constructor> constructors;
+    List<GameObject.Constructor> constructors;
 
     @Override
     public void create() {
@@ -71,16 +79,18 @@ public class SleddingSmash extends ApplicationAdapter {
         lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-        constructors = new ArrayMap<String, GameObject.Constructor>(String.class, GameObject.Constructor.class);
+        constructors = new ArrayList<GameObject.Constructor>();
         modelBatch = new ModelBatch();
 
         createPhysicsWorld();
+        setupCamera();
+
 
         createPlane();
         createBall();
         createTree();
+        createRock();
 
-        setupCamera();
     }
 
     private void createTree(){
@@ -90,20 +100,42 @@ public class SleddingSmash extends ApplicationAdapter {
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal));
-        // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
-        ModelInstance modelInstance = new ModelInstance(model);
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
-        constructors.put("tree", new GameObject.Constructor(model, new btBoxShape(new Vector3(2f, 2f, 2f)), 0));
-        GameObject obj = constructors.get("tree").construct();
+        TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
 
-        obj.transform.rotate(1, 0, 0, -90);
-        obj.transform.setToTranslation(10f, -39f, -40f);
-        obj.getBody().setWorldTransform(obj.transform);
+        for(GameObject object : gameObjects){
+            constructors.add(object.constructor);
+            instances.add(object);
+            dynamicsWorld.addRigidBody(object.getBody());
+        }
 
-        instances.add(obj);
-        dynamicsWorld.addRigidBody(obj.getBody());
 
+    }
+
+    private void createRock(){
+        // Model loader needs a binary json reader to decode
+        UBJsonReader jsonReader = new UBJsonReader();
+        // Create a model loader passing in our json reader
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
+
+        TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
+        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
+
+        for(GameObject object : gameObjects){
+            object.transform.rotate(1,0,0, MathUtils.randomInRange(0, 360));
+            object.getBody().setWorldTransform(object.transform);
+            constructors.add(object.constructor);
+            instances.add(object);
+            dynamicsWorld.addRigidBody(object.getBody());
+        }
     }
 
     private void createBall() {
@@ -114,9 +146,9 @@ public class SleddingSmash extends ApplicationAdapter {
                 .sphere(1f, 1f, 1f, 10, 10);
         model = mb.end();
 
-        constructors.put("sphere", new GameObject.Constructor(model, new btSphereShape(0.5f), 1f));
+        sphere = new GameObject.Constructor(model, new btSphereShape(0.5f), 1f).construct();
+        constructors.add(sphere.constructor);
 
-        sphere = constructors.get("sphere").construct();
         sphere.getBody().setFriction(100f);
         sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
@@ -132,94 +164,12 @@ public class SleddingSmash extends ApplicationAdapter {
         model = LevelBuilder.generate(width, length);
 
         SlopeModifier slopeModifier = new SlopeModifier();
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "s");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 0.5f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.circleOut);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.00f);
-            put(SlopeModifier.IMPACT_AMOUNT, 375.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.7f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.3f);
-            put(SlopeModifier.IMPACT_AMOUNT, 90.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.4f);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "s");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.4f);
-            put(SlopeModifier.IMPACT_AMOUNT, 2.5f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.circleOut);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 20.0f);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.0f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, -40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.9f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.8f);
-            put(SlopeModifier.IMPACT_AMOUNT, -120.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "z");
-            put(SlopeModifier.IMPACT_AXIS, "x");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.2f);
-            put(SlopeModifier.IMPACT_AMOUNT, 200.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
-        slopeModifier.modify(model, new HashMap<String, Object>() {{
-            put(SlopeModifier.MODIFICATION_TYPE, "t");
-            put(SlopeModifier.EVAL_AXIS, "x");
-            put(SlopeModifier.IMPACT_AXIS, "y");
-            put(SlopeModifier.EVAL_AXIS_START_RATIO, 0.5f);
-            put(SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION, 0.1f);
-            put(SlopeModifier.IMPACT_AMOUNT, 40.0f);
-            put(SlopeModifier.INTERPOLATION, Interpolation.linear);
-        }});
+
 
         LevelBuilder.calculateNormals(model);
 
-        constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
-        GameObject plane = constructors.get("plane").construct();
+        plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
+        constructors.add(plane.constructor);
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
         plane.getBody().setWorldTransform(plane.transform);
 
@@ -257,6 +207,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
 
         applyForce();
 
@@ -298,7 +249,7 @@ public class SleddingSmash extends ApplicationAdapter {
             obj.dispose();
         instances.clear();
 
-        for (GameObject.Constructor constructor : constructors.values())
+        for (GameObject.Constructor constructor : constructors)
             constructor.dispose();
         constructors.clear();
 
