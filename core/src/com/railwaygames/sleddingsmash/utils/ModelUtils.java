@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class ModelUtils {
 
-    public static List<Vector3> findAreaInModel(Model model, RectangleArea area, Vector3 upVector){
+    public static List<Vector3> findAreaInModel(Model model, RectangleArea area, Vector3 upVector, float allowedAngle){
         Mesh mesh = model.meshes.get(0);
 
         int newVertexOffset = mesh.getVertexSize() / 4;
@@ -43,7 +43,7 @@ public class ModelUtils {
 
                 double angle = Math.toDegrees(Math.acos(new Vector3(normalX, normalY, normalZ).dot(upVector)));
 
-                if(angle < 20){
+                if(angle < allowedAngle){
                     locationsInBounds.add(new Vector3(vertices[i], vertices[i+1], vertices[i+2]));
                 }
             }

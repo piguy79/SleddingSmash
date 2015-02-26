@@ -69,6 +69,7 @@ public class SleddingSmash extends ApplicationAdapter {
     btDynamicsWorld dynamicsWorld;
     btConstraintSolver constraintSolver;
     List<GameObject.Constructor> constructors;
+    float width;
 
     @Override
     public void create() {
@@ -103,8 +104,10 @@ public class SleddingSmash extends ApplicationAdapter {
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
-        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
+
+
+
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f,0,0));
 
         for(GameObject object : gameObjects){
             constructors.add(object.constructor);
@@ -126,8 +129,7 @@ public class SleddingSmash extends ApplicationAdapter {
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,30, new ModelUtils.RectangleArea(0.1f, 0.5f, 0.8f, 0.6f), cam.up);
-        gameObjects.addAll(treeGenerator.generateObstacles(plane.model, 40, new ModelUtils.RectangleArea(0.1f, 0f, 0.8f, 1f), cam.up));
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f,0,0));
 
         for(GameObject object : gameObjects){
             object.transform.rotate(1,0,0, MathUtils.randomInRange(0, 360));
@@ -159,7 +161,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
     private void createPlane() {
         ModelBuilder modelBuilder = new ModelBuilder();
-        float width = 120.0f;
+        width = 120.0f;
         float length = 2500.0f;
         model = LevelBuilder.generate(width, length);
 
@@ -185,8 +187,12 @@ public class SleddingSmash extends ApplicationAdapter {
         cam.far = 1500f;
         cam.update();
 
+
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
+
+        Vector3 up = cam.up;
+
     }
 
     private void createPhysicsWorld() {
