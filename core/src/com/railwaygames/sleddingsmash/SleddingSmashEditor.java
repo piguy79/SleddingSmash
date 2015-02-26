@@ -131,6 +131,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("Reset", createResetRunnable());
         menuHandlerMap.put("Camera", switchToCameraRunnable());
         menuHandlerMap.put("Save", saveLevelRunnable(null));
+        menuHandlerMap.put("Load", loadLevelRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
 
@@ -147,7 +148,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         rightMenus.setBounds(0.75f * width, 0, width * 0.25f, height);
         stage.addActor(rightMenus);
 
-        showMenus(true, "New");
+        showMenus(true, "New", "Load");
     }
 
     private Runnable switchToCameraRunnable() {
@@ -157,6 +158,71 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 rightMenus.clear();
 
                 Gdx.input.setInputProcessor(camController);
+            }
+        };
+    }
+
+    private Runnable loadLevelRunnable() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                FileHandle fh = Gdx.files.local("levels/raw/");
+
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                FileHandle[] files = fh.list();
+                Array<String> fileNames = new Array<String>(files.length);
+                for (FileHandle file : files) {
+                    if (!file.isDirectory()) {
+                        fileNames.add(file.name());
+                    }
+                }
+
+                final SelectBox<String> selectBox = createLabelWithSelectBox(group, "File", height * 0.9f, width, fileNames);
+
+                {
+                    Label label = new Label("ok", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            FileHandle fileHandle = Gdx.files.internal("levels/raw/" + selectBox.getSelected());
+
+                            Json json = new Json();
+                            level = json.fromJson(Level.class, fileHandle);
+                            if (applyModifiers(group)) {
+                                group.remove();
+                                showLeftMenus();
+                                showMenus(true, homeMenu);
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, "New", "Load");
+                        }
+                    });
+                }
             }
         };
     }
@@ -352,8 +418,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void reset() {
-        model.dispose();
-        model = null;
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
 
         for (GameObject obj : instances)
             obj.dispose();
@@ -640,7 +708,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             level.modifiers.clear();
 
                             group.remove();
-                            showMenus(true, "New");
+                            showMenus(true, "New", "Load");
                         }
                     });
                 }
@@ -725,14 +793,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return textField;
     }
 
-    private SelectBox<InterpolationChoice> createLabelWithSelectBox(Group group, String labelText, float y, float width, Array<InterpolationChoice> items) {
+    private <T> SelectBox<T> createLabelWithSelectBox(Group group, String labelText, float y, float width, Array<T> items) {
         Label label = new Label(labelText, skin, "default");
         label.setColor(Color.WHITE);
         BitmapFont.TextBounds bounds = label.getTextBounds();
         label.setBounds(width * 0.48f - bounds.width, y, bounds.width, bounds.height);
         group.addActor(label);
 
-        SelectBox<InterpolationChoice> selectBox = new SelectBox<InterpolationChoice>(skin, "default");
+        SelectBox<T> selectBox = new SelectBox<T>(skin, "default");
         selectBox.setItems(items);
         selectBox.setBounds(width * 0.5f, y - 5, width * 0.2f, bounds.height + 10);
         group.addActor(selectBox);
@@ -754,7 +822,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         public ModifierType type;
         public Map<String, Object> params = new HashMap<String, Object>();
 
+        public Modifier() {
+        }
+
         public Modifier(ModifierType type) {
+            this.type = type;
+        }
+
+        public void setType(ModifierType type) {
             this.type = type;
         }
 
