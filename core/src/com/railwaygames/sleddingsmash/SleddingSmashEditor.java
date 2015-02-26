@@ -3,7 +3,9 @@ package com.railwaygames.sleddingsmash;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -46,6 +48,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.UBJsonReader;
+import com.badlogic.gdx.utils.Json;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
@@ -95,6 +98,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private List<Obstacle> obstacles = new ArrayList<Obstacle>();
     private float width;
     private float length;
+    private Level level = new Level();
+
+    private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
+
 
     @Override
     public void create() {
@@ -137,6 +144,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("New", createNewRunnable());
         menuHandlerMap.put("Add", createAddRunnable());
         menuHandlerMap.put("Reset", createResetRunnable());
+        menuHandlerMap.put("Camera", switchToCameraRunnable());
+        menuHandlerMap.put("Save", saveLevelRunnable(null));
+        menuHandlerMap.put("Load", loadLevelRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
         menuHandlerMap.put("Trees", createTreeObstaclesRunnable(null));
@@ -154,7 +164,153 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         rightMenus.setBounds(0.75f * width, 0, width * 0.25f, height);
         stage.addActor(rightMenus);
 
-        showMenus(true, "New");
+        showMenus(true, "New", "Load");
+    }
+
+    private Runnable switchToCameraRunnable() {
+        return new Runnable() {
+            public void run() {
+                leftMenus.clear();
+                rightMenus.clear();
+
+                Gdx.input.setInputProcessor(camController);
+            }
+        };
+    }
+
+    private Runnable loadLevelRunnable() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                FileHandle fh = Gdx.files.local("levels/raw/");
+
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                FileHandle[] files = fh.list();
+                Array<String> fileNames = new Array<String>(files.length);
+                for (FileHandle file : files) {
+                    if (!file.isDirectory()) {
+                        fileNames.add(file.name());
+                    }
+                }
+
+                final SelectBox<String> selectBox = createLabelWithSelectBox(group, "File", height * 0.9f, width, fileNames);
+
+                {
+                    Label label = new Label("ok", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            FileHandle fileHandle = Gdx.files.internal("levels/raw/" + selectBox.getSelected());
+
+                            Json json = new Json();
+                            level = json.fromJson(Level.class, fileHandle);
+                            if (applyModifiers(group)) {
+                                group.remove();
+                                showLeftMenus();
+                                showMenus(true, homeMenu);
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, "New", "Load");
+                        }
+                    });
+                }
+            }
+        };
+    }
+
+    private Runnable saveLevelRunnable(final String existingFileName) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                final TextField fileNameTextField;
+                if (existingFileName == null) {
+                    fileNameTextField = createLabelWithTextField(group, "File Name", height * 0.9f, width);
+                } else {
+                    fileNameTextField = null;
+                }
+
+                float y = height * 0.8f;
+                {
+                    String labelText = existingFileName == null ? "save" : "overwrite";
+                    Label label = new Label(labelText, skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Json json = new Json();
+                            String levelAsString = json.prettyPrint(level);
+
+                            String fileName = existingFileName != null ? existingFileName : fileNameTextField.getText();
+                            if (!fileName.trim().isEmpty()) {
+                                FileHandle fh = Gdx.files.local("levels/raw/" + fileName);
+                                if (existingFileName == null && fh.exists()) {
+                                    group.remove();
+                                    saveLevelRunnable(fileName).run();
+                                } else {
+                                    fh.writeString(levelAsString, false);
+                                    group.remove();
+                                    showMenus(true, homeMenu);
+                                    showLeftMenus();
+                                }
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, homeMenu);
+                            showLeftMenus();
+                        }
+                    });
+                }
+            }
+        };
     }
 
     private void createTree(){
@@ -208,6 +364,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void edit(String menu) {
         String[] split = menu.split(":");
+
         if(split[0].equals("OBSTACLE")){
             Obstacle obstacle = obstacles.get(Integer.valueOf(split[1]));
             createTreeObstaclesRunnable(obstacle).run();
@@ -215,12 +372,11 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             Modifier modifier = modifiers.get(Integer.valueOf(split[1]));
             createSlopeModifierRunnable(modifier.type, modifier).run();
         }
-
     }
 
     private void createPlane(float width, float length) {
-        this.width = width;
-        this.length = length;
+        this.level.width = width;
+        this.level.length = length;
 
         model = LevelBuilder.generate(width, length);
     }
@@ -230,6 +386,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
         constructors.add(plane.constructor);
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
+
         plane.getBody().setWorldTransform(plane.transform);
 
         instances.add(plane);
@@ -238,13 +395,25 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void setupCamera() {
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(0f, 50f, 50f);
-        cam.lookAt(0, 0, -50);
+        cam.position.set(0f, 80f, 80f);
+        cam.lookAt(0, 0, -60);
         cam.near = 1f;
-        cam.far = 1500f;
+        cam.far = 5000f;
         cam.update();
 
-        camController = new CameraInputController(cam);
+        camController = new CameraInputController(cam) {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    Gdx.input.setInputProcessor(stage);
+                    showLeftMenus();
+                    showMenus(true, homeMenu);
+                    return false;
+                }
+                return super.keyDown(keycode);
+            }
+        };
+        camController.translateUnits = 100f;
     }
 
     private void createPhysicsWorld() {
@@ -270,6 +439,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             obj.getBody().getWorldTransform(obj.transform);
         }
 
+        camController.update();
+
         modelBatch.begin(cam);
         modelBatch.render(instances, lights);
         modelBatch.end();
@@ -279,8 +450,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void reset() {
-        model.dispose();
-        model = null;
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
 
         for (GameObject obj : instances)
             obj.dispose();
@@ -291,7 +464,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         constructors.clear();
 
         createPhysicsWorld();
-        createPlane(width, length);
+        createPlane(level.width, level.length);
     }
 
     @Override
@@ -375,7 +548,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private boolean applyModifiers(Group group) {
         reset();
-        for (Modifier existingModifier : modifiers) {
+        for (Modifier existingModifier : level.modifiers) {
             try {
                 if (existingModifier.type == ModifierType.TRANSFORM) {
                     SlopeModifier slopeModifier = new SlopeModifier();
@@ -547,7 +720,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     modifier = modToEdit;
                 } else {
                     modifier = new Modifier(type);
-                    modifiers.add(modifier);
+                    level.modifiers.add(modifier);
                 }
                 float height = Gdx.graphics.getHeight();
                 float width = Gdx.graphics.getWidth();
@@ -591,7 +764,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 interpolationSelectBox.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        modifier.params.put(INTERPOLATION, interpolationSelectBox.getSelected().getValue());
+                        modifier.params.put(INTERPOLATION, interpolationSelectBox.getSelected());
                     }
                 });
                 if (modifier.params.containsKey(INTERPOLATION)) {
@@ -612,7 +785,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         public void clicked(InputEvent event, float x, float y) {
                             if (applyModifiers(group)) {
                                 group.remove();
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         }
@@ -630,7 +803,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, homeMenu);
                             showLeftMenus();
                         }
                     });
@@ -650,9 +823,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 group.remove();
-                                modifiers.remove(modToEdit);
+                                level.modifiers.remove(modToEdit);
                                 applyModifiers(group);
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         });
@@ -698,9 +871,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             setupCamera();
                             modifiers.clear();
                             obstacles.clear();
+                            level.modifiers.clear();
 
                             group.remove();
-                            showMenus(true, "New");
+                            showMenus(true, "New", "Load");
                         }
                     });
                 }
@@ -715,7 +889,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, homeMenu);
                             showLeftMenus();
                         }
                     });
@@ -770,7 +944,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()));
                             finalizePlane();
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, homeMenu);
                         }
                     });
                 }
@@ -792,14 +966,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return textField;
     }
 
-    private SelectBox<InterpolationChoice> createLabelWithSelectBox(Group group, String labelText, float y, float width, Array<InterpolationChoice> items) {
+    private <T> SelectBox<T> createLabelWithSelectBox(Group group, String labelText, float y, float width, Array<T> items) {
         Label label = new Label(labelText, skin, "default");
         label.setColor(Color.WHITE);
         BitmapFont.TextBounds bounds = label.getTextBounds();
         label.setBounds(width * 0.48f - bounds.width, y, bounds.width, bounds.height);
         group.addActor(label);
 
-        SelectBox<InterpolationChoice> selectBox = new SelectBox<InterpolationChoice>(skin, "default");
+        SelectBox<T> selectBox = new SelectBox<T>(skin, "default");
         selectBox.setItems(items);
         selectBox.setBounds(width * 0.5f, y - 5, width * 0.2f, bounds.height + 10);
         group.addActor(selectBox);
@@ -811,11 +985,24 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         TRANSFORM, SCALE
     }
 
+    public static class Level {
+        private List<Modifier> modifiers = new ArrayList<Modifier>();
+        private float width;
+        private float length;
+    }
+
     public static class Modifier {
         public ModifierType type;
         public Map<String, Object> params = new HashMap<String, Object>();
 
+        public Modifier() {
+        }
+
         public Modifier(ModifierType type) {
+            this.type = type;
+        }
+
+        public void setType(ModifierType type) {
             this.type = type;
         }
 
