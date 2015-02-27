@@ -43,9 +43,13 @@ public abstract class ObstacleGenerator{
         MapUtils.addDefaults(params, defaultParams);
 
         ModelUtils.RectangleArea area = new ModelUtils.RectangleArea((Float)params.get(START_X), 1f - (Float)params.get(END_Z), (Float)params.get(END_X), 1f - (Float)params.get(START_Z));
-        List<GameObject> gameObjects = new ArrayList<GameObject>();
         List<Vector3> locations = ModelUtils.findAreaInModel(areaModel, area, upVector, (Float)params.get(ANGLE));
 
+        return generateObstacles(params, upVector, offset, locations);
+    }
+
+    private List<GameObject> generateObstacles(Map<String, Object> params, Vector3 upVector, Vector3 offset, List<Vector3> locations){
+        List<GameObject> gameObjects = new ArrayList<GameObject>();
         List<Integer> usedIndexes = new ArrayList<Integer>();
 
         if(locations.size() > 0){
@@ -58,9 +62,19 @@ public abstract class ObstacleGenerator{
             }
         }
 
+        return gameObjects;
+    }
+
+    public List<GameObject> generateAt(List<Vector3> locations, Map<String, Object> params, Vector3 offset){
+        List<GameObject> gameObjects = new ArrayList<GameObject>();
+
+        for(Vector3 loc : locations){
+            gameObjects.add(placeObstacle(loc, offset));
+        }
 
         return gameObjects;
     }
+
 
     abstract GameObject placeObstacle(Vector3 vector, Vector3 offset);
 

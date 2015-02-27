@@ -94,10 +94,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Group leftMenus;
     private Group rightMenus;
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
-    private List<Modifier> modifiers = new ArrayList<Modifier>();
-    private List<Obstacle> obstacles = new ArrayList<Obstacle>();
-    private float width;
-    private float length;
     private Level level = new Level();
 
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
@@ -366,10 +362,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         String[] split = menu.split(":");
 
         if(split[0].equals("OBSTACLE")){
-            Obstacle obstacle = obstacles.get(Integer.valueOf(split[1]));
+            Obstacle obstacle = level.obstacles.get(Integer.valueOf(split[1]));
             createTreeObstaclesRunnable(obstacle).run();
         }else{
-            Modifier modifier = modifiers.get(Integer.valueOf(split[1]));
+            Modifier modifier = level.modifiers.get(Integer.valueOf(split[1]));
             createSlopeModifierRunnable(modifier.type, modifier).run();
         }
     }
@@ -385,7 +381,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         LevelBuilder.calculateNormals(model);
         plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
         constructors.add(plane.constructor);
-        plane.transform.setToTranslation(-width * 0.5f, 0, 0);
+        plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
 
         plane.getBody().setWorldTransform(plane.transform);
 
@@ -530,12 +526,22 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private boolean applyObstacles(Group group){
-        for(Obstacle obstacle : obstacles){
+        for(Obstacle obstacle : level.obstacles){
             TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
+            List<GameObject> gameObjects = new ArrayList<GameObject>();
+            boolean needsPositions = obstacle.generatedPositions == null;
 
-            List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,obstacle.params, new Vector3(0,1,0), new Vector3(-width * 0.5f, 0, 0));
+            if(needsPositions){
+                obstacle.generatedPositions = new ArrayList<Vector3>();
+                gameObjects = treeGenerator.generateObstacles(plane.model,obstacle.params, new Vector3(0,1,0), new Vector3(-level.width * 0.5f, 0, 0));
+            }else{
+                gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f,0,0));
+            }
 
             for(GameObject object : gameObjects){
+                if(needsPositions){
+                    obstacle.generatedPositions.add(object.position);
+                }
                 constructors.add(object.constructor);
                 instances.add(object);
                 dynamicsWorld.addRigidBody(object.getBody());
@@ -601,12 +607,12 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return new Runnable() {
             @Override
             public void run() {
-                Obstacle obstacle;
+                final Obstacle obstacle;
                 if(obstacleToEdit != null){
                     obstacle = obstacleToEdit;
                 }else{
                     obstacle =  new Obstacle(ObstacleType.TREE);
-                    obstacles.add(obstacle);
+                    level.obstacles.add(obstacle);
                 }
                 float height = Gdx.graphics.getHeight();
                 float width = Gdx.graphics.getWidth();
@@ -657,9 +663,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     label.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
+                            obstacle.generatedPositions = null;
                             if (applyModifiers(group)) {
                                 group.remove();
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         }
@@ -677,7 +684,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             group.remove();
-                            showMenus(true, "Add", "Reset");
+                            showMenus(true, homeMenu);
                             showLeftMenus();
                         }
                     });
@@ -697,9 +704,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 group.remove();
-                                obstacles.remove(obstacleToEdit);
+                                level.obstacles.remove(obstacleToEdit);
                                 applyModifiers(group);
-                                showMenus(true, "Add", "Reset");
+                                showMenus(true, homeMenu);
                                 showLeftMenus();
                             }
                         });
@@ -869,8 +876,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             instances.clear();
                             createPhysicsWorld();
                             setupCamera();
-                            modifiers.clear();
-                            obstacles.clear();
+                            level.obstacles.clear();
                             level.modifiers.clear();
 
                             group.remove();
@@ -899,14 +905,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void showLeftMenus() {
-        String[] strings = new String[modifiers.size() + obstacles.size()];
-        for (int i = 0; i < modifiers.size(); ++i) {
-            strings[i] = "MODIFIER:" + i + ": " + modifiers.get(i).toString();
+        String[] strings = new String[level.modifiers.size() + level.obstacles.size()];
+        for (int i = 0; i < level.modifiers.size(); ++i) {
+            strings[i] = "MODIFIER:" + i + ": " + level.modifiers.get(i).toString();
         }
 
-        for(int i = 0; i < obstacles.size(); i++){
-            int offset = modifiers.size() + i;
-            strings[offset] = "OBSTACLE:" + offset + ":" +  obstacles.get(i).toString();
+        for(int i = 0; i < level.obstacles.size(); i++){
+            int offset = level.modifiers.size() + i;
+            strings[offset] = "OBSTACLE:" + offset + ":" +  level.obstacles.get(i).toString();
         }
 
 
@@ -987,6 +993,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     public static class Level {
         private List<Modifier> modifiers = new ArrayList<Modifier>();
+        private List<Obstacle> obstacles = new ArrayList<Obstacle>();
         private float width;
         private float length;
     }
@@ -1021,8 +1028,11 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     public static class Obstacle {
         public Map<String, Object> params = new HashMap<String, Object>();
+        public List<Vector3> generatedPositions;
 
         ObstacleType type;
+
+        public Obstacle(){}
 
         public Obstacle(ObstacleType type){this.type = type;}
 
