@@ -31,7 +31,7 @@ public abstract class ObstacleGenerator{
         put(END_X, 0.6f);
         put(START_Z, 0.1f);
         put(END_Z, 0.9f);
-        put(DENSITY, 20);
+        put(DENSITY, 20f);
         put(ANGLE, 60f);
     }};
 
