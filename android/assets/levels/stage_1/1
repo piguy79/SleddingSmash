@@ -1,0 +1,40 @@
+{
+modifiers: [
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxis: {
+				class: java.lang.String
+				value: x
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: pow2
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: 20
+			}
+		}
+	}
+]
+width: 200
+length: 2000
+}

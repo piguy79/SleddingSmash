@@ -813,9 +813,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     public static class Level {
-        private List<Modifier> modifiers = new ArrayList<Modifier>();
-        private float width;
-        private float length;
+        public List<Modifier> modifiers = new ArrayList<Modifier>();
+        public float width;
+        public float length;
     }
 
     public static class Modifier {
