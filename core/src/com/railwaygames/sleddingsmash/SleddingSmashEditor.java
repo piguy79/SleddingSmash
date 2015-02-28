@@ -1,6 +1,7 @@
 package com.railwaygames.sleddingsmash;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -44,12 +46,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.InterpolationChoice;
+import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +66,12 @@ import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.IMPA
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.IMPACT_AXIS;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.INTERPOLATION;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.ANGLE;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.DENSITY;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_X;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_Z;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_X;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_Z;
 
 public class SleddingSmashEditor extends ApplicationAdapter {
 
@@ -70,16 +79,18 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
     public Model model;
+    public Model treeModel;
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
+    GameObject plane;
     btCollisionConfiguration collisionConfig;
     btDispatcher dispatcher;
     MyContactListener contactListener;
     btBroadphaseInterface broadphase;
     btDynamicsWorld dynamicsWorld;
     btConstraintSolver constraintSolver;
-    ArrayMap<String, GameObject.Constructor> constructors;
+    List<GameObject.Constructor> constructors;
     private BitmapFont font;
     private Skin skin;
     private Stage stage;
@@ -90,6 +101,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
+
     @Override
     public void create() {
         Bullet.init();
@@ -99,7 +111,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-        constructors = new ArrayMap<String, GameObject.Constructor>(String.class, GameObject.Constructor.class);
+        constructors = new ArrayList<GameObject.Constructor>();
         modelBatch = new ModelBatch();
 
         font = new BitmapFont(Gdx.files.internal("data/fonts/font16.fnt"));
@@ -126,6 +138,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         createPhysicsWorld();
         setupCamera();
 
+        createTree();
+
         menuHandlerMap.put("New", createNewRunnable());
         menuHandlerMap.put("Add", createAddRunnable());
         menuHandlerMap.put("Reset", createResetRunnable());
@@ -134,6 +148,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("Load", loadLevelRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
+        menuHandlerMap.put("Trees", createTreeObstaclesRunnable(null));
 
         Gdx.input.setInputProcessor(stage);
 
@@ -297,6 +312,17 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         };
     }
 
+    private void createTree() {
+        // Model loader needs a binary json reader to decode
+        UBJsonReader jsonReader = new UBJsonReader();
+        // Create a model loader passing in our json reader
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
+
+    }
+
     private void showMenus(boolean right, String... menus) {
         float height = Gdx.graphics.getHeight();
 
@@ -337,9 +363,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void edit(String menu) {
         String[] split = menu.split(":");
-        Modifier modifier = level.modifiers.get(Integer.valueOf(split[0]));
 
-        createSlopeModifierRunnable(modifier.type, modifier).run();
+        if (split[0].equals("OBSTACLE")) {
+            Obstacle obstacle = level.obstacles.get(Integer.valueOf(split[1]));
+            createTreeObstaclesRunnable(obstacle).run();
+        } else {
+            Modifier modifier = level.modifiers.get(Integer.valueOf(split[1]));
+            createSlopeModifierRunnable(modifier.type, modifier).run();
+        }
     }
 
     private void createPlane(float width, float length) {
@@ -351,10 +382,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void finalizePlane() {
         LevelBuilder.calculateNormals(model);
-
-        constructors.put("plane", new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f));
-        GameObject plane = constructors.get("plane").construct();
+        plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
+        constructors.add(plane.constructor);
         plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
+
         plane.getBody().setWorldTransform(plane.transform);
 
         instances.add(plane);
@@ -427,7 +458,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             obj.dispose();
         instances.clear();
 
-        for (GameObject.Constructor constructor : constructors.values())
+        for (GameObject.Constructor constructor : constructors)
             constructor.dispose();
         constructors.clear();
 
@@ -441,7 +472,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             obj.dispose();
         instances.clear();
 
-        for (GameObject.Constructor constructor : constructors.values())
+        for (GameObject.Constructor constructor : constructors)
             constructor.dispose();
         constructors.clear();
 
@@ -472,13 +503,13 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return new Runnable() {
             @Override
             public void run() {
-                showMenus(true, "Transform", "Scale");
+                showMenus(true, "Transform", "Scale", "Trees");
                 showMenus(false);
             }
         };
     }
 
-    private TextField.TextFieldListener createTextListener(final Modifier modifier, final String field, final Class clazz) {
+    private TextField.TextFieldListener createTextListener(final Map<String, Object> params, final String field, final Class clazz) {
         return new TextField.TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
@@ -489,12 +520,39 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     } else if (clazz == Float.class) {
                         val = Float.valueOf(textField.getText());
                     }
-                    modifier.params.put(field, val);
+                    params.put(field, val);
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
             }
         };
+    }
+
+    private boolean applyObstacles(Group group) {
+        for (Obstacle obstacle : level.obstacles) {
+            TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
+            List<GameObject> gameObjects = new ArrayList<GameObject>();
+            boolean needsPositions = obstacle.generatedPositions == null;
+
+            if (needsPositions) {
+                obstacle.generatedPositions = new ArrayList<Vector3>();
+                gameObjects = treeGenerator.generateObstacles(plane.model, obstacle.params, new Vector3(0, 1, 0), new Vector3(-level.width * 0.5f, 0, 0));
+            } else {
+                gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f, 0, 0));
+            }
+
+            for (GameObject object : gameObjects) {
+                if (needsPositions) {
+                    obstacle.generatedPositions.add(object.position);
+                }
+                constructors.add(object.constructor);
+                instances.add(object);
+                dynamicsWorld.addRigidBody(object.getBody());
+            }
+        }
+
+        return true;
+
     }
 
     private boolean applyModifiers(Group group) {
@@ -517,6 +575,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             }
         }
         finalizePlane();
+        applyObstacles(group);
 
         return true;
     }
@@ -547,6 +606,121 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         textField.setText(value.toString());
     }
 
+    private Runnable createTreeObstaclesRunnable(final Obstacle obstacleToEdit) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                final Obstacle obstacle;
+                if (obstacleToEdit != null) {
+                    obstacle = obstacleToEdit;
+                } else {
+                    obstacle = new Obstacle(ObstacleType.TREE);
+                    level.obstacles.add(obstacle);
+                }
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                float y = height * 0.9f;
+                final TextField startingXPercent = createLabelWithTextField(group, "x start (0.0 - 1.0)", y, width);
+                startingXPercent.setTextFieldListener(createTextListener(obstacle.params, START_X, Float.class));
+                setText(startingXPercent, (Float) obstacle.params.get(START_X));
+
+
+                y -= height * 0.07f;
+                final TextField endingXPercent = createLabelWithTextField(group, "x end (0.0 - 1.0)", y, width);
+                endingXPercent.setTextFieldListener(createTextListener(obstacle.params, END_X, Float.class));
+                setText(endingXPercent, (Float) obstacle.params.get(END_X));
+
+                y -= height * 0.07f;
+                final TextField startingZPercent = createLabelWithTextField(group, "z start (0.0 - 1.0)", y, width);
+                startingZPercent.setTextFieldListener(createTextListener(obstacle.params, START_Z, Float.class));
+                setText(startingZPercent, (Float) obstacle.params.get(START_Z));
+
+                y -= height * 0.07f;
+                final TextField endingZPercent = createLabelWithTextField(group, "z end (0.0 - 1.0)", y, width);
+                endingZPercent.setTextFieldListener(createTextListener(obstacle.params, END_Z, Float.class));
+                setText(endingZPercent, (Float) obstacle.params.get(END_Z));
+
+                y -= height * 0.07f;
+                final TextField density = createLabelWithTextField(group, "density", y, width);
+                density.setTextFieldListener(createTextListener(obstacle.params, DENSITY, Float.class));
+                setText(density, (Float) obstacle.params.get(DENSITY));
+
+                y -= height * 0.07f;
+                final TextField angle = createLabelWithTextField(group, "angle (0 - 360)", y, width);
+                angle.setTextFieldListener(createTextListener(obstacle.params, ANGLE, Float.class));
+                setText(angle, (Float) obstacle.params.get(ANGLE));
+
+                y -= height * 0.07f;
+
+                {
+                    Label label = new Label("save", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            obstacle.generatedPositions = null;
+                            if (applyModifiers(group)) {
+                                group.remove();
+                                showMenus(true, homeMenu);
+                                showLeftMenus();
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", skin, "default");
+                    label.setColor(Color.WHITE);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, homeMenu);
+                            showLeftMenus();
+                        }
+                    });
+                }
+
+                y -= height * 0.07f;
+
+                if (obstacleToEdit != null) {
+                    {
+                        Label label = new Label("delete", skin, "default");
+                        label.setColor(Color.WHITE);
+                        BitmapFont.TextBounds bounds = label.getTextBounds();
+                        label.setBounds(width * 0.5f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                        group.addActor(label);
+
+                        label.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                group.remove();
+                                level.obstacles.remove(obstacleToEdit);
+                                applyModifiers(group);
+                                showMenus(true, homeMenu);
+                                showLeftMenus();
+                            }
+                        });
+                    }
+                }
+
+
+            }
+        };
+    }
+
     private Runnable createSlopeModifierRunnable(final ModifierType type, final Modifier modToEdit) {
         return new Runnable() {
             @Override
@@ -566,27 +740,27 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 float y = height * 0.9f;
                 final TextField evalAxisTextField = createLabelWithTextField(group, "eval axis", y, width);
-                evalAxisTextField.setTextFieldListener(createTextListener(modifier, EVAL_AXIS, String.class));
+                evalAxisTextField.setTextFieldListener(createTextListener(modifier.params, EVAL_AXIS, String.class));
                 setText(evalAxisTextField, (String) modifier.params.get(EVAL_AXIS));
 
                 y -= height * 0.07f;
                 final TextField impactAxisTextField = createLabelWithTextField(group, "impact axis", y, width);
-                impactAxisTextField.setTextFieldListener(createTextListener(modifier, IMPACT_AXIS, String.class));
+                impactAxisTextField.setTextFieldListener(createTextListener(modifier.params, IMPACT_AXIS, String.class));
                 setText(impactAxisTextField, (String) modifier.params.get(IMPACT_AXIS));
 
                 y -= height * 0.07f;
                 final TextField startTextField = createLabelWithTextField(group, "start (0.0 - 1.0)", y, width);
-                startTextField.setTextFieldListener(createTextListener(modifier, EVAL_AXIS_START_RATIO, Float.class));
+                startTextField.setTextFieldListener(createTextListener(modifier.params, EVAL_AXIS_START_RATIO, Float.class));
                 setText(startTextField, (Float) modifier.params.get(EVAL_AXIS_START_RATIO));
 
                 y -= height * 0.07f;
                 final TextField durationTextField = createLabelWithTextField(group, "duration (0.0 - 1.0)", y, width);
-                durationTextField.setTextFieldListener(createTextListener(modifier, EVAL_AXIS_INTERPOLATION_DURATION, Float.class));
+                durationTextField.setTextFieldListener(createTextListener(modifier.params, EVAL_AXIS_INTERPOLATION_DURATION, Float.class));
                 setText(durationTextField, (Float) modifier.params.get(EVAL_AXIS_INTERPOLATION_DURATION));
 
                 y -= height * 0.07f;
                 final TextField impactAmountTextField = createLabelWithTextField(group, "impact amount", y, width);
-                impactAmountTextField.setTextFieldListener(createTextListener(modifier, IMPACT_AMOUNT, Float.class));
+                impactAmountTextField.setTextFieldListener(createTextListener(modifier.params, IMPACT_AMOUNT, Float.class));
                 setText(impactAmountTextField, (Float) modifier.params.get(IMPACT_AMOUNT));
 
                 y -= height * 0.07f;
@@ -705,6 +879,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                             instances.clear();
                             createPhysicsWorld();
                             setupCamera();
+                            level.obstacles.clear();
                             level.modifiers.clear();
 
                             group.remove();
@@ -733,10 +908,17 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void showLeftMenus() {
-        String[] strings = new String[level.modifiers.size()];
+        String[] strings = new String[level.modifiers.size() + level.obstacles.size()];
         for (int i = 0; i < level.modifiers.size(); ++i) {
-            strings[i] = i + ": " + level.modifiers.get(i).toString();
+            strings[i] = "MODIFIER:" + i + ": " + level.modifiers.get(i).toString();
         }
+
+        for (int i = 0; i < level.obstacles.size(); i++) {
+            int offset = level.modifiers.size() + i;
+            strings[offset] = "OBSTACLE:" + offset + ":" + level.obstacles.get(i).toString();
+        }
+
+
         showMenus(false, strings);
     }
 
@@ -814,6 +996,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     public static class Level {
         public List<Modifier> modifiers = new ArrayList<Modifier>();
+        public List<Obstacle> obstacles = new ArrayList<Obstacle>();
         public float width;
         public float length;
     }
@@ -839,6 +1022,29 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 return type + " (" + params.get(EVAL_AXIS_START_RATIO) + params.get(EVAL_AXIS) + " for " + params.get(EVAL_AXIS_INTERPOLATION_DURATION) + ") -> " + params.get(IMPACT_AXIS) + params.get(IMPACT_AMOUNT);
             }
             return type.toString();
+        }
+    }
+
+    public enum ObstacleType {
+        TREE
+    }
+
+    public static class Obstacle {
+        public Map<String, Object> params = new HashMap<String, Object>();
+        public List<Vector3> generatedPositions;
+
+        ObstacleType type;
+
+        public Obstacle() {
+        }
+
+        public Obstacle(ObstacleType type) {
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return type + " x(" + params.get(START_X) + ":" + params.get(END_X) + ")z(" + params.get(START_Z) + ", " + params.get(END_Z) + ")" + params.get(DENSITY);
         }
     }
 

@@ -15,13 +15,15 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
     }
 
     @Override
-    GameObject placeObstacle(Vector3 vector) {
+    GameObject placeObstacle(Vector3 vector, Vector3 offset) {
 
         GameObject.Constructor constructor = new GameObject.Constructor(model, new btBoxShape(new Vector3(4f, 4f, 4f)), 0);
         GameObject tree = constructor.construct();
 
-        tree.transform.rotate(1, 0, 0, -90);
-        tree.transform.setToTranslation((-120f * 0.5f) + vector.x, vector.y + (tree.height()/ 2), vector.z);
+        tree.setPosition(vector);
+        Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height()/ 2), vector.z);
+        tree.transform.setToTranslation(position);
+        //tree.transform.rotate(1, 0, 0, -180);
         tree.getBody().setWorldTransform(tree.transform);
 
         return tree;

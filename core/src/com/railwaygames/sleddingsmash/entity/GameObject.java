@@ -16,6 +16,7 @@ public class GameObject extends ModelInstance implements Disposable {
 
     private btRigidBody body;
     public Constructor constructor;
+    public Vector3 position;
 
     public GameObject(Model model, btRigidBody.btRigidBodyConstructionInfo constructionInfo, Constructor constructor) {
         super(model);
@@ -23,7 +24,11 @@ public class GameObject extends ModelInstance implements Disposable {
         this.body = new btRigidBody(constructionInfo);
     }
 
-    public Vector3 getPosition() {
+    public void setPosition(Vector3 newPosition) {
+        this.position = newPosition;
+    }
+
+    public Vector3 getLocationInWorld() {
         Vector3 output = new Vector3();
         transform.getTranslation(output);
         return output;
