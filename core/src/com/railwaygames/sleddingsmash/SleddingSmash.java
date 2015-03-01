@@ -39,7 +39,6 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
-import com.railwaygames.sleddingsmash.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,18 +80,14 @@ public class SleddingSmash extends ApplicationAdapter {
         createPhysicsWorld();
         setupCamera();
 
-
         createPlane();
         createBall();
         createTree();
         //createRock();
-
     }
 
     private void createTree() {
-        // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
-        // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         // Now load the model by name
         // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
@@ -111,17 +106,12 @@ public class SleddingSmash extends ApplicationAdapter {
     }
 
     private void createRock() {
-        // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
-        // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-
-        // Now load the model by name
-        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f,0,0));
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f, 0, 0));
 
 
         for (GameObject object : gameObjects) {
@@ -209,9 +199,7 @@ public class SleddingSmash extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-
         applyForce();
-
 
         for (GameObject obj : instances) {
             obj.getBody().getWorldTransform(obj.transform);

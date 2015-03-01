@@ -92,11 +92,6 @@ public class SlopeModifier implements TerrainModifier {
         String evalAxis = (String) params.get(EVAL_AXIS);
         String impactAxis = (String) params.get(IMPACT_AXIS);
 
-        // invert for Z-axis, since it's backwards
-        if (evalAxis.equals("z")) {
-            params.put(EVAL_AXIS_START_RATIO, 1.0f - ((Float) params.get(EVAL_AXIS_START_RATIO)));
-        }
-
         Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
         AxisEvaluator pointEvaluator = createAxisEvaluator(modificationType, evalAxis, impactAxis, params, minMaxMap);
 
@@ -161,6 +156,12 @@ public class SlopeModifier implements TerrainModifier {
             this.interpolation = ((InterpolationChoice) params.get(INTERPOLATION)).getValue();
             this.impactAmount = (Float) params.get(IMPACT_AMOUNT);
             this.evalAxisStartRatio = ((Float) params.get(EVAL_AXIS_START_RATIO));
+
+            // invert for Z-axis, since it's backwards
+            if (params.get(EVAL_AXIS).equals("z")) {
+                evalAxisStartRatio = 1.0f - evalAxisStartRatio;
+            }
+
             this.evalAxisInterpolationDuration = ((Float) params.get(EVAL_AXIS_INTERPOLATION_DURATION));
             this.minMaxMap = minMaxMap;
         }

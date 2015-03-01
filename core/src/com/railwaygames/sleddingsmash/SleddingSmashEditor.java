@@ -46,9 +46,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
@@ -67,8 +66,12 @@ import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.IMPA
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.IMPACT_AXIS;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.INTERPOLATION;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
-
-import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.*;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.ANGLE;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.DENSITY;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_X;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_Z;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_X;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_Z;
 
 public class SleddingSmashEditor extends ApplicationAdapter {
 
@@ -97,7 +100,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Level level = new Level();
 
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
-
 
     @Override
     public void create() {
@@ -309,18 +311,13 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         };
     }
 
-    private void createTree(){
-        // Model loader needs a binary json reader to decode
+    private void createTree() {
         UBJsonReader jsonReader = new UBJsonReader();
-        // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        // Now load the model by name
-        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
-
     }
 
-    private void showMenus(boolean right, String...menus) {
+    private void showMenus(boolean right, String... menus) {
         float height = Gdx.graphics.getHeight();
 
         if (right) {
@@ -361,10 +358,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private void edit(String menu) {
         String[] split = menu.split(":");
 
-        if(split[0].equals("OBSTACLE")){
+        if (split[0].equals("OBSTACLE")) {
             Obstacle obstacle = level.obstacles.get(Integer.valueOf(split[1]));
             createTreeObstaclesRunnable(obstacle).run();
-        }else{
+        } else {
             Modifier modifier = level.modifiers.get(Integer.valueOf(split[1]));
             createSlopeModifierRunnable(modifier.type, modifier).run();
         }
@@ -394,7 +391,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         cam.position.set(0f, 80f, 80f);
         cam.lookAt(0, 0, -60);
         cam.near = 1f;
-        cam.far = 5000f;
+        cam.far = 50000f;
         cam.update();
 
         camController = new CameraInputController(cam) {
@@ -525,21 +522,21 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         };
     }
 
-    private boolean applyObstacles(Group group){
-        for(Obstacle obstacle : level.obstacles){
+    private boolean applyObstacles(Group group) {
+        for (Obstacle obstacle : level.obstacles) {
             TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
             List<GameObject> gameObjects = new ArrayList<GameObject>();
             boolean needsPositions = obstacle.generatedPositions == null;
 
-            if(needsPositions){
+            if (needsPositions) {
                 obstacle.generatedPositions = new ArrayList<Vector3>();
-                gameObjects = treeGenerator.generateObstacles(plane.model,obstacle.params, new Vector3(0,1,0), new Vector3(-level.width * 0.5f, 0, 0));
-            }else{
-                gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f,0,0));
+                gameObjects = treeGenerator.generateObstacles(plane.model, obstacle.params, new Vector3(0, 1, 0), new Vector3(-level.width * 0.5f, 0, 0));
+            } else {
+                gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f, 0, 0));
             }
 
-            for(GameObject object : gameObjects){
-                if(needsPositions){
+            for (GameObject object : gameObjects) {
+                if (needsPositions) {
                     obstacle.generatedPositions.add(object.position);
                 }
                 constructors.add(object.constructor);
@@ -608,10 +605,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             @Override
             public void run() {
                 final Obstacle obstacle;
-                if(obstacleToEdit != null){
+                if (obstacleToEdit != null) {
                     obstacle = obstacleToEdit;
-                }else{
-                    obstacle =  new Obstacle(ObstacleType.TREE);
+                } else {
+                    obstacle = new Obstacle(ObstacleType.TREE);
                     level.obstacles.add(obstacle);
                 }
                 float height = Gdx.graphics.getHeight();
@@ -910,9 +907,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             strings[i] = "MODIFIER:" + i + ": " + level.modifiers.get(i).toString();
         }
 
-        for(int i = 0; i < level.obstacles.size(); i++){
+        for (int i = 0; i < level.obstacles.size(); i++) {
             int offset = level.modifiers.size() + i;
-            strings[offset] = "OBSTACLE:" + offset + ":" +  level.obstacles.get(i).toString();
+            strings[offset] = "OBSTACLE:" + i + ":" + level.obstacles.get(i).toString();
         }
 
 
@@ -992,10 +989,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     public static class Level {
-        private List<Modifier> modifiers = new ArrayList<Modifier>();
-        private List<Obstacle> obstacles = new ArrayList<Obstacle>();
-        private float width;
-        private float length;
+        public List<Modifier> modifiers = new ArrayList<Modifier>();
+        public List<Obstacle> obstacles = new ArrayList<Obstacle>();
+        public float width;
+        public float length;
     }
 
     public static class Modifier {
@@ -1032,13 +1029,16 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         ObstacleType type;
 
-        public Obstacle(){}
+        public Obstacle() {
+        }
 
-        public Obstacle(ObstacleType type){this.type = type;}
+        public Obstacle(ObstacleType type) {
+            this.type = type;
+        }
 
         @Override
         public String toString() {
-            return  type + " x(" + params.get(START_X) + ":" + params.get(END_X) + ")z(" + params.get(START_Z) + ", " +  params.get(END_Z) + ")" + params.get(DENSITY);
+            return type + " x(" + params.get(START_X) + ":" + params.get(END_X) + ")z(" + params.get(START_Z) + ", " + params.get(END_Z) + ")" + params.get(DENSITY);
         }
     }
 

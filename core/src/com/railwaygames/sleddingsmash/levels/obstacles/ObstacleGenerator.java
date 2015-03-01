@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by conormullen on 2/19/15.
  */
-public abstract class ObstacleGenerator{
+public abstract class ObstacleGenerator {
 
     Model model;
 
@@ -39,23 +39,23 @@ public abstract class ObstacleGenerator{
         this.model = model;
     }
 
-    public List<GameObject> generateObstacles(Model areaModel, Map<String, Object> params, Vector3 upVector, Vector3 offset){
+    public List<GameObject> generateObstacles(Model areaModel, Map<String, Object> params, Vector3 upVector, Vector3 offset) {
         MapUtils.addDefaults(params, defaultParams);
 
-        ModelUtils.RectangleArea area = new ModelUtils.RectangleArea((Float)params.get(START_X), 1f - (Float)params.get(END_Z), (Float)params.get(END_X), 1f - (Float)params.get(START_Z));
-        List<Vector3> locations = ModelUtils.findAreaInModel(areaModel, area, upVector, (Float)params.get(ANGLE));
+        ModelUtils.RectangleArea area = new ModelUtils.RectangleArea((Float) params.get(START_X), 1f - (Float) params.get(END_Z), (Float) params.get(END_X), 1f - (Float) params.get(START_Z));
+        List<Vector3> locations = ModelUtils.findAreaInModel(areaModel, area, upVector, (Float) params.get(ANGLE));
 
         return generateObstacles(params, upVector, offset, locations);
     }
 
-    private List<GameObject> generateObstacles(Map<String, Object> params, Vector3 upVector, Vector3 offset, List<Vector3> locations){
+    private List<GameObject> generateObstacles(Map<String, Object> params, Vector3 upVector, Vector3 offset, List<Vector3> locations) {
         List<GameObject> gameObjects = new ArrayList<GameObject>();
         List<Integer> usedIndexes = new ArrayList<Integer>();
 
-        if(locations.size() > 0){
-            for(int i = 0; i < (Float)params.get(DENSITY); i++){
+        if (locations.size() > 0) {
+            for (int i = 0; i < (Float) params.get(DENSITY); i++) {
                 int randomIndex = (int) MathUtils.randomInRange(0, locations.size());
-                if(!usedIndexes.contains(randomIndex)){
+                if (!usedIndexes.contains(randomIndex)) {
                     usedIndexes.add(randomIndex);
                     gameObjects.add(placeObstacle(locations.get(randomIndex), offset));
                 }
@@ -65,10 +65,10 @@ public abstract class ObstacleGenerator{
         return gameObjects;
     }
 
-    public List<GameObject> generateAt(List<Vector3> locations, Map<String, Object> params, Vector3 offset){
+    public List<GameObject> generateAt(List<Vector3> locations, Map<String, Object> params, Vector3 offset) {
         List<GameObject> gameObjects = new ArrayList<GameObject>();
 
-        for(Vector3 loc : locations){
+        for (Vector3 loc : locations) {
             gameObjects.add(placeObstacle(loc, offset));
         }
 

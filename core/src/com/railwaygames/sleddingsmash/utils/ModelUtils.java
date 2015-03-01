@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class ModelUtils {
 
-    public static List<Vector3> findAreaInModel(Model model, RectangleArea area, Vector3 upVector, float allowedAngle){
+    public static List<Vector3> findAreaInModel(Model model, RectangleArea area, Vector3 upVector, float allowedAngle) {
         Mesh mesh = model.meshes.get(0);
 
         int newVertexOffset = mesh.getVertexSize() / 4;
@@ -23,7 +23,7 @@ public class ModelUtils {
 
         List<Vector3> locationsInBounds = new ArrayList<Vector3>();
 
-        Map<String, MathUtils.MinMax> axisMinMax =  MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
+        Map<String, MathUtils.MinMax> axisMinMax = MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
 
         MathUtils.MinMax xAxis = axisMinMax.get("x");
         MathUtils.MinMax zAxis = axisMinMax.get("z");
@@ -36,15 +36,15 @@ public class ModelUtils {
 
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
-            if(inBounds(vertices[i], maxX, minX) && inBounds(vertices[i+2], maxZ, minZ)){
-                float normalX = vertices[i+3];
-                float normalY = vertices[i+4];
-                float normalZ = vertices[i+5];
+            if (inBounds(vertices[i], maxX, minX) && inBounds(vertices[i + 2], maxZ, minZ)) {
+                float normalX = vertices[i + 3];
+                float normalY = vertices[i + 4];
+                float normalZ = vertices[i + 5];
 
                 double angle = Math.toDegrees(Math.acos(new Vector3(normalX, normalY, normalZ).dot(upVector)));
 
-                if(angle < allowedAngle){
-                    locationsInBounds.add(new Vector3(vertices[i], vertices[i+1], vertices[i+2]));
+                if (angle < allowedAngle) {
+                    locationsInBounds.add(new Vector3(vertices[i], vertices[i + 1], vertices[i + 2]));
                 }
             }
         }
@@ -53,14 +53,14 @@ public class ModelUtils {
         return locationsInBounds;
     }
 
-    private static boolean inBounds(float vertex, float max,float min){
-        if(vertex <= max && vertex >= min){
+    private static boolean inBounds(float vertex, float max, float min) {
+        if (vertex <= max && vertex >= min) {
             return true;
         }
         return false;
     }
 
-    public static class RectangleArea{
+    public static class RectangleArea {
         public float xStartPercent;
         public float zStartPercent;
         public float xEndPercent;
