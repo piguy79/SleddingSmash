@@ -786,6 +786,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     label.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
+                            clearObstaclePositions();
                             if (applyModifiers(group)) {
                                 group.remove();
                                 showMenus(true, homeMenu);
@@ -825,6 +826,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         label.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
+                                clearObstaclePositions();
                                 group.remove();
                                 level.modifiers.remove(modToEdit);
                                 applyModifiers(group);
@@ -836,6 +838,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 }
             }
         };
+    }
+
+    private void clearObstaclePositions(){
+        if(level != null){
+            for(Obstacle obstacle : level.obstacles){
+                obstacle.generatedPositions = null;
+            }
+        }
     }
 
     private Runnable createResetRunnable() {
