@@ -29,8 +29,8 @@ public abstract class ObstacleGenerator{
     private Map<String, Object> defaultParams = new HashMap<String, Object>() {{
         put(START_X, 0.2f);
         put(END_X, 0.6f);
-        put(START_Z, 0.1f);
-        put(END_Z, 0.9f);
+        put(START_Z, 0.01f);
+        put(END_Z, 0.1f);
         put(DENSITY, 20f);
         put(ANGLE, 60f);
     }};

@@ -2,7 +2,9 @@ package com.railwaygames.sleddingsmash.levels.obstacles;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 
 /**
@@ -17,14 +19,15 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
     @Override
     GameObject placeObstacle(Vector3 vector, Vector3 offset) {
 
-        GameObject.Constructor constructor = new GameObject.Constructor(model, new btBoxShape(new Vector3(4f, 4f, 4f)), 0);
+        btCollisionShape colliosionShape =  Bullet.obtainStaticNodeShape(model.nodes);
+        GameObject.Constructor constructor = new GameObject.Constructor(model, colliosionShape, 0);
         GameObject tree = constructor.construct();
 
         tree.setPosition(vector);
-        Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height()/ 2), vector.z);
+        Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height() / 2), vector.z);
         tree.transform.setToTranslation(position);
-        //tree.transform.rotate(1, 0, 0, -180);
         tree.getBody().setWorldTransform(tree.transform);
+        tree.getBody().userData = "Tree";
 
         return tree;
     }
