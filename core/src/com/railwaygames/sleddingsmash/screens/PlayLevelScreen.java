@@ -1,5 +1,6 @@
 package com.railwaygames.sleddingsmash.screens;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
@@ -32,11 +34,13 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.Resources;
 import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
+import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,9 +116,10 @@ public class PlayLevelScreen implements ScreenFeedback {
         public PerspectiveCamera cam;
         public ModelBatch modelBatch;
         public Model model;
+        public Model treeModel;
         public CameraInputController camController;
-        private List<GameObject.Constructor> constructors = new ArrayList<GameObject.Constructor>();
         public Array<GameObject> instances = new Array<GameObject>();
+        private List<GameObject.Constructor> constructors = new ArrayList<GameObject.Constructor>();
         private GameObject sphere;
         private GameObject plane;
         private btCollisionConfiguration collisionConfig;
@@ -136,6 +141,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             createPhysicsWorld();
             setupCamera();
             createPlane(level.width, level.length);
+            createTree();
 
             for (SleddingSmashEditor.Modifier existingModifier : level.modifiers) {
                 try {
@@ -150,6 +156,28 @@ public class PlayLevelScreen implements ScreenFeedback {
                     }
                 } catch (Throwable t) {
                     t.printStackTrace();
+                }
+            }
+
+            for (SleddingSmashEditor.Obstacle obstacle : level.obstacles) {
+                TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
+                List<GameObject> gameObjects = new ArrayList<GameObject>();
+                boolean needsPositions = obstacle.generatedPositions == null;
+
+                if (needsPositions) {
+                    obstacle.generatedPositions = new ArrayList<Vector3>();
+                    gameObjects = treeGenerator.generateObstacles(plane.model, obstacle.params, new Vector3(0, 1, 0), new Vector3(-level.width * 0.5f, 0, 0));
+                } else {
+                    gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f, 0, 0));
+                }
+
+                for (GameObject object : gameObjects) {
+                    if (needsPositions) {
+                        obstacle.generatedPositions.add(object.position);
+                    }
+                    constructors.add(object.constructor);
+                    instances.add(object);
+                    dynamicsWorld.addRigidBody(object.getBody());
                 }
             }
 
@@ -181,6 +209,12 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             instances.add(sphere);
             dynamicsWorld.addRigidBody(sphere.getBody());
+        }
+
+        private void createTree() {
+            UBJsonReader jsonReader = new UBJsonReader();
+            G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+            treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
         }
 
         private void createPhysicsWorld() {
@@ -238,7 +272,8 @@ public class PlayLevelScreen implements ScreenFeedback {
                 obj.getBody().getWorldTransform(obj.transform);
             }
 
-            camController.camera.position.set(sphere.getPosition().x, sphere.getPosition().y + 10f, sphere.getPosition().z + 10f);
+            camController.camera.position.set(sphere.getLocationInWorld()
+                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 10f);
             camController.camera.update();
             camController.update();
 

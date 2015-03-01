@@ -21,7 +21,7 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
         GameObject tree = constructor.construct();
 
         tree.setPosition(vector);
-        Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height()/ 2), vector.z);
+        Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height() / 2), vector.z);
         tree.transform.setToTranslation(position);
         //tree.transform.rotate(1, 0, 0, -180);
         tree.getBody().setWorldTransform(tree.transform);

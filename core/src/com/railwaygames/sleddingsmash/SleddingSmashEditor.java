@@ -101,7 +101,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
-
     @Override
     public void create() {
         Bullet.init();
@@ -313,14 +312,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void createTree() {
-        // Model loader needs a binary json reader to decode
         UBJsonReader jsonReader = new UBJsonReader();
-        // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        // Now load the model by name
-        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
         treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
-
     }
 
     private void showMenus(boolean right, String... menus) {
@@ -397,7 +391,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         cam.position.set(0f, 80f, 80f);
         cam.lookAt(0, 0, -60);
         cam.near = 1f;
-        cam.far = 5000f;
+        cam.far = 50000f;
         cam.update();
 
         camController = new CameraInputController(cam) {
@@ -915,7 +909,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         for (int i = 0; i < level.obstacles.size(); i++) {
             int offset = level.modifiers.size() + i;
-            strings[offset] = "OBSTACLE:" + offset + ":" + level.obstacles.get(i).toString();
+            strings[offset] = "OBSTACLE:" + i + ":" + level.obstacles.get(i).toString();
         }
 
 

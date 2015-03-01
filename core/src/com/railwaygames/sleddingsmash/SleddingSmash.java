@@ -38,7 +38,6 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
-import com.railwaygames.sleddingsmash.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,7 +92,7 @@ public class SleddingSmash extends ApplicationAdapter {
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
 
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f,0,0));
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f, 0, 0));
 
 
         for (GameObject object : gameObjects) {
@@ -109,7 +108,7 @@ public class SleddingSmash extends ApplicationAdapter {
         model = modelLoader.loadModel(Gdx.files.getFileHandle("data/rock_2.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f,0,0));
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f, 0, 0));
 
 
         for (GameObject object : gameObjects) {
