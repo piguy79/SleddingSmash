@@ -174,7 +174,7 @@ public class SlopeModifier implements TerrainModifier {
                 tmpVec.set(x, y, z);
 
                 float duration = length * evalAxisInterpolationDuration;
-                float ratio = interpolation.apply((val - start) / duration);
+                float ratio = interpolation.apply(Math.abs((val - start) / duration));
                 setEvaluatedValue(Math.max(-1.0f, Math.min(1.0f, ratio)), tmpVec);
 
                 return tmpVec;

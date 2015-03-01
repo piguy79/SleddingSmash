@@ -763,7 +763,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     choices.add(choice);
                 }
 
-                modifier.params.put(INTERPOLATION, choices.get(0));
                 final SelectBox<InterpolationChoice> interpolationSelectBox = createLabelWithSelectBox(group, "interpolation", y, width, choices);
                 interpolationSelectBox.addListener(new ChangeListener() {
                     @Override
