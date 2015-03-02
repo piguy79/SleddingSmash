@@ -23,6 +23,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
@@ -82,17 +83,19 @@ public class SleddingSmash extends ApplicationAdapter {
         createPlane();
         createBall();
         createTree();
-        createRock();
+        //createRock();
     }
 
     private void createTree() {
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
+        // Now load the model by name
+        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        model = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal));
 
         TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(model);
 
-        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model, new HashMap<String, Object>(), cam.up, new Vector3(-width * 0.5f, 0, 0));
+        List<GameObject> gameObjects = treeGenerator.generateObstacles(plane.model,new HashMap<String, Object>(), new Vector3(0,1,0), new Vector3(-width * 0.5f,0,0));
 
 
         for (GameObject object : gameObjects) {
@@ -134,6 +137,7 @@ public class SleddingSmash extends ApplicationAdapter {
         sphere.getBody().setFriction(100f);
         sphere.transform.setToTranslation(0f, 9f, -9f);
         sphere.getBody().setWorldTransform(sphere.transform);
+        sphere.getBody().userData = "Sphere";
 
         instances.add(sphere);
         dynamicsWorld.addRigidBody(sphere.getBody());
@@ -154,6 +158,7 @@ public class SleddingSmash extends ApplicationAdapter {
         constructors.add(plane.constructor);
         plane.transform.setToTranslation(-width * 0.5f, 0, 0);
         plane.getBody().setWorldTransform(plane.transform);
+        plane.getBody().userData = "Plane";
 
         instances.add(plane);
         dynamicsWorld.addRigidBody(plane.getBody());
@@ -266,5 +271,27 @@ public class SleddingSmash extends ApplicationAdapter {
         public boolean onContactAdded(int userValue0, int partId0, int index0, int userValue1, int partId1, int index1) {
             return true;
         }
+
+        @Override
+        public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+            if(collision("Tree", colObj0, colObj1) && collision("Sphere", colObj0, colObj1)){
+                //btCollisionObject sphere = findObject("Sphere", colObj0, colObj1);
+                btCollisionObject tree = findObject("Tree", colObj0, colObj1);
+                Vector3 velocity = sphere.getBody().getLinearVelocity();
+                sphere.getBody().applyCentralForce(new Vector3(0,0,-100000));
+            }
+
+        }
+    }
+
+    private btCollisionObject findObject(String entity, btCollisionObject obj1, btCollisionObject obj2){
+        if(((String)obj1.userData).equals(entity)){
+            return obj1;
+        }
+        return obj2;
+    }
+
+    private boolean collision(String entity, btCollisionObject obj1, btCollisionObject obj2){
+        return ((String)obj1.userData).equals(entity) || ((String)obj2.userData).equals(entity);
     }
 }

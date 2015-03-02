@@ -2,6 +2,8 @@ package com.railwaygames.sleddingsmash.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.railwaygames.sleddingsmash.SleddingSmash;
+import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 import com.railwaygames.sleddingsmash.GameLoop;
 
 public class DesktopLauncher {
