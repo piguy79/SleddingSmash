@@ -74,7 +74,7 @@ public class LevelBuilder {
         model.meshes.add(mesh);
         model.meshParts.add(meshPart);
 
-        NodePart nodePart = new NodePart(meshPart, new Material(ColorAttribute.createDiffuse(Color.GREEN)));
+        NodePart nodePart = new NodePart(meshPart, new Material(ColorAttribute.createDiffuse(new Color(0.95f, 0.92f, 0.93f, 1.0f))));
 
         Node node = new Node();
         node.id = "plane_node";
