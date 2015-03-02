@@ -50,6 +50,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
+import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.InterpolationChoice;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
@@ -372,6 +373,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         this.level.length = length;
 
         model = LevelBuilder.generate(width, length);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(BumpyTerrainModifier.COUNT, 300);
+        new BumpyTerrainModifier().modify(model, params);
     }
 
     private void finalizePlane() {
@@ -709,8 +713,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         });
                     }
                 }
-
-
             }
         };
     }

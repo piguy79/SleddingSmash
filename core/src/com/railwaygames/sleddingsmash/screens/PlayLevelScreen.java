@@ -39,11 +39,14 @@ import com.railwaygames.sleddingsmash.Resources;
 import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 import com.railwaygames.sleddingsmash.levels.LevelBuilder;
+import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.railwaygames.sleddingsmash.SleddingSmashEditor.Level;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
@@ -190,6 +193,9 @@ public class PlayLevelScreen implements ScreenFeedback {
             this.level.length = length;
 
             model = LevelBuilder.generate(width, length);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put(BumpyTerrainModifier.COUNT, 300);
+            new BumpyTerrainModifier().modify(model, params);
         }
 
         private void createBall() {

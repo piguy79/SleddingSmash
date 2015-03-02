@@ -12,6 +12,12 @@ public class MathUtils {
         return min + ((float) Math.random()) * (max - min);
     }
 
+    public static float distance(float x1, float y1, float x2, float y2) {
+        float one = x2 - x1;
+        float two = y2 - y1;
+        return (float) Math.sqrt(one * one + two * two);
+    }
+
     public static Map<String, MinMax> calculateAxisMinMax(float[] vertices, float newVertexOffset) {
         Map<String, MinMax> minMaxMap = new HashMap<String, MinMax>();
 
@@ -56,7 +62,7 @@ public class MathUtils {
             this.mid = (max - min) * 0.5f;
         }
 
-        public float axisSize(){
+        public float axisSize() {
             return this.max - this.min;
         }
     }
