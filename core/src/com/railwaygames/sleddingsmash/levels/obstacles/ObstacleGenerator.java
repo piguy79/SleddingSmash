@@ -25,6 +25,7 @@ public abstract class ObstacleGenerator {
     public static final String END_Z = "endZ";
     public static final String DENSITY = "density";
     public static final String ANGLE = "angle";
+    public static final String MODEL = "model";
 
     private Map<String, Object> defaultParams = new HashMap<String, Object>() {{
         put(START_X, 0.2f);
@@ -33,6 +34,7 @@ public abstract class ObstacleGenerator {
         put(END_Z, 0.1f);
         put(DENSITY, 20f);
         put(ANGLE, 60f);
+        put(MODEL, "tree");
     }};
 
     protected ObstacleGenerator(Model model) {

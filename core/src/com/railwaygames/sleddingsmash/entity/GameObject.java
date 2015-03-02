@@ -15,13 +15,15 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameObject extends ModelInstance implements Disposable {
 
     private btRigidBody body;
+    public GameObjectType gameObjectType;
     public Constructor constructor;
     public Vector3 position;
 
-    public GameObject(Model model, btRigidBody.btRigidBodyConstructionInfo constructionInfo, Constructor constructor) {
+    public GameObject(Model model, GameObjectType gameObjectType, btRigidBody.btRigidBodyConstructionInfo constructionInfo, Constructor constructor) {
         super(model);
         this.constructor = constructor;
         this.body = new btRigidBody(constructionInfo);
+        this.body.userData = this;
     }
 
     public void setPosition(Vector3 newPosition) {
@@ -51,12 +53,14 @@ public class GameObject extends ModelInstance implements Disposable {
 
     public static class Constructor implements Disposable {
         public final Model model;
+        public final GameObjectType gameObjectType;
         public final btCollisionShape shape;
         public final btRigidBody.btRigidBodyConstructionInfo constructionInfo;
         private static Vector3 localInertia = new Vector3();
 
-        public Constructor(Model model, btCollisionShape shape, float mass) {
+        public Constructor(Model model, GameObjectType gameObjectType, btCollisionShape shape, float mass) {
             this.model = model;
+            this.gameObjectType = gameObjectType;
             this.shape = shape;
             if (mass > 0f)
                 shape.calculateLocalInertia(mass, localInertia);
@@ -66,7 +70,7 @@ public class GameObject extends ModelInstance implements Disposable {
         }
 
         public GameObject construct() {
-            return new GameObject(model, constructionInfo, this);
+            return new GameObject(model, gameObjectType, constructionInfo, this);
         }
 
         @Override
@@ -74,5 +78,9 @@ public class GameObject extends ModelInstance implements Disposable {
             shape.dispose();
             constructionInfo.dispose();
         }
+    }
+
+    public enum GameObjectType{
+        CHARACTER, TREE, ROCK, PLANE
     }
 }

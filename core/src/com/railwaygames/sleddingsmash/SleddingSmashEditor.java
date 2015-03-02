@@ -71,6 +71,7 @@ import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.DENSITY;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_X;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_Z;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.MODEL;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_X;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_Z;
 
@@ -80,7 +81,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
     public Model model;
-    public Model treeModel;
+    public Map<String,Model> treeModelMap;
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
@@ -100,6 +101,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
     private Level level = new Level();
 
+    private String[] treeModels = new String[]{"tree", "tree_1"};
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
     @Override
@@ -134,6 +136,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         TextField.TextFieldStyle style = new TextField.TextFieldStyle(font, Color.BLACK, cursor, null, trd);
         skin.add("default", style);
         skin.add("default", new SelectBox.SelectBoxStyle(font, Color.BLACK, trd, new ScrollPane.ScrollPaneStyle(), new com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle(font, Color.BLUE, Color.WHITE, cursor)));
+
+        treeModelMap = new HashMap<String, Model>();
 
         createPhysicsWorld();
         setupCamera();
@@ -315,7 +319,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private void createTree() {
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
+        treeModelMap.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
+        treeModelMap.put("tree_1", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
     }
 
     private void showMenus(boolean right, String... menus) {
@@ -380,7 +385,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void finalizePlane() {
         LevelBuilder.calculateNormals(model);
-        plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
+        plane = new GameObject.Constructor(model, GameObject.GameObjectType.PLANE, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
         constructors.add(plane.constructor);
         plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
 
@@ -528,7 +533,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private boolean applyObstacles(Group group) {
         for (Obstacle obstacle : level.obstacles) {
-            TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
+            TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModelMap.get(obstacle.getModelToUse()));
             List<GameObject> gameObjects = new ArrayList<GameObject>();
             boolean needsPositions = obstacle.generatedPositions == null;
 
@@ -651,6 +656,24 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 final TextField angle = createLabelWithTextField(group, "angle (0 - 360)", y, width);
                 angle.setTextFieldListener(createTextListener(obstacle.params, ANGLE, Float.class));
                 setText(angle, (Float) obstacle.params.get(ANGLE));
+
+                y -= height * 0.07f;
+                Array<String> choices = new Array<String>();
+                for (String choice : treeModels) {
+                    choices.add(choice);
+                }
+
+                obstacle.params.put(MODEL, choices.get(0));
+                final SelectBox<String> modelSelectBox = createLabelWithSelectBox(group, "Model", y, width, choices);
+                modelSelectBox.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        obstacle.params.put(MODEL, modelSelectBox.getSelected());
+                    }
+                });
+                if (obstacle.params.containsKey(MODEL)) {
+                    modelSelectBox.setSelected((String) obstacle.params.get(MODEL));
+                }
 
                 y -= height * 0.07f;
 
@@ -1045,6 +1068,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         public Obstacle(ObstacleType type) {
             this.type = type;
+        }
+
+        public String getModelToUse(){
+            return (String)params.get(MODEL);
         }
 
         @Override

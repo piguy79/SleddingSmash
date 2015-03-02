@@ -20,14 +20,13 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
     GameObject placeObstacle(Vector3 vector, Vector3 offset) {
 
         btCollisionShape colliosionShape =  Bullet.obtainStaticNodeShape(model.nodes);
-        GameObject.Constructor constructor = new GameObject.Constructor(model, colliosionShape, 0);
+        GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.TREE, colliosionShape, 0);
         GameObject tree = constructor.construct();
 
         tree.setPosition(vector);
         Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height() / 2), vector.z);
         tree.transform.setToTranslation(position);
         tree.getBody().setWorldTransform(tree.transform);
-        tree.getBody().userData = "Tree";
 
         return tree;
     }
