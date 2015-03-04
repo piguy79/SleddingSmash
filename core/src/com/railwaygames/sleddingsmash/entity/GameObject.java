@@ -42,6 +42,12 @@ public class GameObject extends ModelInstance implements Disposable {
         return box.getHeight();
     }
 
+    public float width(){
+        BoundingBox box = new BoundingBox();
+        calculateBoundingBox(box);
+        return box.getWidth();
+    }
+
     public btRigidBody getBody() {
         return body;
     }

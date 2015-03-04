@@ -17,22 +17,34 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.bullet.collision.btBox2dShape;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
+import com.badlogic.gdx.physics.bullet.collision.btConeShape;
+import com.badlogic.gdx.physics.bullet.collision.btConvexHullShape;
+import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -43,6 +55,8 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
+import com.railwaygames.sleddingsmash.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,6 +148,11 @@ public class PlayLevelScreen implements ScreenFeedback {
         private btConstraintSolver constraintSolver;
         private Level level;
 
+        private DebugDrawer debugDrawer;
+        private btCollisionWorld collisionWorld;
+
+        private static final float PHYSICS_SCALE_FACTOR = 3f;
+
         public void buildLevel(Level level) {
             this.level = level;
             lights = new Environment();
@@ -200,19 +219,33 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void createBall() {
-            ModelBuilder mb = new ModelBuilder();
-            mb.begin();
-            mb.node().id = "sphere";
-            mb.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.RED)))
-                    .sphere(1f, 1f, 1f, 10, 10);
-            Model model = mb.end();
 
-            sphere = new GameObject.Constructor(model, GameObject.GameObjectType.CHARACTER, new btSphereShape(0.5f), 1f).construct();
+            UBJsonReader jsonReader = new UBJsonReader();
+            G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+            Model model = modelLoader.loadModel(Gdx.files.getFileHandle("data/sled_1.g3db", Files.FileType.Internal));
+
+            btCompoundShape compoundShape = new btCompoundShape();
+
+            btBoxShape box = new btBoxShape(new Vector3(4f,0.2f,2f));
+            compoundShape.addChildShape(new Matrix4(new Vector3(0,0,0), new Quaternion(), new Vector3(1,1,1)), box);
+
+            btCylinderShape cylinder = new btCylinderShape(new Vector3(1,1,1));
+            compoundShape.addChildShape(new Matrix4(new Vector3(-3,0,0f), new Quaternion(new Vector3(1,0,0), -90), new Vector3(1f,1.5f,1f)), cylinder);
+
+            sphere = new GameObject.Constructor(model, GameObject.GameObjectType.CHARACTER, compoundShape, 50f * PHYSICS_SCALE_FACTOR).construct();
             constructors.add(sphere.constructor);
 
-            sphere.getBody().setFriction(100f);
-            sphere.transform.setToTranslation(0f, 30f, -9f);
+            collisionWorld.addCollisionObject(sphere.getBody());
+            sphere.getBody().setFriction(0.1f);
+
+            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.5f,0.01f, 0.6f, 0.03f),new Vector3(0, 1, 0), 180);
+            int randomIndex = (int)MathUtils.randomInRange(0, locations.size());
+            Vector3 pos = locations.get(randomIndex);
+
+            sphere.transform.setToTranslation((-level.width * 0.5f) + pos.x, pos.y+2f, pos.z);
+            sphere.transform.rotate(0,1,0,-90);
             sphere.getBody().setWorldTransform(sphere.transform);
+
 
             instances.add(sphere);
             dynamicsWorld.addRigidBody(sphere.getBody());
@@ -231,8 +264,13 @@ public class PlayLevelScreen implements ScreenFeedback {
             broadphase = new btDbvtBroadphase();
             constraintSolver = new btSequentialImpulseConstraintSolver();
             dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
-            dynamicsWorld.setGravity(new Vector3(0, -10f, 0));
+            dynamicsWorld.setGravity(new Vector3(0, -10 * PHYSICS_SCALE_FACTOR, 0));
             contactListener = new SSContactListener();
+
+            collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
+            debugDrawer = new DebugDrawer();
+            collisionWorld.setDebugDrawer(debugDrawer);
+            debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
         }
 
         private void finalizePlane() {
@@ -243,6 +281,11 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
             plane.getBody().setWorldTransform(plane.transform);
+            //plane.getBody().setFriction(100f * PHYSICS_SCALE_FACTOR);
+            //plane.getBody().setRestitution(100f * PHYSICS_SCALE_FACTOR);
+
+            // Use for seeing the physcis on the plane
+            //collisionWorld.addCollisionObject(plane.getBody());
 
             instances.add(plane);
             dynamicsWorld.addRigidBody(plane.getBody());
@@ -281,13 +324,17 @@ public class PlayLevelScreen implements ScreenFeedback {
             }
 
             camController.camera.position.set(sphere.getLocationInWorld()
-                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 10f);
+                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 20f);
             camController.camera.update();
             camController.update();
 
             modelBatch.begin(cam);
             modelBatch.render(instances, lights);
             modelBatch.end();
+
+            debugDrawer.begin(cam);
+            collisionWorld.debugDrawWorld();
+            debugDrawer.end();
         }
 
         private void applyForce() {
@@ -296,13 +343,21 @@ public class PlayLevelScreen implements ScreenFeedback {
                 sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2, 0, 0));
             } else {
                 if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
+                    sphere.getBody().applyCentralForce(new Vector3(-15f * PHYSICS_SCALE_FACTOR, 0, 0));
+
+                    //Vector3 force = new Vector3(15f * PHYSICS_SCALE_FACTOR, 0, 0);
+                    //Vector3 position = new Vector3(sphere.width(), 0, sphere.height());
+                    //sphere.getBody().applyForce(force, position);
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
+                    sphere.getBody().applyCentralForce(new Vector3(15f * PHYSICS_SCALE_FACTOR, 0, 0));
+
+                    //Vector3 force = new Vector3(-15f * PHYSICS_SCALE_FACTOR, 0, 0);
+                    //Vector3 position = new Vector3(sphere.width(), 0, sphere.height());
+                    //sphere.getBody().applyForce(force, position);
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
+                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -20f * PHYSICS_SCALE_FACTOR));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
+                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 4f *PHYSICS_SCALE_FACTOR));
                 }
             }
         }
