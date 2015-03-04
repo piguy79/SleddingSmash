@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
@@ -122,7 +123,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         public PerspectiveCamera cam;
         public ModelBatch modelBatch;
         public Model model;
-        public Model treeModel;
+        public Map<String, Model> treeModels;
         public CameraInputController camController;
         public Array<GameObject> instances = new Array<GameObject>();
         public Array<ModelInstance> modelInstances = new Array<ModelInstance>();
@@ -131,7 +132,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private GameObject plane;
         private btCollisionConfiguration collisionConfig;
         private btDispatcher dispatcher;
-        private MyContactListener contactListener;
+        private SSContactListener contactListener;
         private btBroadphaseInterface broadphase;
         private btDynamicsWorld dynamicsWorld;
         private btConstraintSolver constraintSolver;
@@ -167,7 +168,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             }
 
             for (SleddingSmashEditor.Obstacle obstacle : level.obstacles) {
-                TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModel);
+                TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModels.get(obstacle.getModelToUse()));
                 List<GameObject> gameObjects = new ArrayList<GameObject>();
                 boolean needsPositions = obstacle.generatedPositions == null;
 
@@ -218,7 +219,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                     .sphere(1f, 1f, 1f, 10, 10);
             Model model = mb.end();
 
-            sphere = new GameObject.Constructor(model, new btSphereShape(0.5f), 1f).construct();
+            sphere = new GameObject.Constructor(model, GameObject.GameObjectType.CHARACTER, new btSphereShape(0.5f), 1f).construct();
             constructors.add(sphere.constructor);
 
             sphere.getBody().setFriction(100f);
@@ -230,9 +231,10 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void createTree() {
+            this.treeModels = new HashMap<String, Model>();
             UBJsonReader jsonReader = new UBJsonReader();
             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-            treeModel = modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal));
+            treeModels.put("tree",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
         }
 
         private void createPhysicsWorld() {
@@ -242,13 +244,13 @@ public class PlayLevelScreen implements ScreenFeedback {
             constraintSolver = new btSequentialImpulseConstraintSolver();
             dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
             dynamicsWorld.setGravity(new Vector3(0, -10f, 0));
-            contactListener = new MyContactListener();
+            contactListener = new SSContactListener();
         }
 
         private void finalizePlane() {
             LevelBuilder.calculateNormals(model);
 
-            plane = new GameObject.Constructor(model, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
+            plane = new GameObject.Constructor(model, GameObject.GameObjectType.PLANE, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
             constructors.add(plane.constructor);
 
             plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
@@ -318,10 +320,25 @@ public class PlayLevelScreen implements ScreenFeedback {
             }
         }
 
-        class MyContactListener extends ContactListener {
+        class SSContactListener extends ContactListener {
             @Override
-            public boolean onContactAdded(int userValue0, int partId0, int index0, int userValue1, int partId1, int index1) {
-                return true;
+            public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
+                if(collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)){
+                    btCollisionObject tree = findObject(GameObject.GameObjectType.TREE, colObj0, colObj1);
+                    Vector3 velocity = sphere.getBody().getLinearVelocity();
+                    sphere.getBody().applyCentralForce(new Vector3(0,0,-100000));
+                }
+            }
+
+            private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
+                if(((GameObject)obj1.userData).gameObjectType == entity){
+                    return obj1;
+                }
+                return obj2;
+            }
+
+            private boolean collision(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
+                return ((GameObject)obj1.userData).gameObjectType == entity || ((GameObject)obj2.userData).gameObjectType ==entity;
             }
         }
     }

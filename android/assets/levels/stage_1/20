@@ -165,6 +165,10 @@ obstacles: [
 				class: java.lang.Float
 				value: 0
 			}
+			model: {
+                class: java.lang.String
+                value: tree
+            }
 		}
 		generatedPositions: [
 			{
