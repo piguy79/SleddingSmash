@@ -292,9 +292,9 @@ public class PlayLevelScreen implements ScreenFeedback {
                 obj.getBody().getWorldTransform(obj.transform);
             }
 
-//            camController.camera.position.set(sphere.getLocationInWorld()
-//                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 10f);
-//            camController.camera.update();
+            camController.camera.position.set(sphere.getLocationInWorld()
+                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 10f);
+            camController.camera.update();
             camController.update();
 
             modelBatch.begin(cam);
