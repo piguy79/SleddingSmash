@@ -10,7 +10,16 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LevelBuilder {
 
@@ -37,9 +46,7 @@ public class LevelBuilder {
                 vertices[count++] = z;
 
                 // skip normals until all terrain modifiers have been run
-                count++;
-                count++;
-                count++;
+                count += 3;
             }
         }
 
@@ -135,6 +142,214 @@ public class LevelBuilder {
             }
 
             mesh.setVertices(vertices);
+        }
+    }
+
+    public static List<Model> createSides(Model model) {
+        Mesh mesh = model.meshes.get(0);
+
+        int numIndices = mesh.getNumIndices();
+        int numVertices = mesh.getNumVertices() * 3 * 2;
+
+        // divide by 4 b/c size is in bytes
+        int newVertexOffset = mesh.getVertexSize() / 4;
+
+        float[] vertices = new float[numVertices];
+        mesh.getVertices(vertices);
+
+        short[] indices = new short[numIndices];
+        mesh.getIndices(indices);
+
+        /*
+         * Locate edges by counting the number of triangles that connect to each index
+         */
+        Map<Short, Integer> indexCount = new HashMap<Short, Integer>();
+        List<Triangle> triangles = new ArrayList<Triangle>();
+        for (int i = 0; i < numIndices; i += 3) {
+            short one = indices[i];
+            short two = indices[i + 1];
+            short three = indices[i + 2];
+
+            newCount(indexCount, one);
+            newCount(indexCount, two);
+            newCount(indexCount, three);
+
+            triangles.add(new Triangle(one, two, three));
+        }
+
+        List<Segment> leftEdges = new ArrayList<Segment>();
+        List<Segment> rightEdges = new ArrayList<Segment>();
+        for (Triangle triangle : triangles) {
+            findEdges(vertices, indexCount, triangle.one, triangle.two, triangle.three, leftEdges, rightEdges, newVertexOffset);
+            findEdges(vertices, indexCount, triangle.two, triangle.three, triangle.one, leftEdges, rightEdges, newVertexOffset);
+            findEdges(vertices, indexCount, triangle.three, triangle.one, triangle.two, leftEdges, rightEdges, newVertexOffset);
+        }
+
+        Model leftModel = createSideModel(true, leftEdges, newVertexOffset, vertices);
+        Model rightModel = createSideModel(false, rightEdges, newVertexOffset, vertices);
+
+        List<Model> models = new ArrayList<Model>(2);
+        models.add(leftModel);
+        models.add(rightModel);
+        return models;
+    }
+
+    private static Model createSideModel(boolean left, List<Segment> edges, int newVertexOffset, float[] vertices) {
+        //reverse sort b/c Z gets smaller
+        Collections.sort(edges, new Comparator<Segment>() {
+            @Override
+            public int compare(Segment o1, Segment o2) {
+                return Float.valueOf(o2.oneZ).compareTo(Float.valueOf(o1.oneZ));
+            }
+        });
+        int lengthCount = edges.size();
+
+        int rectWidth = 100;
+        int widthCount = 8;
+        int width = rectWidth * widthCount;
+
+        int vertexCount = (lengthCount + 1) * (widthCount + 1) * 3 * 2;
+        float[] newVertices = new float[vertexCount];
+
+        int mod = 1;
+        if (left) {
+            mod = -1;
+        }
+
+        boolean first = true;
+        int v = 0;
+
+        // use interpolators to create some variation in the sides
+        Interpolation xInterpolator = Interpolation.fade;
+        float xImpact = MathUtils.randomInRange(50.0f, 200.0f);
+
+        for (Segment segment : edges) {
+            if (first) {
+                first = false;
+                float x1 = vertices[segment.one * newVertexOffset];
+                float y1 = vertices[segment.one * newVertexOffset + 1];
+                float z1 = vertices[segment.one * newVertexOffset + 2];
+                for (int x = 0; x <= width; x += rectWidth, v += newVertexOffset) {
+                    newVertices[v] = x1 + x * mod;
+                    newVertices[v + 1] = y1 + xImpact * xInterpolator.apply((float) x / (float) width);
+                    newVertices[v + 2] = z1;
+                }
+            }
+            float x1 = vertices[segment.two * newVertexOffset];
+            float y1 = vertices[segment.two * newVertexOffset + 1];
+            float z1 = vertices[segment.two * newVertexOffset + 2];
+            for (int x = 0; x <= width; x += rectWidth, v += newVertexOffset) {
+                newVertices[v] = x1 + x * mod;
+                newVertices[v + 1] = y1 + xImpact * xInterpolator.apply((float) x / (float) width);
+                newVertices[v + 2] = z1;
+            }
+        }
+
+        // subdivide by square, then divide each square into 2 triangles
+        int indexCount = widthCount * lengthCount * 6;
+        short[] indices = new short[indexCount];
+        int count = 0;
+        for (int r = 0; r < lengthCount - 1; r++) {
+            for (int c = 0; c < widthCount; c++) {
+                short offset = (short) (r * (widthCount + 1) + c);
+                short nextOffset = (short) ((r + 1) * (widthCount + 1) + c);
+
+                // triangle 1
+                if (left) {
+                    indices[count++] = (short) (offset + 1);
+                    indices[count++] = offset;
+                } else {
+                    indices[count++] = offset;
+                    indices[count++] = (short) (offset + 1);
+                }
+                indices[count++] = nextOffset;
+
+                // triangle 2
+                if (left) {
+                    indices[count++] = (short) (nextOffset + 1);
+                    indices[count++] = (short) (offset + 1);
+                } else {
+                    indices[count++] = (short) (offset + 1);
+                    indices[count++] = (short) (nextOffset + 1);
+                }
+                indices[count++] = nextOffset;
+            }
+        }
+
+        Mesh mesh = new Mesh(true, vertexCount, indexCount, VertexAttribute.Position(), VertexAttribute.Normal());
+        mesh.setVertices(newVertices);
+        mesh.setIndices(indices);
+
+        MeshPart meshPart = new MeshPart("side" + (left ? "left" : "right"), mesh, 0, indexCount, GL20.GL_TRIANGLES);
+        meshPart.mesh = mesh;
+
+        Model model = new Model();
+
+        model.meshes.add(mesh);
+        model.meshParts.add(meshPart);
+
+        NodePart nodePart = new NodePart(meshPart, new Material(ColorAttribute.createDiffuse(new Color(0.75f, 0.72f, 0.73f, 1.0f))));
+
+        Node node = new Node();
+        node.id = "side_node";
+        node.parts.add(nodePart);
+        model.nodes.add(node);
+
+        return model;
+    }
+
+    private static void findEdges(float[] vertices, Map<Short, Integer> indexCount, short one, short two, short three, List<Segment> leftEdges, List<Segment> rightEdges, int newVertexOffset) {
+        if (indexCount.get(one) < 6 && indexCount.get(two) < 6) {
+            float oneX = vertices[one * newVertexOffset];
+            float twoX = vertices[two * newVertexOffset];
+            float threeX = vertices[three * newVertexOffset];
+
+            if (threeX < twoX && threeX < oneX) {
+                rightEdges.add(new Segment(one, two, vertices[one * newVertexOffset + 2], vertices[two * newVertexOffset + 2]));
+            } else if (threeX > twoX && threeX > oneX) {
+                leftEdges.add(new Segment(one, two, vertices[one * newVertexOffset + 2], vertices[two * newVertexOffset + 2]));
+            }
+        }
+    }
+
+    private static void newCount(Map<Short, Integer> indexCount, short i) {
+        Integer c = indexCount.get(i);
+        if (c == null) {
+            c = 0;
+        }
+        indexCount.put(i, c + 1);
+    }
+
+    private static class Triangle {
+        public short one;
+        public short two;
+        public short three;
+
+        public Triangle(short one, short two, short three) {
+            this.one = one;
+            this.two = two;
+            this.three = three;
+        }
+    }
+
+    private static class Segment {
+        public short one;
+        public short two;
+        public float oneZ;
+        public float twoZ;
+
+        public Segment(short one, short two, float oneZ, float twoZ) {
+            if (oneZ > twoZ) {
+                this.one = one;
+                this.two = two;
+                this.oneZ = oneZ;
+                this.twoZ = twoZ;
+            } else {
+                this.one = two;
+                this.two = one;
+                this.oneZ = twoZ;
+                this.twoZ = oneZ;
+            }
         }
     }
 }
