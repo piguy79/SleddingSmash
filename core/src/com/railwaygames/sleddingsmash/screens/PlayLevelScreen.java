@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
@@ -89,6 +90,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     @Override
     public void show() {
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         FileHandle fileHandle = Gdx.files.internal(levelToLoad);
 
         Json json = new Json();
@@ -137,6 +140,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         public Map<String, Model> treeModels;
         public CameraInputController camController;
         public Array<GameObject> instances = new Array<GameObject>();
+        public Array<ModelInstance> modelInstances = new Array<ModelInstance>();
         private List<GameObject.Constructor> constructors = new ArrayList<GameObject.Constructor>();
         private GameObject sphere;
         private GameObject plane;
@@ -204,6 +208,14 @@ public class PlayLevelScreen implements ScreenFeedback {
                 }
             }
 
+            List<Model> sides = LevelBuilder.createSides(model);
+            for (Model side : sides) {
+                LevelBuilder.calculateNormals(side);
+                ModelInstance instance = new ModelInstance(side);
+                instance.transform.setToTranslation(-level.width * 0.5f, 0, 0);
+                modelInstances.add(instance);
+            }
+
             finalizePlane();
             createBall();
         }
@@ -244,6 +256,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             sphere.transform.setToTranslation((-level.width * 0.5f) + pos.x, pos.y+2f, pos.z);
             sphere.transform.rotate(0,1,0,-90);
+
             sphere.getBody().setWorldTransform(sphere.transform);
 
 
@@ -300,6 +313,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             cam.update();
 
             camController = new CameraInputController(cam);
+            camController.translateUnits = 200.0f;
             Gdx.input.setInputProcessor(camController);
         }
 
@@ -314,7 +328,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
 
-            Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
             applyForce();
@@ -330,6 +343,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             modelBatch.begin(cam);
             modelBatch.render(instances, lights);
+            modelBatch.render(modelInstances, lights);
             modelBatch.end();
 
             debugDrawer.begin(cam);
