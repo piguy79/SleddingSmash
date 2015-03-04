@@ -3,8 +3,11 @@ package com.railwaygames.sleddingsmash;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public class UISkin extends Skin {
 
@@ -30,6 +33,11 @@ public class UISkin extends Skin {
 
     public void initialize(AssetManager assetManager) {
         this.assetManager = assetManager;
+        TextureAtlas menusAtlas = assetManager.get("data/images/menus.atlas", TextureAtlas.class);
+        {
+            NinePatchDrawable trd = new NinePatchDrawable(createNinePatch(menusAtlas.findRegion("button_clear")));
+            add(Constants.UI.CLEAR_BUTTON, new Button.ButtonStyle(trd, trd, trd));
+        }
     }
 
     private NinePatch createNinePatch(AtlasRegion region) {
