@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.railwaygames.sleddingsmash.screens.LevelSelectScreen;
 import com.railwaygames.sleddingsmash.screens.MainMenuScreen;
@@ -30,6 +31,7 @@ public class GameLoop extends Game {
         Gdx.input.setCatchBackKey(true);
 
         AssetManager assetManager = new AssetManager();
+        assetManager.load("data/images/menus.atlas", TextureAtlas.class);
         assetManager.finishLoading();
 
         UISkin skin = new UISkin();

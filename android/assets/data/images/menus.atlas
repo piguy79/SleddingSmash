@@ -4,9 +4,23 @@ size: 921,186
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+arrow_down
+  rotate: false
+  xy: 869, 134
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+arrow_up
+  rotate: false
+  xy: 869, 82
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
 button_clear
   rotate: false
-  xy: 869, 135
+  xy: 869, 31
   size: 50, 49
   split: 24, 25, 24, 24
   orig: 50, 49

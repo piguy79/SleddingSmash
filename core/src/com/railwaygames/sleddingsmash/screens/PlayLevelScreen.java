@@ -34,9 +34,14 @@ import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.UBJsonReader;
+import com.railwaygames.sleddingsmash.Constants;
 import com.railwaygames.sleddingsmash.Resources;
 import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 import com.railwaygames.sleddingsmash.entity.GameObject;
@@ -59,6 +64,7 @@ public class PlayLevelScreen implements ScreenFeedback {
     private String levelToLoad;
     private String renderResult = null;
     private GameState gs;
+    private HudButtons hudButtons;
 
     public PlayLevelScreen(Resources resources) {
         this.resources = resources;
@@ -85,15 +91,19 @@ public class PlayLevelScreen implements ScreenFeedback {
 
         gs = new GameState();
         gs.buildLevel(level);
+
+        hudButtons = new HudButtons(gs, resources);
     }
 
     @Override
     public void render(float delta) {
         gs.render();
+        hudButtons.render();
     }
 
     @Override
     public void resize(int width, int height) {
+        hudButtons.resize(width, height);
 
     }
 
@@ -111,11 +121,76 @@ public class PlayLevelScreen implements ScreenFeedback {
     public void hide() {
         gs.dispose();
         gs = null;
+
+        hudButtons.dispose();
+        hudButtons = null;
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    private static class HudButtons {
+
+        private Stage stage;
+        private Button upButton;
+        private Button downButton;
+        private GameState gs;
+
+        public HudButtons(GameState gs, Resources resources1) {
+            this.gs = gs;
+            stage = new Stage();
+
+            upButton = new Button(resources1.skin, Constants.UI.UP_BUTTON);
+            stage.addActor(upButton);
+
+            downButton = new Button(resources1.skin, Constants.UI.DOWN_BUTTON);
+            stage.addActor(downButton);
+
+            Gdx.input.setInputProcessor(stage);
+        }
+
+        public void render() {
+            float delta = Gdx.graphics.getDeltaTime();
+
+            stage.act(delta);
+            stage.draw();
+        }
+
+        public void resize(int width, int height) {
+            upButton.setBounds(width * 0.89f, height * 0.25f, width * 0.08f, height * 0.12f);
+            upButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(false);
+                }
+            });
+            downButton.setBounds(width * 0.89f, height * 0.07f, width * 0.08f, height * 0.12f);
+            downButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(false);
+                }
+            });
+        }
+
+        public void dispose() {
+            stage.dispose();
+            stage = null;
+        }
     }
 
     private static class GameState {
@@ -234,7 +309,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             this.treeModels = new HashMap<String, Model>();
             UBJsonReader jsonReader = new UBJsonReader();
             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-            treeModels.put("tree",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
+            treeModels.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
         }
 
         private void createPhysicsWorld() {
@@ -270,7 +345,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             camController = new CameraInputController(cam);
             camController.translateUnits = 200.0f;
-            Gdx.input.setInputProcessor(camController);
+//            Gdx.input.setInputProcessor(camController);
         }
 
         public void dispose() {
@@ -303,6 +378,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.end();
         }
 
+        private boolean accelerate = false;
+        private boolean decelerate = false;
         private void applyForce() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
@@ -312,33 +389,41 @@ public class PlayLevelScreen implements ScreenFeedback {
                     sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
                     sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || accelerate) {
                     sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || decelerate) {
                     sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
                 }
             }
         }
 
+        public void setAccelerate(boolean accelerate) {
+            this.accelerate = accelerate;
+        }
+
+        public void setDecelerate(boolean decelerate) {
+            this.decelerate = decelerate;
+        }
+
         class SSContactListener extends ContactListener {
             @Override
             public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-                if(collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)){
+                if (collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)) {
                     btCollisionObject tree = findObject(GameObject.GameObjectType.TREE, colObj0, colObj1);
                     Vector3 velocity = sphere.getBody().getLinearVelocity();
-                    sphere.getBody().applyCentralForce(new Vector3(0,0,-100000));
+                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -100000));
                 }
             }
 
-            private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
-                if(((GameObject)obj1.userData).gameObjectType == entity){
+            private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
+                if (((GameObject) obj1.userData).gameObjectType == entity) {
                     return obj1;
                 }
                 return obj2;
             }
 
-            private boolean collision(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
-                return ((GameObject)obj1.userData).gameObjectType == entity || ((GameObject)obj2.userData).gameObjectType ==entity;
+            private boolean collision(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
+                return ((GameObject) obj1.userData).gameObjectType == entity || ((GameObject) obj2.userData).gameObjectType == entity;
             }
         }
     }
