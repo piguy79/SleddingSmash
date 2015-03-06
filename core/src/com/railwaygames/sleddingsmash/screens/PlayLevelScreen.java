@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
@@ -38,6 +39,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -49,12 +51,15 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
+import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
+import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 import static com.railwaygames.sleddingsmash.SleddingSmashEditor.Level;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
 
@@ -92,7 +97,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         gs = new GameState();
         gs.buildLevel(level);
 
-        hudButtons = new HudButtons(gs, resources);
+        hudButtons = new HudButtons(gs);
     }
 
     @Override
@@ -124,6 +129,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
         hudButtons.dispose();
         hudButtons = null;
+
+        renderResult = null;
     }
 
     @Override
@@ -131,35 +138,17 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     }
 
-    private static class HudButtons {
+    private class HudButtons {
 
         private Stage stage;
         private Button upButton;
         private Button downButton;
-        private GameState gs;
+        private Button pauseButton;
 
-        public HudButtons(GameState gs, Resources resources1) {
-            this.gs = gs;
+        public HudButtons(final GameState gs) {
             stage = new Stage();
 
-            upButton = new Button(resources1.skin, Constants.UI.UP_BUTTON);
-            stage.addActor(upButton);
-
-            downButton = new Button(resources1.skin, Constants.UI.DOWN_BUTTON);
-            stage.addActor(downButton);
-
-            Gdx.input.setInputProcessor(stage);
-        }
-
-        public void render() {
-            float delta = Gdx.graphics.getDeltaTime();
-
-            stage.act(delta);
-            stage.draw();
-        }
-
-        public void resize(int width, int height) {
-            upButton.setBounds(width * 0.89f, height * 0.25f, width * 0.08f, height * 0.12f);
+            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
             upButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -172,7 +161,9 @@ public class PlayLevelScreen implements ScreenFeedback {
                     gs.setAccelerate(false);
                 }
             });
-            downButton.setBounds(width * 0.89f, height * 0.07f, width * 0.08f, height * 0.12f);
+            stage.addActor(upButton);
+
+            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
             downButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -185,6 +176,83 @@ public class PlayLevelScreen implements ScreenFeedback {
                     gs.setDecelerate(false);
                 }
             });
+            stage.addActor(downButton);
+
+            pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
+            pauseButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    showMenu();
+                }
+            });
+            stage.addActor(pauseButton);
+
+            Gdx.input.setInputProcessor(stage);
+        }
+
+        public void render() {
+            float delta = Gdx.graphics.getDeltaTime();
+
+            stage.act(delta);
+            stage.draw();
+        }
+
+        public void resize(int width, int height) {
+            float bWidth = width * 0.08f;
+            float bHeight = height * 0.125f;
+
+            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
+            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
+            pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
+        }
+
+        private void showMenu() {
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            final DialogOverlay ovr = new DialogOverlay(resources);
+            stage.addActor(ovr);
+
+            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "restart";
+                }
+            });
+
+            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            mainMenuButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "mainMenu";
+                }
+            });
+
+            ShaderButtonWithLabel resumeButton = new ShaderButtonWithLabel(resources.fontShader, "Resume", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            resumeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ovr.remove();
+                }
+            });
+
+            float bHeight = height * 0.125f;
+            float menuWidth = width * 0.25f;
+
+            restartButton.setBounds(-menuWidth, height * 0.7f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
+            resumeButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+
+            ovr.addActor(restartButton);
+            ovr.addActor(mainMenuButton);
+            ovr.addActor(resumeButton);
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+            resumeButton.addAction(moveTo(width * 0.5f - resumeButton.getWidth() * 0.6f, resumeButton.getY(), 0.4f, Interpolation.pow3));
         }
 
         public void dispose() {
@@ -212,6 +280,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         private btDynamicsWorld dynamicsWorld;
         private btConstraintSolver constraintSolver;
         private Level level;
+        private boolean accelerate = false;
+        private boolean decelerate = false;
 
         public void buildLevel(Level level) {
             this.level = level;
@@ -378,8 +448,6 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.end();
         }
 
-        private boolean accelerate = false;
-        private boolean decelerate = false;
         private void applyForce() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {

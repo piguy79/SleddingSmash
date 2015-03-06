@@ -1,26 +1,26 @@
 
 menus.png
-size: 921,186
+size: 852,661
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 arrow_down
   rotate: false
-  xy: 869, 134
-  size: 50, 50
-  orig: 50, 50
+  xy: 504, 402
+  size: 100, 100
+  orig: 100, 100
   offset: 0, 0
   index: -1
 arrow_up
   rotate: false
-  xy: 869, 82
-  size: 50, 50
-  orig: 50, 50
+  xy: 504, 300
+  size: 100, 100
+  orig: 100, 100
   offset: 0, 0
   index: -1
 button_clear
   rotate: false
-  xy: 869, 31
+  xy: 606, 351
   size: 50, 49
   split: 24, 25, 24, 24
   orig: 50, 49
@@ -28,15 +28,29 @@ button_clear
   index: -1
 cursor
   rotate: false
-  xy: 852, 2
+  xy: 504, 116
   size: 15, 182
   orig: 15, 182
   offset: 0, 0
   index: -1
+pause
+  rotate: false
+  xy: 606, 402
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 textFieldBg
   rotate: false
-  xy: 2, 29
+  xy: 2, 504
   size: 848, 155
   orig: 848, 155
+  offset: 0, 0
+  index: -1
+transparent_square
+  rotate: false
+  xy: 2, 2
+  size: 500, 500
+  orig: 500, 500
   offset: 0, 0
   index: -1

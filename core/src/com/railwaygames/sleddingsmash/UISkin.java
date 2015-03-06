@@ -40,6 +40,10 @@ public class UISkin extends Skin {
             add(Constants.UI.CLEAR_BUTTON, new Button.ButtonStyle(trd, trd, trd));
         }
         {
+            TextureRegionDrawable trd = new TextureRegionDrawable(menusAtlas.findRegion("pause"));
+            add(Constants.UI.PAUSE_BUTTON, new Button.ButtonStyle(trd, trd, trd));
+        }
+        {
             TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
             add(Constants.UI.UP_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
         }
