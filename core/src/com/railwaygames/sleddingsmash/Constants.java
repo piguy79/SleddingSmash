@@ -13,6 +13,11 @@ public class Constants {
         public static final String MEDIUM_LARGE_FONT = "mediumLargeFont";
         public static final String LARGE_FONT = "largeFont";
         public static final String X_LARGE_FONT = "xLargeFont";
+
+        public static final String CLEAR_BUTTON = "clearButton";
+        public static final String PAUSE_BUTTON = "pauseButton";
+        public static final String UP_BUTTON = "upButton";
+        public static final String DOWN_BUTTON = "downButton";
     }
 
     public static class Colors {

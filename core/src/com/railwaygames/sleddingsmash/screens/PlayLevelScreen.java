@@ -18,9 +18,13 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+<<<<<<< HEAD
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+=======
+import com.badlogic.gdx.math.Interpolation;
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -46,12 +50,21 @@ import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
+<<<<<<< HEAD
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.physics.bullet.linearmath.btTransform;
+=======
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.UBJsonReader;
+import com.railwaygames.sleddingsmash.Constants;
 import com.railwaygames.sleddingsmash.Resources;
 import com.railwaygames.sleddingsmash.SleddingSmashEditor;
 import com.railwaygames.sleddingsmash.entity.GameObject;
@@ -59,14 +72,20 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
+<<<<<<< HEAD
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
+=======
+import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
+import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 import static com.railwaygames.sleddingsmash.SleddingSmashEditor.Level;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
 
@@ -76,6 +95,7 @@ public class PlayLevelScreen implements ScreenFeedback {
     private String levelToLoad;
     private String renderResult = null;
     private GameState gs;
+    private HudButtons hudButtons;
 
     public PlayLevelScreen(Resources resources) {
         this.resources = resources;
@@ -102,15 +122,19 @@ public class PlayLevelScreen implements ScreenFeedback {
 
         gs = new GameState();
         gs.buildLevel(level);
+
+        hudButtons = new HudButtons(gs);
     }
 
     @Override
     public void render(float delta) {
         gs.render();
+        hudButtons.render();
     }
 
     @Override
     public void resize(int width, int height) {
+        hudButtons.resize(width, height);
 
     }
 
@@ -128,11 +152,139 @@ public class PlayLevelScreen implements ScreenFeedback {
     public void hide() {
         gs.dispose();
         gs = null;
+
+        hudButtons.dispose();
+        hudButtons = null;
+
+        renderResult = null;
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    private class HudButtons {
+
+        private Stage stage;
+        private Button upButton;
+        private Button downButton;
+        private Button pauseButton;
+
+        public HudButtons(final GameState gs) {
+            stage = new Stage();
+
+            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
+            upButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(false);
+                }
+            });
+            stage.addActor(upButton);
+
+            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
+            downButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(false);
+                }
+            });
+            stage.addActor(downButton);
+
+            pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
+            pauseButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    showMenu();
+                }
+            });
+            stage.addActor(pauseButton);
+
+            Gdx.input.setInputProcessor(stage);
+        }
+
+        public void render() {
+            float delta = Gdx.graphics.getDeltaTime();
+
+            stage.act(delta);
+            stage.draw();
+        }
+
+        public void resize(int width, int height) {
+            float bWidth = width * 0.08f;
+            float bHeight = height * 0.125f;
+
+            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
+            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
+            pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
+        }
+
+        private void showMenu() {
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            final DialogOverlay ovr = new DialogOverlay(resources);
+            stage.addActor(ovr);
+
+            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "restart";
+                }
+            });
+
+            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            mainMenuButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "mainMenu";
+                }
+            });
+
+            ShaderButtonWithLabel resumeButton = new ShaderButtonWithLabel(resources.fontShader, "Resume", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            resumeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ovr.remove();
+                }
+            });
+
+            float bHeight = height * 0.125f;
+            float menuWidth = width * 0.25f;
+
+            restartButton.setBounds(-menuWidth, height * 0.7f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
+            resumeButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+
+            ovr.addActor(restartButton);
+            ovr.addActor(mainMenuButton);
+            ovr.addActor(resumeButton);
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+            resumeButton.addAction(moveTo(width * 0.5f - resumeButton.getWidth() * 0.6f, resumeButton.getY(), 0.4f, Interpolation.pow3));
+        }
+
+        public void dispose() {
+            stage.dispose();
+            stage = null;
+        }
     }
 
     private static class GameState {
@@ -156,6 +308,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private Level level;
         private boolean accelerate = false;
         private boolean decelerate = false;
+<<<<<<< HEAD
 
         private DebugDrawer debugDrawer;
         private btCollisionWorld collisionWorld;
@@ -169,6 +322,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         private static final float rotation = 0.5f;
 
         private boolean pushed = false;
+=======
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
 
         public void buildLevel(Level level) {
             this.level = level;
@@ -310,8 +465,12 @@ public class PlayLevelScreen implements ScreenFeedback {
             this.treeModels = new HashMap<String, Model>();
             UBJsonReader jsonReader = new UBJsonReader();
             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+<<<<<<< HEAD
             treeModels.put("tree_1",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
             treeModels.put("tree",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
+=======
+            treeModels.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
         }
 
         private void createPhysicsWorld() {
@@ -356,7 +515,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             camController = new CameraInputController(cam);
             camController.translateUnits = 200.0f;
-            Gdx.input.setInputProcessor(camController);
+//            Gdx.input.setInputProcessor(camController);
         }
 
         public void dispose() {
@@ -407,6 +566,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             }
         }
 
+<<<<<<< HEAD
         private void applyForceToSled() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
@@ -444,27 +604,35 @@ public class PlayLevelScreen implements ScreenFeedback {
                 sideMovement = -sideMovement;
             }
             sphere.getBody().applyCentralForce(new Vector3(sideMovement * MASS_OF_SLED,0, -forward * MASS_OF_SLED));
+=======
+        public void setAccelerate(boolean accelerate) {
+            this.accelerate = accelerate;
+        }
+
+        public void setDecelerate(boolean decelerate) {
+            this.decelerate = decelerate;
+>>>>>>> 2b51ef9d10e1b4df03388586c31215a3888a3ae0
         }
 
         class SSContactListener extends ContactListener {
             @Override
             public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-                if(collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)){
+                if (collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)) {
                     btCollisionObject tree = findObject(GameObject.GameObjectType.TREE, colObj0, colObj1);
                     Vector3 velocity = sphere.getBody().getLinearVelocity();
-                    sphere.getBody().applyCentralForce(new Vector3(0,0,-100000));
+                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -100000));
                 }
             }
 
-            private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
-                if(((GameObject)obj1.userData).gameObjectType == entity){
+            private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
+                if (((GameObject) obj1.userData).gameObjectType == entity) {
                     return obj1;
                 }
                 return obj2;
             }
 
-            private boolean collision(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
-                return ((GameObject)obj1.userData).gameObjectType == entity || ((GameObject)obj2.userData).gameObjectType ==entity;
+            private boolean collision(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
+                return ((GameObject) obj1.userData).gameObjectType == entity || ((GameObject) obj2.userData).gameObjectType == entity;
             }
         }
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.railwaygames.sleddingsmash.screens.LevelSelectScreen;
 import com.railwaygames.sleddingsmash.screens.MainMenuScreen;
@@ -16,6 +17,7 @@ public class GameLoop extends Game {
     private MainMenuScreen mainMenuScreen;
     private LevelSelectScreen levelSelectScreen;
     private PlayLevelScreen playLevelScreen;
+    private String lastLevel;
 
     @Override
     public void create() {
@@ -30,6 +32,7 @@ public class GameLoop extends Game {
         Gdx.input.setCatchBackKey(true);
 
         AssetManager assetManager = new AssetManager();
+        assetManager.load("data/images/menus.atlas", TextureAtlas.class);
         assetManager.finishLoading();
 
         UISkin skin = new UISkin();
@@ -39,6 +42,7 @@ public class GameLoop extends Game {
         resources.skin = skin;
         resources.assetManager = assetManager;
         resources.fontShader = createShader("data/shaders/font-vs.glsl", "data/shaders/font-fs.glsl");
+        resources.menuAtlas = assetManager.get("data/images/menus.atlas", TextureAtlas.class);
 
         Fonts.dispose();
 
@@ -73,9 +77,20 @@ public class GameLoop extends Game {
                 }
             } else if (getScreen() instanceof LevelSelectScreen) {
                 String level = (String) returnObject;
+                lastLevel = level;
                 playLevelScreen.setLevelToLoad(level);
                 changeScreen(playLevelScreen);
                 return;
+            } else if (getScreen() instanceof PlayLevelScreen) {
+                String action = (String) returnObject;
+                if (action.equals("mainMenu")) {
+                    changeScreen(levelSelectScreen);
+                    return;
+                } else if (action.equals("restart")) {
+                    playLevelScreen.setLevelToLoad(lastLevel);
+                    changeScreen(playLevelScreen);
+                    return;
+                }
             }
 
             throw new IllegalArgumentException("Could not handle return value of '" + returnObject + "' from " + getScreen().getClass().getName());
