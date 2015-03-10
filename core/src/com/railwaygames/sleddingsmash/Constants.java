@@ -20,6 +20,10 @@ public class Constants {
         public static final String DOWN_BUTTON = "downButton";
     }
 
+    public static class CharacterState {
+        public static final String SLEEP = "sleep";
+    }
+
     public static class Colors {
 
     }
