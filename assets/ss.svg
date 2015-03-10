@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="71.837817"
+     inkscape:cx="59.337817"
      inkscape:cy="906.98088"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -57,13 +57,15 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
+       inkscape:connector-curvature="0"
        style="opacity:1;fill:#78c878;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M -94.285156 -13.351562 L -134.28516 52.361328 L -110 52.361328 L -110 122.36133 L -80 122.36133 L -80 52.361328 L -54.285156 52.361328 L -94.285156 -13.351562 z "
+       d="m -94.285156,-13.351562 -40.000004,65.71289 24.28516,0 0,70.000002 30,0 0,-70.000002 25.714844,0 -40,-65.71289 z"
        id="rect4493" />
     <g
        id="g4516"
-       inkscape:export-xdpi="53.529999"
-       inkscape:export-ydpi="53.529999">
+       inkscape:export-xdpi="107.05"
+       inkscape:export-ydpi="107.05"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/arrow_up.png">
       <circle
          r="40"
          cy="62.362206"
@@ -81,29 +83,35 @@
        style="opacity:1;fill:#78c878;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.91822481;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 70.3577,33.826825 -21.53539,27.099089 13.07476,0 0,28.867034 16.15154,0 0,-28.867034 13.844477,0 L 70.3577,33.826825 Z"
        id="path4524"
-       inkscape:export-xdpi="53.529999"
-       inkscape:export-ydpi="53.529999" />
+       inkscape:export-xdpi="107.05"
+       inkscape:export-ydpi="107.05"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/arrow_up.png" />
     <circle
        style="opacity:1;fill:#787878;fill-opacity:0.60256407;fill-rule:nonzero;stroke:#ffff80;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="circle4528"
        cx="70"
        cy="166.36221"
        r="40"
-       inkscape:export-xdpi="53.529999"
-       inkscape:export-ydpi="53.529999" />
+       inkscape:export-xdpi="107.05239"
+       inkscape:export-ydpi="107.05239"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/arrow_down.png" />
     <path
        id="path4532"
        d="m 70.3577,195.21047 -21.53539,-27.09909 13.07476,0 0,-28.86703 16.15154,0 0,28.86703 13.844477,0 -21.535387,27.09909 z"
        style="opacity:1;fill:#c87878;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.91822481;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:connector-curvature="0"
-       inkscape:export-xdpi="53.529999"
-       inkscape:export-ydpi="53.529999" />
+       inkscape:export-xdpi="107.05239"
+       inkscape:export-ydpi="107.05239"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/arrow_down.png" />
     <circle
        r="40"
        cy="62.362206"
        cx="180"
        id="circle4536"
-       style="opacity:1;fill:#787878;fill-opacity:0.60256407;fill-rule:nonzero;stroke:#ffff80;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:#787878;fill-opacity:0.60256407;fill-rule:nonzero;stroke:#ffff80;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/pause.png"
+       inkscape:export-xdpi="107.05"
+       inkscape:export-ydpi="107.05" />
     <rect
        style="opacity:1;fill:#ffff80;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4568"
@@ -117,19 +125,37 @@
        height="44.962791"
        width="17.105648"
        id="rect4570"
-       style="opacity:1;fill:#ffff80;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.96535277;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:#ffff80;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.96535277;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/pause.png"
+       inkscape:export-xdpi="107.05"
+       inkscape:export-ydpi="107.05" />
     <rect
        style="opacity:1;fill:#ffff80;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.96535277;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4572"
        width="17.105648"
        height="44.962791"
        x="182.80432"
-       y="39.880806" />
+       y="39.880806"
+       inkscape:export-filename="/Users/mpietal/Documents/development/SleddingSmash/texturepacker/images/menus/pause.png"
+       inkscape:export-xdpi="107.05"
+       inkscape:export-ydpi="107.05" />
     <circle
        style="opacity:1;fill:#787878;fill-opacity:0.60256407;fill-rule:nonzero;stroke:#ffff80;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="circle4574"
-       cx="182.14285"
-       cy="162.36221"
+       cx="180.14285"
+       cy="164.36221"
        r="40" />
+    <path
+       style="opacity:1;fill:#78c878;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -190,12.362206 -100,50 0,-100 z"
+       id="rect4599"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path4602"
+       d="m 205.23383,163.07649 -39.51641,22.63633 0,-45.27265 z"
+       style="opacity:1;fill:#78c878;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.72189951;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
