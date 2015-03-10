@@ -31,8 +31,8 @@ public class ModelUtils {
 
         float maxX = xAxis.min + (xAxis.axisSize() * area.xEndPercent);
         float minX = xAxis.min + (xAxis.axisSize() * area.xStartPercent);
-        float maxZ = zAxis.min + (zAxis.axisSize() * area.zEndPercent);
-        float minZ = zAxis.min + (zAxis.axisSize() * area.zStartPercent);
+        float maxZ = zAxis.min + (zAxis.axisSize() * (1 - area.zStartPercent));
+        float minZ = zAxis.min + (zAxis.axisSize() * (1 - area.zEndPercent));
 
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
