@@ -47,6 +47,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -63,6 +64,7 @@ import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
 import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
+import com.railwaygames.sleddingsmash.widgets.ShaderLabel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +81,7 @@ public class PlayLevelScreen implements ScreenFeedback {
     private String levelToLoad;
     private String renderResult = null;
     private GameState gs;
-    private HudButtons hudButtons;
+    private Hud hud;
 
     public PlayLevelScreen(Resources resources) {
         this.resources = resources;
@@ -107,18 +109,18 @@ public class PlayLevelScreen implements ScreenFeedback {
         gs = new GameState();
         gs.buildLevel(level);
 
-        hudButtons = new HudButtons(gs);
+        hud = new Hud(gs);
     }
 
     @Override
     public void render(float delta) {
         gs.render();
-        hudButtons.render();
+        hud.render();
     }
 
     @Override
     public void resize(int width, int height) {
-        hudButtons.resize(width, height);
+        hud.resize(width, height);
 
     }
 
@@ -137,8 +139,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         gs.dispose();
         gs = null;
 
-        hudButtons.dispose();
-        hudButtons = null;
+        hud.dispose();
+        hud = null;
 
         renderResult = null;
     }
@@ -178,6 +180,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private DebugDrawer debugDrawer;
         private btCollisionWorld collisionWorld;
         private boolean pushed = false;
+        private Vector3 sphereStartPosition;
 
         public void buildLevel(Level level) {
             this.level = level;
@@ -273,8 +276,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             sphere.getBody().setFriction(1);
 
-            Vector3 startPos = findStartPos();
-            sphere.transform.setToTranslation(startPos);
+            sphereStartPosition = findStartPos();
+            sphere.transform.setToTranslation(sphereStartPosition);
             sphere.getBody().setWorldTransform(sphere.transform);
 
             instances.add(sphere);
@@ -405,6 +408,14 @@ public class PlayLevelScreen implements ScreenFeedback {
             debugDrawer.end();
         }
 
+        public Vector3 getSphereLocation() {
+            return sphere.getLocationInWorld();
+        }
+
+        public Vector3 getSphereStartPosition() {
+            return sphereStartPosition;
+        }
+
         private void applyForce() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
@@ -489,14 +500,18 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
     }
 
-    private class HudButtons {
-
+    private class Hud {
         private Stage stage;
         private Button upButton;
         private Button downButton;
         private Button pauseButton;
+        private ShaderLabel timerLabel;
+        private ShaderLabel distanceTraveledLabel;
+        private float totalTimeInSeconds = 0.0f;
+        private float distanceTraveledInMeters = 0.0f;
+        private boolean paused = false;
 
-        public HudButtons(final GameState gs) {
+        public Hud(final GameState gs) {
             stage = new Stage();
 
             upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
@@ -533,10 +548,19 @@ public class PlayLevelScreen implements ScreenFeedback {
             pauseButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    paused = true;
                     showMenu();
                 }
             });
             stage.addActor(pauseButton);
+
+            timerLabel = new ShaderLabel(resources.fontShader, "", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
+            timerLabel.setAlignment(Align.right);
+            stage.addActor(timerLabel);
+
+            distanceTraveledLabel = new ShaderLabel(resources.fontShader, "", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
+            distanceTraveledLabel.setAlignment(Align.right);
+            stage.addActor(distanceTraveledLabel);
 
             Gdx.input.setInputProcessor(stage);
         }
@@ -544,8 +568,34 @@ public class PlayLevelScreen implements ScreenFeedback {
         public void render() {
             float delta = Gdx.graphics.getDeltaTime();
 
+            if (!paused) {
+                totalTimeInSeconds += delta;
+                timerLabel.setText(formatTime(totalTimeInSeconds));
+            }
+
+            distanceTraveledLabel.setText(getDistance());
+
             stage.act(delta);
             stage.draw();
+        }
+
+        private String getDistance() {
+            return (-1 * ((int) (gs.getSphereLocation().z - gs.getSphereStartPosition().z)) / 10) + " m";
+        }
+
+        private String formatTime(float totalTimeInSeconds) {
+            int mins = (int) totalTimeInSeconds / 60;
+            int seconds = (int) totalTimeInSeconds % 60;
+            int fractionalSeconds = (int) ((totalTimeInSeconds - Math.floor(totalTimeInSeconds)) * 1000.0f);
+            String fs = "";
+            if (fractionalSeconds < 10) {
+                fs = "00";
+            } else if (fractionalSeconds < 100) {
+                fs = "0";
+            }
+            fs += fractionalSeconds;
+
+            return (mins < 10 ? "0" : "") + mins + ":" + ((seconds < 10) ? "0" : "") + seconds + "." + fs;
         }
 
         public void resize(int width, int height) {
@@ -555,6 +605,9 @@ public class PlayLevelScreen implements ScreenFeedback {
             upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
             downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
             pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
+
+            timerLabel.setBounds(width * 0.85f, height * 0.94f, width * 0.12f, height * 0.06f);
+            distanceTraveledLabel.setBounds(width * 0.85f, height * 0.88f, width * 0.12f, height * 0.06f);
         }
 
         private void showMenu() {
@@ -588,6 +641,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     ovr.remove();
+                    paused = false;
                 }
             });
 
