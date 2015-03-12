@@ -10,10 +10,15 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelMaterial;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelTexture;
+import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -99,9 +104,9 @@ public class LevelBuilder {
     public static void calculateNormals(Model model) {
         for (Mesh mesh : model.meshes) {
             int numIndices = mesh.getNumIndices();
-            int numVertices = mesh.getNumVertices() * 3 * 2;
 
             int vertexSize = mesh.getVertexSize() / 4;
+            int numVertices = mesh.getNumVertices() * vertexSize;
 
             float[] vertices = new float[numVertices];
             mesh.getVertices(vertices);
@@ -192,6 +197,87 @@ public class LevelBuilder {
         models.add(leftModel);
         models.add(rightModel);
         return models;
+    }
+
+    public static Model createBackground() {
+        Model model = new Model();
+
+        float[] vertices = new float[32];
+        short[] indices = new short[6];
+
+        vertices[0] = -5.0f;
+        vertices[1] = -5.0f;
+        vertices[2] = 0;
+        vertices[6] = 0;
+        vertices[7] = 1;
+
+        vertices[8] = 5.0f;
+        vertices[9] = -5.0f;
+        vertices[10] = 0;
+        vertices[14] = 1;
+        vertices[15] = 1;
+
+        vertices[16] = -5.0f;
+        vertices[17] = 5.0f;
+        vertices[18] = 0;
+        vertices[22] = 0;
+        vertices[23] = 0;
+
+        vertices[24] = 5.0f;
+        vertices[25] = 5.0f;
+        vertices[26] = 0;
+        vertices[30] = 1;
+        vertices[31] = 0;
+
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+        indices[3] = 2;
+        indices[4] = 1;
+        indices[5] = 3;
+
+        Mesh mesh = new Mesh(false, vertices.length, indices.length, VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
+        mesh.setVertices(vertices);
+        mesh.setIndices(indices);
+
+        MeshPart meshPart = new MeshPart("bg", mesh, 0, indices.length, GL20.GL_TRIANGLES);
+        meshPart.mesh = mesh;
+
+        ModelMaterial modelMaterial = new ModelMaterial();
+        modelMaterial.id = "bg_one_material";
+        modelMaterial.diffuse = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        ModelTexture modelTexture = new ModelTexture();
+        modelTexture.id = "bg_one_texture";
+        modelTexture.fileName = "data/images/bg/one.png";
+        modelTexture.usage = ModelTexture.USAGE_DIFFUSE;
+        Array<ModelTexture> modelTextures = new Array<ModelTexture>();
+        modelTextures.add(modelTexture);
+
+        modelMaterial.textures = modelTextures;
+        List<ModelMaterial> materials = new ArrayList<ModelMaterial>();
+        materials.add(modelMaterial);
+
+        try {
+            Method method = model.getClass().getDeclaredMethod("loadMaterials", Iterable.class, TextureProvider.class);
+            method.setAccessible(true);
+            Object r = method.invoke(model, materials, new TextureProvider.FileTextureProvider());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        model.meshes.add(mesh);
+        model.meshParts.add(meshPart);
+
+        NodePart nodePart = new NodePart(meshPart, model.getMaterial("bg_one_material"));
+
+        Node node = new Node();
+        node.id = "bg_node";
+        node.parts.add(nodePart);
+        model.nodes.add(node);
+
+        LevelBuilder.calculateNormals(model);
+        return model;
     }
 
     private static Model createSideModel(boolean left, List<Segment> edges, int newVertexOffset, float[] vertices) {

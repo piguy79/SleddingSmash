@@ -167,7 +167,7 @@ obstacles: [
 			}
 			model: {
                 class: java.lang.String
-                value: tree
+                value: tree_1
             }
 		}
 		generatedPositions: [

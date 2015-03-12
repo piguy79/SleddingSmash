@@ -31,6 +31,7 @@ import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
 import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
@@ -47,6 +48,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -63,6 +65,9 @@ import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
 import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
 import com.railwaygames.sleddingsmash.utils.WidgetUtils;
+import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
+import com.railwaygames.sleddingsmash.utils.ModelUtils;
 import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
 import com.railwaygames.sleddingsmash.widgets.ShaderLabel;
 
@@ -81,7 +86,7 @@ public class PlayLevelScreen implements ScreenFeedback {
     private String levelToLoad;
     private String renderResult = null;
     private GameState gs;
-    private HudButtons hudButtons;
+    private Hud hud;
 
     public PlayLevelScreen(Resources resources) {
         this.resources = resources;
@@ -109,7 +114,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         gs = new GameState();
         gs.buildLevel(level);
 
-        hudButtons = new HudButtons(gs);
+        hud = new Hud(gs);
     }
 
     @Override
@@ -120,15 +125,15 @@ public class PlayLevelScreen implements ScreenFeedback {
             if(gs.renderResult.equals(Constants.CharacterState.SLEEP)){
                 gs.renderResult = null;
                 gs.pause = true;
-                hudButtons.showEndGame();
+                hud.showEndGame();
             }
         }
-        hudButtons.render();
+        hud.render();
     }
 
     @Override
     public void resize(int width, int height) {
-        hudButtons.resize(width, height);
+        hud.resize(width, height);
 
     }
 
@@ -147,8 +152,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         gs.dispose();
         gs = null;
 
-        hudButtons.dispose();
-        hudButtons = null;
+        hud.dispose();
+        hud = null;
 
         renderResult = null;
     }
@@ -158,177 +163,13 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     }
 
-    private class HudButtons {
-
-        private Stage stage;
-        private Button upButton;
-        private Button downButton;
-        private Button pauseButton;
-
-        public HudButtons(final GameState gs) {
-            stage = new Stage();
-
-            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
-            upButton.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(true);
-                    return true;
-                }
-
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(false);
-                }
-            });
-            stage.addActor(upButton);
-
-            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
-            downButton.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(true);
-                    return true;
-                }
-
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(false);
-                }
-            });
-            stage.addActor(downButton);
-
-            pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
-            pauseButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    gs.pause = true;
-                    showMenu();
-                }
-            });
-            stage.addActor(pauseButton);
-
-            Gdx.input.setInputProcessor(stage);
-        }
-
-        public void render() {
-            float delta = Gdx.graphics.getDeltaTime();
-
-            stage.act(delta);
-            stage.draw();
-        }
-
-        public void resize(int width, int height) {
-            float bWidth = width * 0.08f;
-            float bHeight = height * 0.125f;
-
-            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
-            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
-            pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
-        }
-
-        public void showEndGame(){
-            int width = Gdx.graphics.getWidth();
-            int height = Gdx.graphics.getHeight();
-
-            final DialogOverlay ovr = new DialogOverlay(resources);
-            stage.addActor(ovr);
-
-            ShaderLabel gameOver = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
-                    Color.RED);
-
-            float centerX = width * 0.48f;
-            float y = height * 0.75f;
-            WidgetUtils.centerLabelOnPoint(gameOver, centerX, y);
-
-            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
-                    Color.WHITE);
-            restartButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    renderResult = "restart";
-                }
-            });
-
-            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
-                    Color.WHITE);
-            mainMenuButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    renderResult = "mainMenu";
-                }
-            });
-
-            float bHeight = height * 0.125f;
-            float menuWidth = width * 0.25f;
-
-            restartButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
-            mainMenuButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
-
-            ovr.addActor(gameOver);
-            ovr.addActor(restartButton);
-            ovr.addActor(mainMenuButton);
-            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
-            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
-        }
-
-        private void showMenu() {
-            int width = Gdx.graphics.getWidth();
-            int height = Gdx.graphics.getHeight();
-
-            final DialogOverlay ovr = new DialogOverlay(resources);
-            stage.addActor(ovr);
-
-            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
-                    Color.WHITE);
-            restartButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    renderResult = "restart";
-                }
-            });
-
-            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
-                    Color.WHITE);
-            mainMenuButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    renderResult = "mainMenu";
-                }
-            });
-
-            ShaderButtonWithLabel resumeButton = new ShaderButtonWithLabel(resources.fontShader, "Resume", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
-                    Color.WHITE);
-            resumeButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    gs.pause = false;
-                    ovr.remove();
-                }
-            });
-
-            float bHeight = height * 0.125f;
-            float menuWidth = width * 0.25f;
-
-            restartButton.setBounds(-menuWidth, height * 0.7f, menuWidth, bHeight);
-            mainMenuButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
-            resumeButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
-
-            ovr.addActor(restartButton);
-            ovr.addActor(mainMenuButton);
-            ovr.addActor(resumeButton);
-            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
-            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
-            resumeButton.addAction(moveTo(width * 0.5f - resumeButton.getWidth() * 0.6f, resumeButton.getY(), 0.4f, Interpolation.pow3));
-        }
-
-        public void dispose() {
-            stage.dispose();
-            stage = null;
-        }
-    }
-
     private static class GameState {
+        private static final float MASS_OF_SLED = 100;
+        private static final float MASS_OF_CHARACTER = 200;
+        private static final float PHYSICS_SCALE_FACTOR = 1f;
+        private static final float sideMove = 10f;
+        private static final float forwardMove = 0.4f;
+        private static final float rotation = 0.5f;
         public Environment lights;
         public PerspectiveCamera cam;
         public ModelBatch modelBatch;
@@ -349,29 +190,20 @@ public class PlayLevelScreen implements ScreenFeedback {
         private Level level;
         private boolean accelerate = false;
         private boolean decelerate = false;
+
         private boolean pause = false;
-
         private String renderResult = null;
-
-        private DebugDrawer debugDrawer;
-        private btCollisionWorld collisionWorld;
-
-        private static final float MASS_OF_SLED = 100;
-        private static final float PHYSICS_SCALE_FACTOR = 1f;
-
-        private static final float sideMove = 10f;
-        private static final float forwardMove = 0.4f;
-        private static final float rotation = 0.5f;
-
         private static final float LINEAR_SLEEP = 10;
         private static final float ANGULAR_SLEEP = 10;
-
-
+        private DebugDrawer debugDrawer;
+        private btCollisionWorld collisionWorld;
+        private boolean pushed = false;
+        private Vector3 sphereStartPosition;
 
         public void buildLevel(Level level) {
             this.level = level;
             lights = new Environment();
-            lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
+            lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
             lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
             modelBatch = new ModelBatch();
@@ -428,6 +260,13 @@ public class PlayLevelScreen implements ScreenFeedback {
                 modelInstances.add(instance);
             }
 
+            Model bg = LevelBuilder.createBackground();
+            ModelInstance bgInstance = new ModelInstance(bg);
+            bgInstance.transform.idt();
+            bgInstance.transform.setToTranslation(0.0f, 550.0f, -10000.0f);
+            bgInstance.transform.scale(2100.0f, 750.0f, 1.0f);
+            modelInstances.add(bgInstance);
+
             finalizePlane();
             createBall();
             //createSled();
@@ -457,8 +296,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphere.getBody().setFriction(1);
             sphere.getBody().setSleepingThresholds(LINEAR_SLEEP, ANGULAR_SLEEP);
 
-            Vector3 startPos = findStartPos();
-            sphere.transform.setToTranslation(startPos);
+            sphereStartPosition = findStartPos();
+            sphere.transform.setToTranslation(sphereStartPosition);
             sphere.getBody().setWorldTransform(sphere.transform);
 
             instances.add(sphere);
@@ -473,11 +312,11 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             btCompoundShape compoundShape = new btCompoundShape();
 
-            btBoxShape box = new btBoxShape(new Vector3(5f,0.5f,3f));
-            compoundShape.addChildShape(new Matrix4(new Vector3(3,0,0), new Quaternion(), new Vector3(1,1,1)), box);
+            btBoxShape box = new btBoxShape(new Vector3(5f, 0.5f, 3f));
+            compoundShape.addChildShape(new Matrix4(new Vector3(3, 0, 0), new Quaternion(), new Vector3(1, 1, 1)), box);
 
-            btCylinderShape cylinder = new btCylinderShape(new Vector3(1,3,2));
-            compoundShape.addChildShape(new Matrix4(new Vector3(-3,0,0f), new Quaternion(new Vector3(1,0,0), -90), new Vector3(1f,1.5f,1f)), cylinder);
+            btCylinderShape cylinder = new btCylinderShape(new Vector3(1, 3, 2));
+            compoundShape.addChildShape(new Matrix4(new Vector3(-3, 0, 0f), new Quaternion(new Vector3(1, 0, 0), -90), new Vector3(1f, 1.5f, 1f)), cylinder);
 
             sphere = new GameObject.Constructor(model, GameObject.GameObjectType.CHARACTER, new btSphereShape(2f), MASS_OF_SLED * PHYSICS_SCALE_FACTOR).construct();
             constructors.add(sphere.constructor);
@@ -485,14 +324,14 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphere.getBody().setFriction(1f);
             sphere.getBody().setRestitution(0);
 
-            sphere.getBody().setLinearVelocity(new Vector3(0,0, -6));
+            sphere.getBody().setLinearVelocity(new Vector3(0, 0, -6));
 
-            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.5f,0.01f, 0.6f, 0.03f),new Vector3(0, 1, 0), 180);
-            int randomIndex = (int)MathUtils.randomInRange(0, locations.size());
+            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.5f, 0.01f, 0.6f, 0.03f), new Vector3(0, 1, 0), 180);
+            int randomIndex = (int) MathUtils.randomInRange(0, locations.size());
             Vector3 pos = locations.get(randomIndex);
 
             sphere.transform.setToTranslation((-level.width * 0.5f) + pos.x, pos.y + 2f, pos.z);
-            sphere.transform.rotate(0,1,0,-90);
+            sphere.transform.rotate(0, 1, 0, -90);
 
             sphere.getBody().setWorldTransform(sphere.transform);
             collisionWorld.addCollisionObject(sphere.getBody());
@@ -504,6 +343,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.2f,0.01f, 0.2f, 0.03f),new Vector3(0, 1, 0), 70);
             int randomIndex = (int)MathUtils.randomInRange(0, locations.size());
             return locations.get(randomIndex).add(new Vector3(0, 5, 0));
+
         }
 
         private void createTree() {
@@ -513,7 +353,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             treeModels.put("tree_1",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
             treeModels.put("tree",modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
-
         }
 
         private void createPhysicsWorld() {
@@ -553,7 +392,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             cam.position.set(0f, 10f, 10f);
             cam.lookAt(0, 0, -20);
             cam.near = 1f;
-            cam.far = 1500f;
+            cam.far = 20000f;
             cam.update();
 
             camController = new CameraInputController(cam);
@@ -572,6 +411,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 final float delta = Math.min(1f / 30f, Gdx.graphics.getDeltaTime());
                 dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
                 applyForce();
+
 
                 if(!sphere.getBody().isActive()){
                     renderResult = Constants.CharacterState.SLEEP;
@@ -593,6 +433,14 @@ public class PlayLevelScreen implements ScreenFeedback {
             //debugDrawer.begin(cam);
             //collisionWorld.debugDrawWorld();
             //debugDrawer.end();
+        }
+
+        public Vector3 getSphereLocation() {
+            return sphere.getLocationInWorld();
+        }
+
+        public Vector3 getSphereStartPosition() {
+            return sphereStartPosition;
         }
 
         private void applyForce() {
@@ -619,19 +467,16 @@ public class PlayLevelScreen implements ScreenFeedback {
             } else {
                 if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
                     Vector3 torque = sphere.getLocationInWorld();
-                    Vector3 smr = new Vector3(0,rotation,0).add(torque);
-                    sphere.getBody().applyTorqueImpulse(new Vector3(0,rotation * MASS_OF_SLED,0));
-
+                    Vector3 smr = new Vector3(0, rotation, 0).add(torque);
+                    sphere.getBody().applyTorqueImpulse(new Vector3(0, rotation * MASS_OF_SLED, 0));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
                     Vector3 torque = sphere.getLocationInWorld();
-                    Vector3 smr = new Vector3(0,-rotation,0).add(torque);
-                    sphere.getBody().applyTorqueImpulse(new Vector3(0,-rotation * MASS_OF_SLED,0));
-
-
+                    Vector3 smr = new Vector3(0, -rotation, 0).add(torque);
+                    sphere.getBody().applyTorqueImpulse(new Vector3(0, -rotation * MASS_OF_SLED, 0));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
                     sledForward(sideMove, forwardMove);
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-                    Vector3 relativeForce = new Vector3(0,0,4);
+                    Vector3 relativeForce = new Vector3(0, 0, 4);
                     sphere.applyForce(relativeForce);
                 }
             }
@@ -682,5 +527,217 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
 
+    }
+
+    private class Hud {
+        private Stage stage;
+        private Button upButton;
+        private Button downButton;
+        private Button pauseButton;
+        private ShaderLabel timerLabel;
+        private ShaderLabel distanceTraveledLabel;
+        private float totalTimeInSeconds = 0.0f;
+        private float distanceTraveledInMeters = 0.0f;
+        private boolean paused = false;
+
+        public Hud(final GameState gs) {
+            stage = new Stage();
+
+            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
+            upButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setAccelerate(false);
+                }
+            });
+            stage.addActor(upButton);
+
+            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
+            downButton.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(true);
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    gs.setDecelerate(false);
+                }
+            });
+            stage.addActor(downButton);
+
+            pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
+            pauseButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    paused = true;
+                    showMenu();
+                }
+            });
+            stage.addActor(pauseButton);
+
+            timerLabel = new ShaderLabel(resources.fontShader, "", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
+            timerLabel.setAlignment(Align.right);
+            stage.addActor(timerLabel);
+
+            distanceTraveledLabel = new ShaderLabel(resources.fontShader, "", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
+            distanceTraveledLabel.setAlignment(Align.right);
+            stage.addActor(distanceTraveledLabel);
+
+            Gdx.input.setInputProcessor(stage);
+        }
+
+        public void showEndGame(){
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            final DialogOverlay ovr = new DialogOverlay(resources);
+            stage.addActor(ovr);
+
+            ShaderLabel gameOver = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
+                    Color.RED);
+
+            float centerX = width * 0.48f;
+            float y = height * 0.75f;
+            WidgetUtils.centerLabelOnPoint(gameOver, centerX, y);
+
+            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "restart";
+                }
+            });
+
+            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            mainMenuButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "mainMenu";
+                }
+            });
+
+            float bHeight = height * 0.125f;
+            float menuWidth = width * 0.25f;
+
+            restartButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+
+            ovr.addActor(gameOver);
+            ovr.addActor(restartButton);
+            ovr.addActor(mainMenuButton);
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+        }
+
+
+        public void render() {
+            float delta = Gdx.graphics.getDeltaTime();
+
+            if (!paused) {
+                totalTimeInSeconds += delta;
+                timerLabel.setText(formatTime(totalTimeInSeconds));
+            }
+
+            distanceTraveledLabel.setText(getDistance());
+
+            stage.act(delta);
+            stage.draw();
+        }
+
+        private String getDistance() {
+            return (-1 * ((int) (gs.getSphereLocation().z - gs.getSphereStartPosition().z)) / 10) + " m";
+        }
+
+        private String formatTime(float totalTimeInSeconds) {
+            int mins = (int) totalTimeInSeconds / 60;
+            int seconds = (int) totalTimeInSeconds % 60;
+            int fractionalSeconds = (int) ((totalTimeInSeconds - Math.floor(totalTimeInSeconds)) * 1000.0f);
+            String fs = "";
+            if (fractionalSeconds < 10) {
+                fs = "00";
+            } else if (fractionalSeconds < 100) {
+                fs = "0";
+            }
+            fs += fractionalSeconds;
+
+            return (mins < 10 ? "0" : "") + mins + ":" + ((seconds < 10) ? "0" : "") + seconds + "." + fs;
+        }
+
+        public void resize(int width, int height) {
+            float bWidth = width * 0.08f;
+            float bHeight = height * 0.125f;
+
+            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
+            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
+            pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
+
+            timerLabel.setBounds(width * 0.85f, height * 0.94f, width * 0.12f, height * 0.06f);
+            distanceTraveledLabel.setBounds(width * 0.85f, height * 0.88f, width * 0.12f, height * 0.06f);
+        }
+
+        private void showMenu() {
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            final DialogOverlay ovr = new DialogOverlay(resources);
+            stage.addActor(ovr);
+
+            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "restart";
+                }
+            });
+
+            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            mainMenuButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "mainMenu";
+                }
+            });
+
+            ShaderButtonWithLabel resumeButton = new ShaderButtonWithLabel(resources.fontShader, "Resume", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            resumeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ovr.remove();
+                    paused = false;
+                }
+            });
+
+            float bHeight = height * 0.125f;
+            float menuWidth = width * 0.25f;
+
+            restartButton.setBounds(-menuWidth, height * 0.7f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
+            resumeButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+
+            ovr.addActor(restartButton);
+            ovr.addActor(mainMenuButton);
+            ovr.addActor(resumeButton);
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+            resumeButton.addAction(moveTo(width * 0.5f - resumeButton.getWidth() * 0.6f, resumeButton.getY(), 0.4f, Interpolation.pow3));
+        }
+
+        public void dispose() {
+            stage.dispose();
+            stage = null;
+        }
     }
 }
