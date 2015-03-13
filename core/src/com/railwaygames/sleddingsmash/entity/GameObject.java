@@ -25,6 +25,7 @@ public class GameObject extends ModelInstance implements Disposable {
     public GameObject(Model model, GameObjectType gameObjectType, btRigidBody.btRigidBodyConstructionInfo constructionInfo, Constructor constructor) {
         super(model);
         this.constructor = constructor;
+        this.gameObjectType = constructor.gameObjectType;
         this.body = new btRigidBody(constructionInfo);
         this.body.userData = this;
         this.motionState = new MotionState(this.transform);

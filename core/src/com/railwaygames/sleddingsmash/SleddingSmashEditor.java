@@ -452,18 +452,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void reset() {
-        if (model != null) {
-            model.dispose();
-            model = null;
-        }
-
-        for (GameObject obj : instances)
-            obj.dispose();
-        instances.clear();
-
-        for (GameObject.Constructor constructor : constructors)
-            constructor.dispose();
-        constructors.clear();
+        dispose();
 
         createPhysicsWorld();
         createPlane(level.width, level.length);
@@ -480,7 +469,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         constructors.clear();
 
         modelBatch.dispose();
-        model.dispose();
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
         dynamicsWorld.dispose();
         constraintSolver.dispose();
         broadphase.dispose();
@@ -520,7 +512,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     Object val = null;
                     if (clazz == String.class) {
                         val = new String(textField.getText());
-                    } else if (clazz == Float.class) {
+                    } else if (clazz == Float.class && !textField.getText().equals("-")) {
                         val = Float.valueOf(textField.getText());
                     }
                     params.put(field, val);

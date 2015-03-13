@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
+import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
@@ -41,6 +42,7 @@ import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
 import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
@@ -200,6 +202,9 @@ public class PlayLevelScreen implements ScreenFeedback {
         private boolean pushed = false;
         private Vector3 sphereStartPosition;
 
+        private static final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 3, 0);
+
+
         public void buildLevel(Level level) {
             this.level = level;
             lights = new Environment();
@@ -269,7 +274,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             finalizePlane();
             createBall();
-            //createSled();
         }
 
         private void createPlane(float width, float length) {
@@ -299,6 +303,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphereStartPosition = findStartPos();
             sphere.transform.setToTranslation(sphereStartPosition);
             sphere.getBody().setWorldTransform(sphere.transform);
+            sphere.getBody().setContactCallbackFlag(Constants.CollisionsFlag.SPHERE_FLAG);
+            sphere.getBody().setContactCallbackFilter(Constants.CollisionsFlag.SPHERE_FLAG);
 
             instances.add(sphere);
             dynamicsWorld.addRigidBody(sphere.getBody());
@@ -340,9 +346,9 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private Vector3 findStartPos(){
-            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.2f,0.01f, 0.2f, 0.03f),new Vector3(0, 1, 0), 70);
+            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.45f, 0.01f,0.5f, 0.03f), new Vector3(0,1,0), 70);
             int randomIndex = (int)MathUtils.randomInRange(0, locations.size());
-            return locations.get(randomIndex).add(new Vector3(0, 5, 0));
+            return locations.get(randomIndex).add(new Vector3(-level.width * 0.5f, 1, 0));
 
         }
 
@@ -361,7 +367,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             broadphase = new btDbvtBroadphase();
             constraintSolver = new btSequentialImpulseConstraintSolver();
             dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
-            dynamicsWorld.setGravity(new Vector3(0, -10 * 4, 0));
+            dynamicsWorld.setGravity(GRAVITY_VEC);
             contactListener = new SSContactListener();
 
             collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
@@ -378,10 +384,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
             plane.getBody().setWorldTransform(plane.transform);
-
-
-            // Use for seeing the physcis of the plane
-            //collisionWorld.addCollisionObject(plane.getBody());
+            plane.getBody().setContactCallbackFilter(Constants.CollisionsFlag.PLANE_FLAG);
 
             instances.add(plane);
             dynamicsWorld.addRigidBody(plane.getBody());
@@ -489,7 +492,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             out.getRotation(q);
 
-
             if (q.nor().getPitch() < 0) {
                 sideMovement = -sideMovement;
             }
@@ -506,12 +508,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
         class SSContactListener extends ContactListener {
             @Override
-            public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-                if (collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)) {
-                    btCollisionObject tree = findObject(GameObject.GameObjectType.TREE, colObj0, colObj1);
-                    Vector3 velocity = sphere.getBody().getLinearVelocity();
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -100000));
-                }
+            public void onContactProcessed(btCollisionObject colObj0, boolean match0, btCollisionObject colObj1, boolean match1) {
+                sphere.getBody().setActivationState(Collision.ISLAND_SLEEPING);
             }
 
             private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
@@ -578,6 +576,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     paused = true;
+                    gs.pause = true;
                     showMenu();
                 }
             });
@@ -717,6 +716,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 public void clicked(InputEvent event, float x, float y) {
                     ovr.remove();
                     paused = false;
+                    gs.pause = false;
                 }
             });
 

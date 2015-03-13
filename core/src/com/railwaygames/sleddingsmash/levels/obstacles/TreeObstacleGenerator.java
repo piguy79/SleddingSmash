@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
 import com.badlogic.gdx.physics.bullet.collision.btConeShape;
 import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
+import com.railwaygames.sleddingsmash.Constants;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 
 /**
@@ -34,6 +35,8 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
         Matrix4 treePosition = tree.transform.cpy();
         treePosition.translate(4, -1, -1);
         tree.getBody().setWorldTransform(treePosition);
+        tree.getBody().setContactCallbackFlag(Constants.CollisionsFlag.TREE_FLAG);
+        tree.getBody().setContactCallbackFilter(Constants.CollisionsFlag.SPHERE_FLAG);
 
         return tree;
     }
