@@ -1,10 +1,16 @@
 package com.railwaygames.sleddingsmash.levels.obstacles;
 
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
+import com.badlogic.gdx.physics.bullet.collision.btConeShape;
+import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
+import com.railwaygames.sleddingsmash.Constants;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 
 /**
@@ -19,14 +25,18 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
     @Override
     GameObject placeObstacle(Vector3 vector, Vector3 offset) {
 
-        btCollisionShape colliosionShape =  Bullet.obtainStaticNodeShape(model.nodes);
-        GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.TREE, colliosionShape, 0);
+        btCylinderShape cylinder = new btCylinderShape(new Vector3(2,6,2));
+        GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.TREE, cylinder, 0);
         GameObject tree = constructor.construct();
 
         tree.setPosition(vector);
         Vector3 position = new Vector3(offset.x + vector.x, vector.y + (tree.height() / 2), vector.z);
         tree.transform.setToTranslation(position);
-        tree.getBody().setWorldTransform(tree.transform);
+        Matrix4 treePosition = tree.transform.cpy();
+        treePosition.translate(4, -1, -1);
+        tree.getBody().setWorldTransform(treePosition);
+        tree.getBody().setContactCallbackFlag(Constants.CollisionsFlag.TREE_FLAG);
+        tree.getBody().setContactCallbackFilter(Constants.CollisionsFlag.SPHERE_FLAG);
 
         return tree;
     }

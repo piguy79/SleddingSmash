@@ -20,6 +20,16 @@ public class Constants {
         public static final String DOWN_BUTTON = "downButton";
     }
 
+    public static class CharacterState {
+        public static final String SLEEP = "sleep";
+    }
+
+    public static class CollisionsFlag {
+        public static final int SPHERE_FLAG = 2;
+        public static final int TREE_FLAG = 3;
+        public static final int PLANE_FLAG = 4;
+    }
+
     public static class Colors {
 
     }

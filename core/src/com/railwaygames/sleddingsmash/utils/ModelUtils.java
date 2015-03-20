@@ -15,28 +15,23 @@ public class ModelUtils {
 
     public static List<Vector3> findAreaInModel(Model model, RectangleArea area, Vector3 upVector, float allowedAngle) {
         Mesh mesh = model.meshes.get(0);
-
         int newVertexOffset = mesh.getVertexSize() / 4;
 
         float[] vertices = new float[mesh.getNumVertices() * newVertexOffset];
         mesh.getVertices(vertices);
 
-        List<Vector3> locationsInBounds = new ArrayList<Vector3>();
-
         Map<String, MathUtils.MinMax> axisMinMax = MathUtils.calculateAxisMinMax(vertices, newVertexOffset);
 
-        MathUtils.MinMax xAxis = axisMinMax.get("x");
         MathUtils.MinMax zAxis = axisMinMax.get("z");
 
-
-        float maxX = xAxis.min + (xAxis.axisSize() * area.xEndPercent);
-        float minX = xAxis.min + (xAxis.axisSize() * area.xStartPercent);
         float maxZ = zAxis.min + (zAxis.axisSize() * (1 - area.zStartPercent));
         float minZ = zAxis.min + (zAxis.axisSize() * (1 - area.zEndPercent));
 
+        List<Vector3> locationsInBounds = new ArrayList<Vector3>();
+
 
         for (int i = 0; i < vertices.length; i += newVertexOffset) {
-            if (inBounds(vertices[i], maxX, minX) && inBounds(vertices[i + 2], maxZ, minZ)) {
+            if (inBounds(vertices[i + 2], maxZ, minZ)) {
                 float normalX = vertices[i + 3];
                 float normalY = vertices[i + 4];
                 float normalZ = vertices[i + 5];
@@ -49,9 +44,32 @@ public class ModelUtils {
             }
         }
 
-
-        return locationsInBounds;
+        return findXPlane(locationsInBounds, area);
     }
+
+
+    private static List<Vector3> findXPlane(List<Vector3> locations, RectangleArea area){
+        float maxX = Integer.MIN_VALUE;
+        float minX = Integer.MAX_VALUE;
+
+        for(Vector3 loc : locations){
+            minX = Math.min(loc.x, minX);
+            maxX = Math.max(loc.x, maxX);
+        }
+
+        float start = minX + ((maxX - minX) * area.xStartPercent);
+        float end = minX + ((maxX - minX) * area.xEndPercent);
+
+        List<Vector3> finalLocations = new ArrayList<Vector3>();
+        for(Vector3 loc : locations){
+            if(loc.x >= start && loc.x <= end){
+                finalLocations.add(loc);
+            }
+        }
+
+        return finalLocations;
+    }
+
 
     private static boolean inBounds(float vertex, float max, float min) {
         if (vertex <= max && vertex >= min) {
@@ -73,6 +91,5 @@ public class ModelUtils {
             this.zEndPercent = zEndPercent;
         }
     }
-
 
 }

@@ -25,6 +25,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
+import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
@@ -65,6 +66,7 @@ import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
 import com.railwaygames.sleddingsmash.shaders.TerrainShaderProvider;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
+import com.railwaygames.sleddingsmash.utils.WidgetUtils;
 import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
 import com.railwaygames.sleddingsmash.widgets.ShaderLabel;
 
@@ -118,6 +120,14 @@ public class PlayLevelScreen implements ScreenFeedback {
     @Override
     public void render(float delta) {
         gs.render();
+
+        if (gs.renderResult != null) {
+            if (gs.renderResult.equals(Constants.CharacterState.SLEEP)) {
+                gs.renderResult = null;
+                gs.pause = true;
+                hud.showEndGame();
+            }
+        }
         hud.render();
     }
 
@@ -160,6 +170,10 @@ public class PlayLevelScreen implements ScreenFeedback {
         private static final float sideMove = 10f;
         private static final float forwardMove = 0.4f;
         private static final float rotation = 0.5f;
+        private static final float LINEAR_SLEEP = 10;
+        private static final float ANGULAR_SLEEP = 10;
+        private final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 3, 0);
+
         public Environment lights;
         public PerspectiveCamera cam;
         public ModelBatch modelBatch;
@@ -182,6 +196,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         private Level level;
         private boolean accelerate = false;
         private boolean decelerate = false;
+        private boolean pause = false;
+        private String renderResult = null;
         private DebugDrawer debugDrawer;
         private btCollisionWorld collisionWorld;
         private boolean pushed = false;
@@ -234,6 +250,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                     if (needsPositions) {
                         obstacle.generatedPositions.add(object.position);
                     }
+                    collisionWorld.addCollisionObject(object.getBody());
                     constructors.add(object.constructor);
                     instances.add(object);
                     dynamicsWorld.addRigidBody(object.getBody());
@@ -257,7 +274,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             finalizePlane();
             createBall();
-            //createSled();
         }
 
         private void createPlane(float width, float length) {
@@ -282,10 +298,13 @@ public class PlayLevelScreen implements ScreenFeedback {
             constructors.add(sphere.constructor);
 
             sphere.getBody().setFriction(1);
+            sphere.getBody().setSleepingThresholds(LINEAR_SLEEP, ANGULAR_SLEEP);
 
             sphereStartPosition = findStartPos();
             sphere.transform.setToTranslation(sphereStartPosition);
             sphere.getBody().setWorldTransform(sphere.transform);
+            sphere.getBody().setContactCallbackFlag(Constants.CollisionsFlag.SPHERE_FLAG);
+            sphere.getBody().setContactCallbackFilter(Constants.CollisionsFlag.SPHERE_FLAG);
 
             instances.add(sphere);
             dynamicsWorld.addRigidBody(sphere.getBody());
@@ -327,15 +346,17 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private Vector3 findStartPos() {
-            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.2f, 0.01f, 0.2f, 0.03f), new Vector3(0, 1, 0), 70);
+            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.45f, 0.01f, 0.5f, 0.03f), new Vector3(0, 1, 0), 70);
             int randomIndex = (int) MathUtils.randomInRange(0, locations.size());
-            return locations.get(randomIndex).add(new Vector3(0, 20, 0));
+            return locations.get(randomIndex).add(new Vector3(-level.width * 0.5f, 1, 0));
+
         }
 
         private void createTree() {
             this.treeModels = new HashMap<String, Model>();
             UBJsonReader jsonReader = new UBJsonReader();
             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+
             treeModels.put("tree_1", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
             treeModels.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
         }
@@ -346,7 +367,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             broadphase = new btDbvtBroadphase();
             constraintSolver = new btSequentialImpulseConstraintSolver();
             dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
-            dynamicsWorld.setGravity(new Vector3(0, -10 * 4, 0));
+            dynamicsWorld.setGravity(GRAVITY_VEC);
             contactListener = new SSContactListener();
 
             collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
@@ -373,8 +394,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             userData.put("u_worldMax", new Vector3(minMaxMap.get("x").max, minMaxMap.get("y").max, minMaxMap.get("z").max));
             plane.userData = userData;
 
-            // Use for seeing the physcis on the plane
-            //collisionWorld.addCollisionObject(plane.getBody());
+            plane.getBody().setContactCallbackFilter(Constants.CollisionsFlag.PLANE_FLAG);
 
             terrainModelInstances.add(plane);
             dynamicsWorld.addRigidBody(plane.getBody());
@@ -390,7 +410,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             camController = new CameraInputController(cam);
             camController.translateUnits = 200.0f;
-//            Gdx.input.setInputProcessor(camController);
         }
 
         public void dispose() {
@@ -400,11 +419,17 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         public void render() {
-            final float delta = Math.min(1f / 30f, Gdx.graphics.getDeltaTime());
 
-            dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
+            if (!pause) {
+                final float delta = Math.min(1f / 30f, Gdx.graphics.getDeltaTime());
+                dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
+                applyForce();
 
-            applyForce();
+
+                if (!sphere.getBody().isActive()) {
+                    renderResult = Constants.CharacterState.SLEEP;
+                }
+            }
 
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -422,10 +447,9 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.render(modelInstances, lights);
             modelBatch.end();
 
-
-            debugDrawer.begin(cam);
-            collisionWorld.debugDrawWorld();
-            debugDrawer.end();
+            //debugDrawer.begin(cam);
+            //collisionWorld.debugDrawWorld();
+            //debugDrawer.end();
         }
 
         public Vector3 getSphereLocation() {
@@ -482,7 +506,6 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             out.getRotation(q);
 
-
             if (q.nor().getPitch() < 0) {
                 sideMovement = -sideMovement;
             }
@@ -499,12 +522,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
         class SSContactListener extends ContactListener {
             @Override
-            public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1) {
-                if (collision(GameObject.GameObjectType.TREE, colObj0, colObj1) && collision(GameObject.GameObjectType.CHARACTER, colObj0, colObj1)) {
-                    btCollisionObject tree = findObject(GameObject.GameObjectType.TREE, colObj0, colObj1);
-                    Vector3 velocity = sphere.getBody().getLinearVelocity();
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -100000));
-                }
+            public void onContactProcessed(btCollisionObject colObj0, boolean match0, btCollisionObject colObj1, boolean match1) {
+                sphere.getBody().setActivationState(Collision.ISLAND_SLEEPING);
             }
 
             private btCollisionObject findObject(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
@@ -518,6 +537,8 @@ public class PlayLevelScreen implements ScreenFeedback {
                 return ((GameObject) obj1.userData).gameObjectType == entity || ((GameObject) obj2.userData).gameObjectType == entity;
             }
         }
+
+
     }
 
     private class Hud {
@@ -569,6 +590,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     paused = true;
+                    gs.pause = true;
                     showMenu();
                 }
             });
@@ -584,6 +606,52 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             Gdx.input.setInputProcessor(stage);
         }
+
+        public void showEndGame() {
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+
+            final DialogOverlay ovr = new DialogOverlay(resources);
+            stage.addActor(ovr);
+
+            ShaderLabel gameOver = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
+                    Color.RED);
+
+            float centerX = width * 0.48f;
+            float y = height * 0.75f;
+            WidgetUtils.centerLabelOnPoint(gameOver, centerX, y);
+
+            ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "restart";
+                }
+            });
+
+            ShaderButtonWithLabel mainMenuButton = new ShaderButtonWithLabel(resources.fontShader, "Main Menu", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
+                    Color.WHITE);
+            mainMenuButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    renderResult = "mainMenu";
+                }
+            });
+
+            float bHeight = height * 0.125f;
+            float menuWidth = width * 0.25f;
+
+            restartButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+
+            ovr.addActor(gameOver);
+            ovr.addActor(restartButton);
+            ovr.addActor(mainMenuButton);
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+        }
+
 
         public void render() {
             float delta = Gdx.graphics.getDeltaTime();
@@ -662,6 +730,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                 public void clicked(InputEvent event, float x, float y) {
                     ovr.remove();
                     paused = false;
+                    gs.pause = false;
                 }
             });
 
