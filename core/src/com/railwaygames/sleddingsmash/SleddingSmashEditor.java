@@ -5,6 +5,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -377,8 +378,13 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         this.level.width = width;
         this.level.length = length;
 
+        TextureLoader.TextureParameter tp = new TextureLoader.TextureParameter();
+        tp.magFilter = Texture.TextureFilter.Linear;
+        tp.minFilter = Texture.TextureFilter.Linear;
+
         AssetManager assetManager = new AssetManager();
-        assetManager.load("data/images/levels.atlas", TextureAtlas.class);
+        assetManager.load("data/images/menus.atlas", TextureAtlas.class);
+        assetManager.load("data/images/levels/finish_line.png", Texture.class, tp);
         assetManager.finishLoading();
 
         UISkin skin = new UISkin();
