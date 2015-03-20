@@ -76,6 +76,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
+import static com.railwaygames.sleddingsmash.Constants.CharacterState.SLEEP;
+import static com.railwaygames.sleddingsmash.Constants.CharacterState.VICTORY;
 import static com.railwaygames.sleddingsmash.SleddingSmashEditor.Level;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
 import static com.railwaygames.sleddingsmash.utils.MathUtils.MinMax;
@@ -121,11 +123,11 @@ public class PlayLevelScreen implements ScreenFeedback {
     public void render(float delta) {
         gs.render();
 
-        if (gs.renderResult != null) {
-            if (gs.renderResult.equals(Constants.CharacterState.SLEEP)) {
-                gs.renderResult = null;
+        if (gs.state != null) {
+            if (gs.state.equals(SLEEP) || gs.state.equals(VICTORY)) {
+                hud.showEndGame(gs.state);
+                gs.state = null;
                 gs.pause = true;
-                hud.showEndGame();
             }
         }
         hud.render();
@@ -187,6 +189,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private List<GameObject.Constructor> constructors = new ArrayList<GameObject.Constructor>();
         private GameObject sphere;
         private GameObject plane;
+        private Map<String, MinMax> minMaxMap;
         private btCollisionConfiguration collisionConfig;
         private btDispatcher dispatcher;
         private SSContactListener contactListener;
@@ -197,7 +200,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private boolean accelerate = false;
         private boolean decelerate = false;
         private boolean pause = false;
-        private String renderResult = null;
+        private String state = null;
         private DebugDrawer debugDrawer;
         private btCollisionWorld collisionWorld;
         private boolean pushed = false;
@@ -388,7 +391,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             int vertexSize = mesh.getVertexSize() / 4;
             float[] vertices = new float[mesh.getNumVertices() * mesh.getVertexSize()];
             mesh.getVertices(vertices);
-            Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
+
+            minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
             Map<String, Object> userData = new HashMap<String, Object>();
             userData.put("u_worldMin", new Vector3(minMaxMap.get("x").min, minMaxMap.get("y").min, minMaxMap.get("z").min));
             userData.put("u_worldMax", new Vector3(minMaxMap.get("x").max, minMaxMap.get("y").max, minMaxMap.get("z").max));
@@ -418,16 +422,23 @@ public class PlayLevelScreen implements ScreenFeedback {
             constructors.clear();
         }
 
-        public void render() {
+        private float getZPercentComplete() {
+            MinMax zMinMax = minMaxMap.get("z");
+            return (getSphereLocation().z - zMinMax.max) / (zMinMax.min - zMinMax.max);
+        }
 
+        public void render() {
             if (!pause) {
                 final float delta = Math.min(1f / 30f, Gdx.graphics.getDeltaTime());
                 dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
                 applyForce();
 
-
                 if (!sphere.getBody().isActive()) {
-                    renderResult = Constants.CharacterState.SLEEP;
+                    state = SLEEP;
+                } else {
+                    if (getZPercentComplete() >= 0.95f) {
+                        state = VICTORY;
+                    }
                 }
             }
 
@@ -537,8 +548,6 @@ public class PlayLevelScreen implements ScreenFeedback {
                 return ((GameObject) obj1.userData).gameObjectType == entity || ((GameObject) obj2.userData).gameObjectType == entity;
             }
         }
-
-
     }
 
     private class Hud {
@@ -607,19 +616,25 @@ public class PlayLevelScreen implements ScreenFeedback {
             Gdx.input.setInputProcessor(stage);
         }
 
-        public void showEndGame() {
+        public void showEndGame(String state) {
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();
 
             final DialogOverlay ovr = new DialogOverlay(resources);
             stage.addActor(ovr);
 
-            ShaderLabel gameOver = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
-                    Color.RED);
+            ShaderLabel statusLabel;
+            if (state.equals(SLEEP)) {
+                statusLabel = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
+                        Color.RED);
+            } else {
+                statusLabel = new ShaderLabel(resources.fontShader, "Victory", resources.skin, Constants.UI.LARGE_FONT,
+                        Color.GREEN);
+            }
 
             float centerX = width * 0.48f;
             float y = height * 0.75f;
-            WidgetUtils.centerLabelOnPoint(gameOver, centerX, y);
+            WidgetUtils.centerLabelOnPoint(statusLabel, centerX, y);
 
             ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
                     Color.WHITE);
@@ -645,13 +660,12 @@ public class PlayLevelScreen implements ScreenFeedback {
             restartButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
             mainMenuButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
 
-            ovr.addActor(gameOver);
+            ovr.addActor(statusLabel);
             ovr.addActor(restartButton);
             ovr.addActor(mainMenuButton);
             restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
             mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
         }
-
 
         public void render() {
             float delta = Gdx.graphics.getDeltaTime();

@@ -91,8 +91,8 @@ void main() {
 	#ifdef diffuseTextureFlag
 	    float z_len = u_worldMax.z - u_worldMin.z;
 	    float z_pos = (u_worldMax.z - a_position.z) / z_len;
-	    float z_start = 0.94;
-	    float z_end = 0.96;
+	    float z_start = 0.95;
+	    float z_end = 0.99;
 		if(z_pos > z_start && z_pos < z_end) {
 		    float x_len = (u_worldMax.x - u_worldMin.x) * 0.1;
 		    float u = mod(a_position.x, x_len) / x_len;

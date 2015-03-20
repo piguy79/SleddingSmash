@@ -22,6 +22,7 @@ public class Constants {
 
     public static class CharacterState {
         public static final String SLEEP = "sleep";
+        public static final String VICTORY = "victory";
     }
 
     public static class CollisionsFlag {

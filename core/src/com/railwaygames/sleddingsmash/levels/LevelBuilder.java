@@ -35,7 +35,7 @@ public class LevelBuilder {
         Model model = new Model();
 
         // Assume we are going to split our plane into chunks this size
-        float chunkSize = 8.0f;
+        float chunkSize = 10.0f;
 
         int lengthCount = (int) (l / chunkSize);
         l = (int) (chunkSize * lengthCount);
