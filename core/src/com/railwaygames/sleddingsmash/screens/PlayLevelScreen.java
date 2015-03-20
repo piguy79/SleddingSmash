@@ -3,6 +3,7 @@ package com.railwaygames.sleddingsmash.screens;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -624,17 +625,39 @@ public class PlayLevelScreen implements ScreenFeedback {
             stage.addActor(ovr);
 
             ShaderLabel statusLabel;
+            float centerX = width * 0.5f;
             if (state.equals(SLEEP)) {
                 statusLabel = new ShaderLabel(resources.fontShader, "Game Over", resources.skin, Constants.UI.LARGE_FONT,
                         Color.RED);
             } else {
                 statusLabel = new ShaderLabel(resources.fontShader, "Victory", resources.skin, Constants.UI.LARGE_FONT,
                         Color.GREEN);
+                String bestTimePref = "bestTime:" + levelToLoad;
+                Preferences prefs = Gdx.app.getPreferences(Constants.PREFERENCE_STORE);
+                float bestTime = prefs.getFloat(bestTimePref, 100000.0f);
+
+                if (totalTimeInSeconds < bestTime) {
+                    ShaderLabel newRecordLabel = new ShaderLabel(resources.fontShader, "New Record!", resources.skin, Constants.UI.DEFAULT_FONT,
+                            Color.GREEN);
+                    WidgetUtils.centerLabelOnPoint(newRecordLabel, centerX, height * 0.66f);
+                    prefs.putFloat(bestTimePref, totalTimeInSeconds);
+                    prefs.flush();
+                    ovr.addActor(newRecordLabel);
+                } else if (bestTime < 100000.0f) {
+                    ShaderLabel previousBestLabel = new ShaderLabel(resources.fontShader, "Current Record: " + formatTime(bestTime), resources.skin, Constants.UI.DEFAULT_FONT,
+                            Color.GREEN);
+                    WidgetUtils.centerLabelOnPoint(previousBestLabel, centerX, height * 0.66f);
+                    ovr.addActor(previousBestLabel);
+                }
+
+                ShaderLabel timeLabel = new ShaderLabel(resources.fontShader, "Time: " + formatTime(totalTimeInSeconds), resources.skin, Constants.UI.DEFAULT_FONT,
+                        Color.GREEN);
+                WidgetUtils.centerLabelOnPoint(timeLabel, centerX, height * 0.6f);
+                ovr.addActor(timeLabel);
             }
 
-            float centerX = width * 0.48f;
-            float y = height * 0.75f;
-            WidgetUtils.centerLabelOnPoint(statusLabel, centerX, y);
+            WidgetUtils.centerLabelOnPoint(statusLabel, centerX, height * 0.75f);
+
 
             ShaderButtonWithLabel restartButton = new ShaderButtonWithLabel(resources.fontShader, "Restart", resources.skin, Constants.UI.CLEAR_BUTTON, Constants.UI.SMALL_FONT,
                     Color.WHITE);
@@ -657,14 +680,14 @@ public class PlayLevelScreen implements ScreenFeedback {
             float bHeight = height * 0.125f;
             float menuWidth = width * 0.25f;
 
-            restartButton.setBounds(-menuWidth, height * 0.5f, menuWidth, bHeight);
-            mainMenuButton.setBounds(-menuWidth, height * 0.3f, menuWidth, bHeight);
+            restartButton.setBounds(-menuWidth, height * 0.4f, menuWidth, bHeight);
+            mainMenuButton.setBounds(-menuWidth, height * 0.2f, menuWidth, bHeight);
 
             ovr.addActor(statusLabel);
             ovr.addActor(restartButton);
             ovr.addActor(mainMenuButton);
-            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.6f, restartButton.getY(), 0.4f, Interpolation.pow3));
-            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.6f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
+            restartButton.addAction(moveTo(width * 0.5f - restartButton.getWidth() * 0.5f, restartButton.getY(), 0.4f, Interpolation.pow3));
+            mainMenuButton.addAction(moveTo(width * 0.5f - mainMenuButton.getWidth() * 0.5f, mainMenuButton.getY(), 0.4f, Interpolation.pow3));
         }
 
         public void render() {

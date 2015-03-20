@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 public class Constants {
     public static final String APP_TITLE = "Sledding Smash";
+    public static final String PREFERENCE_STORE = "SleddingSmash";
     public static SimpleDateFormat timeRemainingFormat = new SimpleDateFormat("mm:ss");
 
     public static class UI {
