@@ -81,7 +81,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
     public Model model;
-    public Map<String,Model> treeModelMap;
+    public Map<String, Model> treeModelMap;
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
@@ -377,7 +377,18 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         this.level.width = width;
         this.level.length = length;
 
-        model = LevelBuilder.generate(width, length);
+        AssetManager assetManager = new AssetManager();
+        assetManager.load("data/images/levels.atlas", TextureAtlas.class);
+        assetManager.finishLoading();
+
+        UISkin skin = new UISkin();
+        skin.initialize(assetManager);
+
+        Resources resources = new Resources();
+        resources.skin = skin;
+        resources.assetManager = assetManager;
+
+        model = LevelBuilder.generate(width, length, resources);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(BumpyTerrainModifier.COUNT, 300);
         new BumpyTerrainModifier().modify(model, params);
@@ -865,9 +876,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         };
     }
 
-    private void clearObstaclePositions(){
-        if(level != null){
-            for(Obstacle obstacle : level.obstacles){
+    private void clearObstaclePositions() {
+        if (level != null) {
+            for (Obstacle obstacle : level.obstacles) {
                 obstacle.generatedPositions = null;
             }
         }
@@ -1022,6 +1033,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         TRANSFORM, SCALE
     }
 
+    public enum ObstacleType {
+        TREE
+    }
+
     public static class Level {
         public List<Modifier> modifiers = new ArrayList<Modifier>();
         public List<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -1053,10 +1068,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         }
     }
 
-    public enum ObstacleType {
-        TREE
-    }
-
     public static class Obstacle {
         public Map<String, Object> params = new HashMap<String, Object>();
         public List<Vector3> generatedPositions;
@@ -1070,8 +1081,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             this.type = type;
         }
 
-        public String getModelToUse(){
-            return (String)params.get(MODEL);
+        public String getModelToUse() {
+            return (String) params.get(MODEL);
         }
 
         @Override

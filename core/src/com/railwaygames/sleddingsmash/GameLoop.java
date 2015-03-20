@@ -4,12 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.railwaygames.sleddingsmash.screens.LevelSelectScreen;
 import com.railwaygames.sleddingsmash.screens.MainMenuScreen;
 import com.railwaygames.sleddingsmash.screens.PlayLevelScreen;
 import com.railwaygames.sleddingsmash.screens.ScreenFeedback;
+
+import static com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 
 
 public class GameLoop extends Game {
@@ -30,9 +33,13 @@ public class GameLoop extends Game {
         gl.glEnable(GL20.GL_DEPTH_BUFFER_BIT);
 
         Gdx.input.setCatchBackKey(true);
+        TextureParameter tp = new TextureParameter();
+        tp.magFilter = Texture.TextureFilter.Linear;
+        tp.minFilter = Texture.TextureFilter.Linear;
 
         AssetManager assetManager = new AssetManager();
         assetManager.load("data/images/menus.atlas", TextureAtlas.class);
+        assetManager.load("data/images/levels/finish_line.png", Texture.class, tp);
         assetManager.finishLoading();
 
         UISkin skin = new UISkin();

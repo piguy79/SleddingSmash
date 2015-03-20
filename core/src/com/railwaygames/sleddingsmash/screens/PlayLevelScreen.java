@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -61,6 +62,7 @@ import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 import com.railwaygames.sleddingsmash.overlay.DialogOverlay;
+import com.railwaygames.sleddingsmash.shaders.TerrainShaderProvider;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 import com.railwaygames.sleddingsmash.utils.ModelUtils;
 import com.railwaygames.sleddingsmash.widgets.ShaderButtonWithLabel;
@@ -74,6 +76,7 @@ import java.util.Map;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 import static com.railwaygames.sleddingsmash.SleddingSmashEditor.Level;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.MODIFICATION_TYPE;
+import static com.railwaygames.sleddingsmash.utils.MathUtils.MinMax;
 
 public class PlayLevelScreen implements ScreenFeedback {
 
@@ -150,7 +153,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     }
 
-    private static class GameState {
+    private class GameState {
         private static final float MASS_OF_SLED = 100;
         private static final float MASS_OF_CHARACTER = 200;
         private static final float PHYSICS_SCALE_FACTOR = 1f;
@@ -160,10 +163,12 @@ public class PlayLevelScreen implements ScreenFeedback {
         public Environment lights;
         public PerspectiveCamera cam;
         public ModelBatch modelBatch;
+        public ModelBatch terrainModelBatch;
         public Model model;
         public Map<String, Model> treeModels;
         public CameraInputController camController;
         public Array<GameObject> instances = new Array<GameObject>();
+        public Array<GameObject> terrainModelInstances = new Array<GameObject>();
         public Array<ModelInstance> modelInstances = new Array<ModelInstance>();
         private List<GameObject.Constructor> constructors = new ArrayList<GameObject.Constructor>();
         private GameObject sphere;
@@ -187,8 +192,10 @@ public class PlayLevelScreen implements ScreenFeedback {
             lights = new Environment();
             lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
             lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+            lights.set(new ColorAttribute(ColorAttribute.Fog, 0.8f, 0.8f, 0.9f, 1f));
 
             modelBatch = new ModelBatch();
+            terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
 
             createPhysicsWorld();
             setupCamera();
@@ -257,7 +264,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             this.level.width = width;
             this.level.length = length;
 
-            model = LevelBuilder.generate(width, length);
+            model = LevelBuilder.generate(width, length, resources);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put(BumpyTerrainModifier.COUNT, 300);
             new BumpyTerrainModifier().modify(model, params);
@@ -353,15 +360,23 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             plane = new GameObject.Constructor(model, GameObject.GameObjectType.PLANE, new btBvhTriangleMeshShape(model.meshParts), 0f).construct();
             constructors.add(plane.constructor);
-
             plane.transform.setToTranslation(-level.width * 0.5f, 0, 0);
             plane.getBody().setWorldTransform(plane.transform);
 
+            Mesh mesh = model.meshes.get(0);
+            int vertexSize = mesh.getVertexSize() / 4;
+            float[] vertices = new float[mesh.getNumVertices() * mesh.getVertexSize()];
+            mesh.getVertices(vertices);
+            Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
+            Map<String, Object> userData = new HashMap<String, Object>();
+            userData.put("u_worldMin", new Vector3(minMaxMap.get("x").min, minMaxMap.get("y").min, minMaxMap.get("z").min));
+            userData.put("u_worldMax", new Vector3(minMaxMap.get("x").max, minMaxMap.get("y").max, minMaxMap.get("z").max));
+            plane.userData = userData;
 
             // Use for seeing the physcis on the plane
             //collisionWorld.addCollisionObject(plane.getBody());
 
-            instances.add(plane);
+            terrainModelInstances.add(plane);
             dynamicsWorld.addRigidBody(plane.getBody());
         }
 
@@ -398,10 +413,15 @@ public class PlayLevelScreen implements ScreenFeedback {
             camController.camera.update();
             camController.update();
 
+            terrainModelBatch.begin(cam);
+            terrainModelBatch.render(terrainModelInstances, lights);
+            terrainModelBatch.end();
+
             modelBatch.begin(cam);
             modelBatch.render(instances, lights);
             modelBatch.render(modelInstances, lights);
             modelBatch.end();
+
 
             debugDrawer.begin(cam);
             collisionWorld.debugDrawWorld();

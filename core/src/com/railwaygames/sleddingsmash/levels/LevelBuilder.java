@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.railwaygames.sleddingsmash.Resources;
 import com.railwaygames.sleddingsmash.utils.MathUtils;
 
 import java.lang.reflect.Method;
@@ -26,13 +27,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.badlogic.gdx.graphics.g3d.utils.TextureProvider.AssetTextureProvider;
+
 public class LevelBuilder {
 
-    public static Model generate(float w, float l) {
+    public static Model generate(float w, float l, Resources resources) {
         Model model = new Model();
 
         // Assume we are going to split our plane into chunks this size
-        float chunkSize = 10.0f;
+        float chunkSize = 8.0f;
 
         int lengthCount = (int) (l / chunkSize);
         l = (int) (chunkSize * lengthCount);
@@ -40,18 +43,19 @@ public class LevelBuilder {
         int widthCount = (int) (w / chunkSize);
         w = (int) (chunkSize * widthCount);
 
-        int vertexCount = (lengthCount + 1) * (widthCount + 1) * 3 * 2;
+        int vertexSize = 6;
+        int vertexCount = (lengthCount + 1) * (widthCount + 1) * vertexSize;
         float[] vertices = new float[vertexCount];
 
         int count = 0;
         for (float z = 0; z >= -l; z -= chunkSize) {
             for (float x = 0; x <= w; x += chunkSize) {
-                vertices[count++] = x;
-                vertices[count++] = 0.0f;
-                vertices[count++] = z;
+                vertices[count] = x;
+                vertices[count + 1] = 0.0f;
+                vertices[count + 2] = z;
 
                 // skip normals until all terrain modifiers have been run
-                count += 3;
+                count += vertexSize;
             }
         }
 
@@ -83,14 +87,39 @@ public class LevelBuilder {
         MeshPart meshPart = new MeshPart("plane", mesh, 0, indexCount, GL20.GL_TRIANGLES);
         meshPart.mesh = mesh;
 
+        ModelTexture modelTexture = new ModelTexture();
+        modelTexture.id = "bg_one_texture";
+        modelTexture.fileName = "data/images/levels/finish_line.png";
+        modelTexture.usage = ModelTexture.USAGE_DIFFUSE;
+        Array<ModelTexture> modelTextures = new Array<ModelTexture>();
+        modelTextures.add(modelTexture);
+
+        ModelMaterial modelMaterial = new ModelMaterial();
+        modelMaterial.id = "level_finish";
+        modelMaterial.diffuse = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        modelMaterial.textures = modelTextures;
+        List<ModelMaterial> materials = new ArrayList<ModelMaterial>();
+        materials.add(modelMaterial);
+
+        try {
+            Method method = model.getClass().getDeclaredMethod("loadMaterials", Iterable.class, TextureProvider.class);
+            method.setAccessible(true);
+            Object r = method.invoke(model, materials, new AssetTextureProvider(resources.assetManager));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         model.meshes.add(mesh);
         model.meshParts.add(meshPart);
 
-        NodePart nodePart = new NodePart(meshPart, new Material(ColorAttribute.createDiffuse(new Color(0.95f, 0.92f, 0.93f, 1.0f))));
+        Material material = model.getMaterial("level_finish");
+        material.set(ColorAttribute.createDiffuse(new Color(0.95f, 0.92f, 0.93f, 1.0f)));
+        NodePart nodePartPlane = new NodePart(meshPart, material);
 
         Node node = new Node();
         node.id = "plane_node";
-        node.parts.add(nodePart);
+        node.parts.add(nodePartPlane);
         model.nodes.add(node);
 
         return model;
@@ -154,10 +183,10 @@ public class LevelBuilder {
         Mesh mesh = model.meshes.get(0);
 
         int numIndices = mesh.getNumIndices();
-        int numVertices = mesh.getNumVertices() * 3 * 2;
 
         // divide by 4 b/c size is in bytes
         int newVertexOffset = mesh.getVertexSize() / 4;
+        int numVertices = mesh.getNumVertices() * newVertexOffset;
 
         float[] vertices = new float[numVertices];
         mesh.getVertices(vertices);
@@ -205,6 +234,7 @@ public class LevelBuilder {
         float[] vertices = new float[32];
         short[] indices = new short[6];
 
+        // Images are flipped on y-axis, so UV coords look upside down
         vertices[0] = -5.0f;
         vertices[1] = -5.0f;
         vertices[2] = 0;
@@ -294,7 +324,7 @@ public class LevelBuilder {
         int widthCount = 8;
         int width = rectWidth * widthCount;
 
-        int vertexCount = (lengthCount + 1) * (widthCount + 1) * 3 * 2;
+        int vertexCount = (lengthCount + 1) * (widthCount + 1) * newVertexOffset;
         float[] newVertices = new float[vertexCount];
 
         int mod = 1;
