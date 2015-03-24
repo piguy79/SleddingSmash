@@ -21,6 +21,8 @@ RUN $ANDROID_HOME/tools/android update sdk --no-ui
 RUN echo "y" | $ANDROID_HOME/tools/android update sdk -u --filter platform-tools,android-21
 RUN echo "y" | $ANDROID_HOME/tools/android update sdk -u --all --filter build-tools-20.0.0
 
+RUN keytool -genkey -v -keypass railwaygames113 -keystore $JENKINS_HOME/sleddingSmash.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000 -storepass railwaygames113  -dname "CN=railwaygames.mobi, OU=ID, O=RG, L=Mullen, S=Conor, C=US"
+
 
 
 ENV ANDROID_HOME /opt/android-sdk-linux

@@ -443,6 +443,11 @@ public class PlayLevelScreen implements ScreenFeedback {
                 }
             }
 
+            if(!pushed){
+                sphere.applyForce(new Vector3(0,0,-80));
+                pushed = true;
+            }
+
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
             camController.camera.position.set(sphere.getLocationInWorld()
