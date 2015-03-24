@@ -362,7 +362,6 @@ public class PlayLevelScreen implements ScreenFeedback {
             G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
 
             treeModels.put("tree_1", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
-            treeModels.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
         }
 
         private void createPhysicsWorld() {
@@ -464,9 +463,10 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.render(modelInstances, lights);
             modelBatch.end();
 
-            //debugDrawer.begin(cam);
-            //collisionWorld.debugDrawWorld();
-            //debugDrawer.end();
+            // DEBUG PHYSICS
+            debugDrawer.begin(cam);
+            collisionWorld.debugDrawWorld();
+            debugDrawer.end();
         }
 
         public Vector3 getSphereLocation() {
@@ -480,16 +480,16 @@ public class PlayLevelScreen implements ScreenFeedback {
         private void applyForce() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
-                sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2, 0, 0));
+                sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2.5f, 0, 0));
             } else {
                 if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(-9f, 0, 0));
+                    sphere.getBody().applyCentralForce(new Vector3(-20f, 0, 0));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(9f, 0, 0));
+                    sphere.getBody().applyCentralForce(new Vector3(20f, 0, 0));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || accelerate) {
                     sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
                 } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || decelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 2f));
+                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 5f));
                 }
             }
         }

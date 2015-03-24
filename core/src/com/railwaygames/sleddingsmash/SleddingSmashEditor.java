@@ -102,7 +102,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
     private Level level = new Level();
 
-    private String[] treeModels = new String[]{"tree", "tree_1"};
+    private String[] treeModels = new String[]{"tree_1"};
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
     @Override
