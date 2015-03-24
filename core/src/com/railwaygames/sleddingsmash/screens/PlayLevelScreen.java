@@ -331,20 +331,15 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphere = new GameObject.Constructor(model, GameObject.GameObjectType.CHARACTER, new btSphereShape(2f), MASS_OF_SLED * PHYSICS_SCALE_FACTOR).construct();
             constructors.add(sphere.constructor);
 
-            sphere.getBody().setFriction(1f);
-            sphere.getBody().setRestitution(0);
+            sphere.getBody().setFriction(1);
+            sphere.getBody().setSleepingThresholds(LINEAR_SLEEP, ANGULAR_SLEEP);
 
-            sphere.getBody().setLinearVelocity(new Vector3(0, 0, -6));
-
-            List<Vector3> locations = ModelUtils.findAreaInModel(plane.model, new ModelUtils.RectangleArea(0.5f, 0.01f, 0.6f, 0.03f), new Vector3(0, 1, 0), 180);
-            int randomIndex = (int) MathUtils.randomInRange(0, locations.size());
-            Vector3 pos = locations.get(randomIndex);
-
-            sphere.transform.setToTranslation((-level.width * 0.5f) + pos.x, pos.y + 2f, pos.z);
-            sphere.transform.rotate(0, 1, 0, -90);
-
+            sphereStartPosition = findStartPos();
+            sphere.transform.setToTranslation(sphereStartPosition);
             sphere.getBody().setWorldTransform(sphere.transform);
-            collisionWorld.addCollisionObject(sphere.getBody());
+            sphere.getBody().setContactCallbackFlag(Constants.CollisionsFlag.SPHERE_FLAG);
+            sphere.getBody().setContactCallbackFilter(Constants.CollisionsFlag.SPHERE_FLAG);
+
             instances.add(sphere);
             dynamicsWorld.addRigidBody(sphere.getBody());
         }
@@ -443,7 +438,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             }
 
             if(!pushed){
-                sphere.applyForce(new Vector3(0,0,-80));
+                sphere.applyForce(new Vector3(0,0,-90));
                 pushed = true;
             }
 
@@ -464,9 +459,9 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.end();
 
             // DEBUG PHYSICS
-            debugDrawer.begin(cam);
-            collisionWorld.debugDrawWorld();
-            debugDrawer.end();
+            //debugDrawer.begin(cam);
+            //collisionWorld.debugDrawWorld();
+            //debugDrawer.end();
         }
 
         public Vector3 getSphereLocation() {
