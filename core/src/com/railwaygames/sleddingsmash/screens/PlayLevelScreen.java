@@ -606,7 +606,7 @@ public class PlayLevelScreen implements ScreenFeedback {
             });
             stage.addActor(pauseButton);
 
-            timerLabel = new ShaderLabel(resources.fontShader, "", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
+            timerLabel = new ShaderLabel(resources.fontShader, "Current: ", resources.skin, Constants.UI.X_SMALL_FONT, Color.GREEN);
             timerLabel.setAlignment(Align.right);
             stage.addActor(timerLabel);
 
