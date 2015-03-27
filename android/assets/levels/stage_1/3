@@ -1,0 +1,1278 @@
+{
+modifiers: [
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: fade
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: x
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -60
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: fade
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0.9
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: x
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: 60
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.5
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: sine
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -300
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -100
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.5
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0.5
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -200
+			}
+		}
+	}
+]
+obstacles: [
+	{
+		params: {
+			class: java.util.HashMap
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			startX: {
+				class: java.lang.Float
+				value: 0.05
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.4
+			}
+			density: {
+				class: java.lang.Float
+				value: 50
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.6
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.4
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: 60
+				y: -469.55594
+				z: -1680
+			}
+			{
+				x: 120
+				y: -458.74527
+				z: -1440
+			}
+			{
+				x: 80
+				y: -473.23233
+				z: -1750
+			}
+			{
+				x: 100
+				y: -450.26282
+				z: -1320
+			}
+			{
+				x: 120
+				y: -457.4609
+				z: -1460
+			}
+			{
+				x: 90
+				y: -473.6899
+				z: -1720
+			}
+			{
+				x: 110
+				y: -465.79507
+				z: -1550
+			}
+			{
+				x: 50
+				y: -461.0566
+				z: -1450
+			}
+			{
+				x: 80
+				y: -458.87994
+				z: -1460
+			}
+			{
+				x: 100
+				y: -473.58667
+				z: -1730
+			}
+			{
+				x: 70
+				y: -451.77377
+				z: -1340
+			}
+			{
+				x: 60
+				y: -436.65106
+				z: -1230
+			}
+			{
+				x: 80
+				y: -471.28546
+				z: -1620
+			}
+			{
+				x: 110
+				y: -473.58667
+				z: -1730
+			}
+			{
+				x: 100
+				y: -451.7805
+				z: -1340
+			}
+			{
+				x: 80
+				y: -451.31863
+				z: -1330
+			}
+			{
+				x: 90
+				y: -463.37674
+				z: -1580
+			}
+			{
+				x: 110
+				y: -445.816
+				z: -1290
+			}
+			{
+				x: 70
+				y: -459.43045
+				z: -1460
+			}
+			{
+				x: 80
+				y: -459.9556
+				z: -1500
+			}
+			{
+				x: 110
+				y: -463.21906
+				z: -1580
+			}
+			{
+				x: 80
+				y: -469.21304
+				z: -1600
+			}
+			{
+				x: 50
+				y: -473.6167
+				z: -1690
+			}
+			{
+				x: 60
+				y: -434.9278
+				z: -1220
+			}
+			{
+				x: 100
+				y: -462.53442
+				z: -1520
+			}
+			{
+				x: 50
+				y: -460.92532
+				z: -1440
+			}
+			{
+				x: 110
+				y: -438.31796
+				z: -1240
+			}
+			{
+				x: 50
+				y: -472.9846
+				z: -1760
+			}
+			{
+				x: 60
+				y: -444.36127
+				z: -1280
+			}
+			{
+				x: 60
+				y: -455.2855
+				z: -1380
+			}
+			{
+				x: 50
+				y: -434.9264
+				z: -1220
+			}
+			{
+				x: 50
+				y: -451.66238
+				z: -1340
+			}
+			{
+				x: 120
+				y: -472.26163
+				z: -1780
+			}
+			{
+				x: 100
+				y: -461.2684
+				z: -1510
+			}
+			{
+				x: 50
+				y: -449.49277
+				z: -1320
+			}
+			{
+				x: 80
+				y: -471.34915
+				z: -1800
+			}
+			{
+				x: 110
+				y: -473.61624
+				z: -1690
+			}
+			{
+				x: 120
+				y: -456.7175
+				z: -1400
+			}
+			{
+				x: 60
+				y: -449.75302
+				z: -1320
+			}
+			{
+				x: 60
+				y: -473.28372
+				z: -1700
+			}
+			{
+				x: 120
+				y: -473.58667
+				z: -1730
+			}
+			{
+				x: 90
+				y: -453.59937
+				z: -1360
+			}
+			{
+				x: 70
+				y: -436.72095
+				z: -1230
+			}
+			{
+				x: 60
+				y: -473.58667
+				z: -1730
+			}
+			{
+				x: 110
+				y: -449.77927
+				z: -1320
+			}
+			{
+				x: 100
+				y: -465.74994
+				z: -1550
+			}
+		]
+		type: TREE
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			startX: {
+				class: java.lang.Float
+				value: 0.6
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.95
+			}
+			density: {
+				class: java.lang.Float
+				value: 50
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.6
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.4
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: 170
+				y: -456.71777
+				z: -1400
+			}
+			{
+				x: 210
+				y: -438.31796
+				z: -1240
+			}
+			{
+				x: 210
+				y: -470.70673
+				z: -1610
+			}
+			{
+				x: 230
+				y: -461.3006
+				z: -1510
+			}
+			{
+				x: 190
+				y: -473.23218
+				z: -1750
+			}
+			{
+				x: 190
+				y: -470.08844
+				z: -1790
+			}
+			{
+				x: 240
+				y: -453.67224
+				z: -1360
+			}
+			{
+				x: 220
+				y: -438.31796
+				z: -1240
+			}
+			{
+				x: 190
+				y: -471.81503
+				z: -1630
+			}
+			{
+				x: 170
+				y: -430.95847
+				z: -1200
+			}
+			{
+				x: 220
+				y: -455.28552
+				z: -1380
+			}
+			{
+				x: 200
+				y: -458.8185
+				z: -1440
+			}
+			{
+				x: 180
+				y: -448.2845
+				z: -1310
+			}
+			{
+				x: 230
+				y: -470.0511
+				z: -1600
+			}
+			{
+				x: 240
+				y: -451.82043
+				z: -1340
+			}
+			{
+				x: 220
+				y: -470.0511
+				z: -1600
+			}
+			{
+				x: 200
+				y: -439.88672
+				z: -1250
+			}
+			{
+				x: 180
+				y: -471.34674
+				z: -1800
+			}
+			{
+				x: 240
+				y: -457.02173
+				z: -1400
+			}
+			{
+				x: 210
+				y: -458.3891
+				z: -1430
+			}
+			{
+				x: 230
+				y: -456.74167
+				z: -1400
+			}
+			{
+				x: 220
+				y: -441.45212
+				z: -1260
+			}
+			{
+				x: 190
+				y: -464.80707
+				z: -1540
+			}
+			{
+				x: 190
+				y: -472.99573
+				z: -1660
+			}
+			{
+				x: 220
+				y: -471.23108
+				z: -1790
+			}
+			{
+				x: 230
+				y: -467.72244
+				z: -1570
+			}
+			{
+				x: 180
+				y: -450.37753
+				z: -1330
+			}
+			{
+				x: 230
+				y: -459.96725
+				z: -1490
+			}
+			{
+				x: 200
+				y: -473.25748
+				z: -1670
+			}
+			{
+				x: 220
+				y: -472.13803
+				z: -1760
+			}
+			{
+				x: 230
+				y: -459.86777
+				z: -1480
+			}
+			{
+				x: 230
+				y: -472.26602
+				z: -1640
+			}
+			{
+				x: 230
+				y: -434.9278
+				z: -1220
+			}
+			{
+				x: 230
+				y: -448.3355
+				z: -1310
+			}
+			{
+				x: 240
+				y: -460
+				z: -1500
+			}
+			{
+				x: 240
+				y: -450.7194
+				z: -1330
+			}
+			{
+				x: 210
+				y: -470.37784
+				z: -1780
+			}
+			{
+				x: 190
+				y: -449.40936
+				z: -1320
+			}
+			{
+				x: 190
+				y: -441.46036
+				z: -1260
+			}
+			{
+				x: 240
+				y: -438.31796
+				z: -1240
+			}
+			{
+				x: 210
+				y: -469.3433
+				z: -1590
+			}
+			{
+				x: 170
+				y: -472.29474
+				z: -1690
+			}
+			{
+				x: 190
+				y: -447.02643
+				z: -1300
+			}
+			{
+				x: 210
+				y: -464.6861
+				z: -1540
+			}
+			{
+				x: 240
+				y: -471.5773
+				z: -1790
+			}
+			{
+				x: 180
+				y: -470.70673
+				z: -1610
+			}
+			{
+				x: 200
+				y: -448.44046
+				z: -1310
+			}
+			{
+				x: 180
+				y: -472.65314
+				z: -1650
+			}
+		]
+		type: TREE
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			startX: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.9
+			}
+			density: {
+				class: java.lang.Float
+				value: 20
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.4
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: 70
+				y: -328.78973
+				z: -810
+			}
+			{
+				x: 130
+				y: -200.62314
+				z: -360
+			}
+			{
+				x: 130
+				y: -331.92426
+				z: -820
+			}
+			{
+				x: 210
+				y: -229.34631
+				z: -480
+			}
+			{
+				x: 160
+				y: -254.75674
+				z: -570
+			}
+			{
+				x: 140
+				y: -338.10608
+				z: -840
+			}
+			{
+				x: 120
+				y: -384.9464
+				z: -1000
+			}
+			{
+				x: 220
+				y: -385.00833
+				z: -1000
+			}
+			{
+				x: 130
+				y: -341.2074
+				z: -850
+			}
+			{
+				x: 170
+				y: -209.629
+				z: -400
+			}
+			{
+				x: 60
+				y: -398.0764
+				z: -1050
+			}
+			{
+				x: 120
+				y: -387.6802
+				z: -1010
+			}
+			{
+				x: 220
+				y: -390.37115
+				z: -1020
+			}
+			{
+				x: 200
+				y: -260.68704
+				z: -590
+			}
+			{
+				x: 150
+				y: -226.97562
+				z: -470
+			}
+			{
+				x: 160
+				y: -344.23883
+				z: -860
+			}
+			{
+				x: 80
+				y: -207.30035
+				z: -390
+			}
+			{
+				x: 160
+				y: -364.3178
+				z: -930
+			}
+			{
+				x: 230
+				y: -246.07352
+				z: -540
+			}
+			{
+				x: 200
+				y: -248.97726
+				z: -550
+			}
+		]
+		type: TREE
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			startX: {
+				class: java.lang.Float
+				value: 0.4
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.9
+			}
+			density: {
+				class: java.lang.Float
+				value: 40
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.95
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.7
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: 150
+				y: -346.76764
+				z: -2750
+			}
+			{
+				x: 200
+				y: -408.1985
+				z: -2260
+			}
+			{
+				x: 140
+				y: -390.42783
+				z: -2360
+			}
+			{
+				x: 230
+				y: -388.68872
+				z: -2370
+			}
+			{
+				x: 180
+				y: -380.3769
+				z: -2420
+			}
+			{
+				x: 210
+				y: -360.78152
+				z: -2570
+			}
+			{
+				x: 130
+				y: -422.4619
+				z: -2180
+			}
+			{
+				x: 170
+				y: -347.6541
+				z: -2740
+			}
+			{
+				x: 170
+				y: -431.30627
+				z: -2130
+			}
+			{
+				x: 170
+				y: -346.43835
+				z: -2810
+			}
+			{
+				x: 130
+				y: -356.29407
+				z: -2600
+			}
+			{
+				x: 160
+				y: -351.86288
+				z: -2650
+			}
+			{
+				x: 220
+				y: -349.77478
+				z: -2680
+			}
+			{
+				x: 130
+				y: -346.00867
+				z: -2820
+			}
+			{
+				x: 170
+				y: -348.15155
+				z: -2710
+			}
+			{
+				x: 150
+				y: -368.32504
+				z: -2500
+			}
+			{
+				x: 140
+				y: -349.2041
+				z: -2690
+			}
+			{
+				x: 130
+				y: -416.0937
+				z: -2220
+			}
+			{
+				x: 190
+				y: -395.67444
+				z: -2330
+			}
+			{
+				x: 200
+				y: -402.779
+				z: -2290
+			}
+			{
+				x: 210
+				y: -358.05856
+				z: -2600
+			}
+			{
+				x: 160
+				y: -346.307
+				z: -2800
+			}
+			{
+				x: 130
+				y: -365.02094
+				z: -2530
+			}
+			{
+				x: 200
+				y: -416.85992
+				z: -2220
+			}
+			{
+				x: 200
+				y: -369.74805
+				z: -2490
+			}
+			{
+				x: 180
+				y: -427.6119
+				z: -2150
+			}
+			{
+				x: 230
+				y: -352.67123
+				z: -2640
+			}
+			{
+				x: 230
+				y: -424.29657
+				z: -2170
+			}
+			{
+				x: 140
+				y: -417.5858
+				z: -2210
+			}
+			{
+				x: 190
+				y: -373.52014
+				z: -2470
+			}
+			{
+				x: 160
+				y: -409.27655
+				z: -2260
+			}
+			{
+				x: 190
+				y: -419.04742
+				z: -2200
+			}
+			{
+				x: 200
+				y: -363.07318
+				z: -2540
+			}
+			{
+				x: 210
+				y: -375.58157
+				z: -2440
+			}
+			{
+				x: 230
+				y: -385.31665
+				z: -2390
+			}
+			{
+				x: 130
+				y: -404.60095
+				z: -2280
+			}
+			{
+				x: 180
+				y: -425.24387
+				z: -2160
+			}
+			{
+				x: 190
+				y: -360.6192
+				z: -2560
+			}
+			{
+				x: 130
+				y: -345.66797
+				z: -2800
+			}
+			{
+				x: 160
+				y: -369.74805
+				z: -2490
+			}
+		]
+		type: TREE
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			startX: {
+				class: java.lang.Float
+				value: 0.05
+			}
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			density: {
+				class: java.lang.Float
+				value: 30
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.3
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.95
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.7
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: 60
+				y: -413.463
+				z: -2230
+			}
+			{
+				x: 50
+				y: -353.99084
+				z: -2620
+			}
+			{
+				x: 60
+				y: -359.48926
+				z: -2570
+			}
+			{
+				x: 70
+				y: -348.65082
+				z: -2700
+			}
+			{
+				x: 60
+				y: -410.8424
+				z: -2240
+			}
+			{
+				x: 60
+				y: -390.21677
+				z: -2360
+			}
+			{
+				x: 80
+				y: -353.62222
+				z: -2610
+			}
+			{
+				x: 50
+				y: -391.66815
+				z: -2350
+			}
+			{
+				x: 90
+				y: -346.30695
+				z: -2800
+			}
+			{
+				x: 80
+				y: -348.24512
+				z: -2740
+			}
+			{
+				x: 90
+				y: -346.3838
+				z: -2810
+			}
+			{
+				x: 90
+				y: -347.70782
+				z: -2720
+			}
+			{
+				x: 80
+				y: -422.59088
+				z: -2180
+			}
+			{
+				x: 90
+				y: -411.21127
+				z: -2230
+			}
+			{
+				x: 60
+				y: -383.63104
+				z: -2400
+			}
+			{
+				x: 70
+				y: -360.66745
+				z: -2550
+			}
+			{
+				x: 90
+				y: -349.77478
+				z: -2680
+			}
+			{
+				x: 60
+				y: -356.25
+				z: -2600
+			}
+			{
+				x: 60
+				y: -347.34686
+				z: -2850
+			}
+			{
+				x: 80
+				y: -358.37457
+				z: -2580
+			}
+			{
+				x: 90
+				y: -347.00427
+				z: -2840
+			}
+			{
+				x: 70
+				y: -350.2261
+				z: -2680
+			}
+			{
+				x: 80
+				y: -346.30695
+				z: -2800
+			}
+			{
+				x: 50
+				y: -349.77478
+				z: -2680
+			}
+			{
+				x: 80
+				y: -395.67444
+				z: -2330
+			}
+			{
+				x: 90
+				y: -346.54327
+				z: -2820
+			}
+			{
+				x: 70
+				y: -397.40915
+				z: -2320
+			}
+			{
+				x: 80
+				y: -360.55148
+				z: -2550
+			}
+			{
+				x: 80
+				y: -348.65082
+				z: -2700
+			}
+			{
+				x: 50
+				y: -346.3105
+				z: -2780
+			}
+		]
+		type: TREE
+	}
+]
+width: 300
+length: 3000
+}
