@@ -73,6 +73,7 @@ import com.railwaygames.sleddingsmash.widgets.ShaderLabel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -198,14 +199,17 @@ public class PlayLevelScreen implements ScreenFeedback {
         private btDynamicsWorld dynamicsWorld;
         private btConstraintSolver constraintSolver;
         private Level level;
-        private boolean accelerate = false;
-        private boolean decelerate = false;
+        private boolean left = false;
+        private boolean right = false;
         private boolean pause = false;
         private String state = null;
         private DebugDrawer debugDrawer;
         private btCollisionWorld collisionWorld;
         private boolean pushed = false;
         private Vector3 sphereStartPosition;
+        private LinkedList<Float> lastCameraYPositions;
+        private LinkedList<Float> lastCameraXPositions;
+        private Vector3 lastSphereLocation;
 
         public void buildLevel(Level level) {
             this.level = level;
@@ -216,6 +220,16 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             modelBatch = new ModelBatch();
             terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
+
+            lastCameraYPositions = new LinkedList<Float>();
+            for (int i = 0; i < 100; i++) {
+                lastCameraYPositions.push(3.0f);
+            }
+
+            lastCameraXPositions = new LinkedList<Float>();
+            for (int i = 0; i < 100; i++) {
+                lastCameraXPositions.push(0.0f);
+            }
 
             createPhysicsWorld();
             setupCamera();
@@ -437,15 +451,60 @@ public class PlayLevelScreen implements ScreenFeedback {
                 }
             }
 
-            if(!pushed){
-                sphere.applyForce(new Vector3(0,0,-90));
+            if (!pushed) {
+                sphere.applyForce(new Vector3(0, 0, -90));
                 pushed = true;
             }
 
+            Vector3 linearVelocity = sphere.getBody().getLinearVelocity();
+            float currentVelocity = linearVelocity.len();
+            if (currentVelocity > Constants.MAX_VELOCITY) {
+                float factor = currentVelocity / Constants.MAX_VELOCITY;
+                sphere.getBody().setLinearVelocity(new Vector3(linearVelocity.x / factor, linearVelocity.y / factor, linearVelocity.z / factor));
+            }
+
+
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-            camController.camera.position.set(sphere.getLocationInWorld()
-                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 20f);
+            Vector3 currentSphereLocation = sphere.getLocationInWorld();
+
+            if (lastCameraYPositions.size() > 100) {
+                lastCameraYPositions.pop();
+                lastCameraXPositions.pop();
+            }
+
+            if (lastSphereLocation != null) {
+                float zDiff = currentSphereLocation.z - lastSphereLocation.z;
+                float yDiff = currentSphereLocation.y - lastSphereLocation.y;
+                float xDiff = currentSphereLocation.x - lastSphereLocation.x;
+
+                lastCameraYPositions.addLast((35.0f * yDiff) / zDiff);
+                lastCameraXPositions.addLast((35.0f * xDiff) / zDiff);
+
+                float yAvg = 0.0f;
+                for (float val : lastCameraYPositions) {
+                    yAvg += val;
+                }
+                yAvg /= (float) lastCameraYPositions.size();
+                yAvg = Math.min(yAvg, 20.0f);
+                yAvg = Math.max(yAvg, -20.0f);
+
+                float xAvg = 0.0f;
+                for (float val : lastCameraXPositions) {
+                    xAvg += val;
+                }
+                xAvg /= (float) lastCameraXPositions.size();
+                xAvg = Math.min(xAvg, 20.0f);
+                xAvg = Math.max(xAvg, -20.0f);
+
+                camController.camera.position.set(currentSphereLocation.x + xAvg, currentSphereLocation.y + yAvg + 3.0f, currentSphereLocation.z + 35f);
+                camController.camera.lookAt(currentSphereLocation);
+            } else {
+                camController.camera.position.set(currentSphereLocation.x, currentSphereLocation.y + 3.0f, currentSphereLocation.z + 35f);
+            }
+
+            lastSphereLocation = currentSphereLocation;
+
             camController.camera.update();
             camController.update();
 
@@ -477,14 +536,10 @@ public class PlayLevelScreen implements ScreenFeedback {
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
                 sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2.5f, 0, 0));
             } else {
-                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(-20f, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(20f, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || accelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -5f));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || decelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 5f));
+                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || left) {
+                    sphere.getBody().applyCentralForce(new Vector3(-50f, 0, 0));
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || right) {
+                    sphere.getBody().applyCentralForce(new Vector3(50f, 0, 0));
                 }
             }
         }
@@ -524,12 +579,12 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphere.getBody().applyCentralForce(new Vector3(sideMovement * MASS_OF_SLED, 0, -forward * MASS_OF_SLED));
         }
 
-        public void setAccelerate(boolean accelerate) {
-            this.accelerate = accelerate;
+        public void setLeft(boolean left) {
+            this.left = left;
         }
 
-        public void setDecelerate(boolean decelerate) {
-            this.decelerate = decelerate;
+        public void setRight(boolean right) {
+            this.right = right;
         }
 
         class SSContactListener extends ContactListener {
@@ -553,8 +608,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     private class Hud {
         private Stage stage;
-        private Button upButton;
-        private Button downButton;
+        private Button leftButton;
+        private Button rightButton;
         private Button pauseButton;
         private ShaderLabel timerLabel;
         private ShaderLabel distanceTraveledLabel;
@@ -565,35 +620,35 @@ public class PlayLevelScreen implements ScreenFeedback {
         public Hud(final GameState gs) {
             stage = new Stage();
 
-            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
-            upButton.addListener(new InputListener() {
+            leftButton = new Button(resources.skin, Constants.UI.LEFT_BUTTON);
+            leftButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(true);
+                    gs.setLeft(true);
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(false);
+                    gs.setLeft(false);
                 }
             });
-            stage.addActor(upButton);
+            stage.addActor(leftButton);
 
-            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
-            downButton.addListener(new InputListener() {
+            rightButton = new Button(resources.skin, Constants.UI.RIGHT_BUTTON);
+            rightButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(true);
+                    gs.setRight(true);
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(false);
+                    gs.setRight(false);
                 }
             });
-            stage.addActor(downButton);
+            stage.addActor(rightButton);
 
             pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
             pauseButton.addListener(new ClickListener() {
@@ -727,8 +782,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             float bWidth = width * 0.08f;
             float bHeight = height * 0.125f;
 
-            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
-            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
+            leftButton.setBounds(width * 0.03f, height * 0.07f, bWidth, bHeight);
+            rightButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
             pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
 
             timerLabel.setBounds(width * 0.85f, height * 0.94f, width * 0.12f, height * 0.06f);
