@@ -117,7 +117,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         constructors = new ArrayList<GameObject.Constructor>();
         modelBatch = new ModelBatch();
 
-        font = new BitmapFont(Gdx.files.internal("data/fonts/font16.fnt"));
+        font = new BitmapFont(Gdx.files.internal("data/fonts/font10.fnt"));
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         stage = new Stage();
@@ -353,7 +353,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 }
             });
 
-            y -= height * 0.07f;
+            y -= height * 0.04f;
             if (right) {
                 rightMenus.addActor(label);
             } else {
@@ -490,13 +490,12 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             model.dispose();
             model = null;
         }
+        contactListener.dispose();
         dynamicsWorld.dispose();
         constraintSolver.dispose();
         broadphase.dispose();
         dispatcher.dispose();
         collisionConfig.dispose();
-
-        contactListener.dispose();
     }
 
     @Override
