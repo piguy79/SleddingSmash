@@ -45,6 +45,14 @@ public class UISkin extends Skin {
         }
         {
             TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
+            add(Constants.UI.LEFT_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
+        }
+        {
+            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
+            add(Constants.UI.RIGHT_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
+        }
+        {
+            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
             add(Constants.UI.UP_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
         }
         {
