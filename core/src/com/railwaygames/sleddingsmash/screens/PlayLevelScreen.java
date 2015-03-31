@@ -3,7 +3,6 @@ package com.railwaygames.sleddingsmash.screens;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -75,6 +74,7 @@ import com.railwaygames.sleddingsmash.widgets.ShaderLabel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -201,8 +201,8 @@ public class PlayLevelScreen implements ScreenFeedback {
         private btDynamicsWorld dynamicsWorld;
         private btConstraintSolver constraintSolver;
         private Level level;
-        private boolean accelerate = false;
-        private boolean decelerate = false;
+        private boolean left = false;
+        private boolean right = false;
         private boolean pause = false;
         private String state = null;
         private DebugDrawer debugDrawer;
@@ -210,6 +210,9 @@ public class PlayLevelScreen implements ScreenFeedback {
         private boolean pushed = false;
         private Vector3 sphereStartPosition;
         int starsCollected = 0;
+        private LinkedList<Float> lastCameraYPositions;
+        private LinkedList<Float> lastCameraXPositions;
+        private Vector3 lastSphereLocation;
 
         public void buildLevel(Level level) {
             this.level = level;
@@ -220,6 +223,16 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             modelBatch = new ModelBatch();
             terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
+
+            lastCameraYPositions = new LinkedList<Float>();
+            for (int i = 0; i < 50; i++) {
+                lastCameraYPositions.push(3.0f);
+            }
+
+            lastCameraXPositions = new LinkedList<Float>();
+            for (int i = 0; i < 50; i++) {
+                lastCameraXPositions.push(0.0f);
+            }
 
             createPhysicsWorld();
             setupCamera();
@@ -396,7 +409,13 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void setupCamera() {
-            cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
+                @Override
+                public void lookAt(float x, float y, float z) {
+                    super.lookAt(x, y, z);
+                    up.set(0, 1, 0);
+                }
+            };
             cam.position.set(0f, 10f, 10f);
             cam.lookAt(0, 0, -20);
             cam.near = 1f;
@@ -433,15 +452,58 @@ public class PlayLevelScreen implements ScreenFeedback {
                 }
             }
 
-            if(!pushed){
-                sphere.applyForce(new Vector3(0,0,-90));
+            if (!pushed) {
+                sphere.applyForce(new Vector3(0, 0, -90));
                 pushed = true;
             }
 
+            Vector3 linearVelocity = sphere.getBody().getLinearVelocity();
+            float currentVelocity = linearVelocity.len();
+            if (currentVelocity > Constants.MAX_VELOCITY) {
+                float factor = currentVelocity / Constants.MAX_VELOCITY;
+                sphere.getBody().setLinearVelocity(new Vector3(linearVelocity.x / factor, linearVelocity.y / factor, linearVelocity.z / factor));
+            }
+
+
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-            camController.camera.position.set(sphere.getLocationInWorld()
-                    .x, sphere.getLocationInWorld().y + 10f, sphere.getLocationInWorld().z + 20f);
+            Vector3 currentSphereLocation = sphere.getLocationInWorld();
+
+            if (lastCameraYPositions.size() > 50) {
+                lastCameraYPositions.pop();
+                lastCameraXPositions.pop();
+            }
+
+            if (lastSphereLocation != null) {
+                float zDiff = currentSphereLocation.z - lastSphereLocation.z;
+                float yDiff = currentSphereLocation.y - lastSphereLocation.y;
+                float xDiff = currentSphereLocation.x - lastSphereLocation.x;
+
+                lastCameraYPositions.addLast((35.0f * yDiff) / zDiff);
+                lastCameraXPositions.addLast((35.0f * xDiff) / zDiff);
+
+                float yAvg = 0.0f;
+                for (float val : lastCameraYPositions) {
+                    yAvg += val;
+                }
+                yAvg /= (float) lastCameraYPositions.size();
+                yAvg = Math.min(yAvg, 20.0f);
+                yAvg = Math.max(yAvg, -20.0f);
+
+                float xAvg = 0.0f;
+                for (float val : lastCameraXPositions) {
+                    xAvg += val;
+                }
+                xAvg /= (float) lastCameraXPositions.size();
+
+                camController.camera.position.set(currentSphereLocation.x + xAvg, currentSphereLocation.y + yAvg + 4.0f, currentSphereLocation.z + 35f);
+                camController.camera.lookAt(currentSphereLocation);
+            } else {
+                camController.camera.position.set(currentSphereLocation.x, currentSphereLocation.y + 4.0f, currentSphereLocation.z + 35f);
+            }
+
+            lastSphereLocation = currentSphereLocation;
+
             camController.camera.update();
             camController.update();
 
@@ -471,28 +533,16 @@ public class PlayLevelScreen implements ScreenFeedback {
         private void applyForce() {
             // TODO possibly scale based on Linear velocity of the object.
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
-                if(Gdx.input.getAccelerometerY() > 0.5){
-                    sphere.getBody().applyCentralForce(new Vector3(40f * MASS_OF_SLED, 0, 0));
-                }else if(Gdx.input.getAccelerometerY() < -0.5){
-                    sphere.getBody().applyCentralForce(new Vector3(-40f* MASS_OF_SLED, 0, 0));
-                }
-                //sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 4f, 0, 0));
 
-                if (accelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -10f* MASS_OF_SLED));
-                } else if (decelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 50f* MASS_OF_SLED));
-                }
+                sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2.5f, 0, 0));
             } else {
-                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(-40f* MASS_OF_SLED, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                    sphere.getBody().applyCentralForce(new Vector3(40f* MASS_OF_SLED, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || accelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, -10f* MASS_OF_SLED));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || decelerate) {
-                    sphere.getBody().applyCentralForce(new Vector3(0, 0, 50f* MASS_OF_SLED));
+                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || left) {
+                    sphere.getBody().applyCentralForce(new Vector3(-50f, 0, 0));
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || right) {
+                    sphere.getBody().applyCentralForce(new Vector3(50f, 0, 0));
                 }
+
+
             }
         }
 
@@ -509,12 +559,12 @@ public class PlayLevelScreen implements ScreenFeedback {
             sphere.getBody().applyCentralForce(new Vector3(sideMovement * MASS_OF_SLED, 0, -forward * MASS_OF_SLED));
         }
 
-        public void setAccelerate(boolean accelerate) {
-            this.accelerate = accelerate;
+        public void setLeft(boolean left) {
+            this.left = left;
         }
 
-        public void setDecelerate(boolean decelerate) {
-            this.decelerate = decelerate;
+        public void setRight(boolean right) {
+            this.right = right;
         }
 
         class SSContactListener extends ContactListener {
@@ -566,48 +616,49 @@ public class PlayLevelScreen implements ScreenFeedback {
 
     private class Hud {
         private Stage stage;
-        private Button upButton;
-        private Button downButton;
+        private Button leftButton;
+        private Button rightButton;
         private Button pauseButton;
         //private ShaderLabel timerLabel;
         private ShaderLabel distanceTraveledLabel;
         private ShaderLabel starsCollectedLabel;
-        private float totalTimeInSeconds = 0.0f;
+       // private float totalTimeInSeconds = 0.0f;
         private float distanceTraveledInMeters = 0.0f;
+
         private boolean paused = false;
 
         public Hud(final GameState gs) {
             stage = new Stage();
 
-            upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
-            upButton.addListener(new InputListener() {
+            leftButton = new Button(resources.skin, Constants.UI.LEFT_BUTTON);
+            leftButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(true);
+                    gs.setLeft(true);
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setAccelerate(false);
+                    gs.setLeft(false);
                 }
             });
-            stage.addActor(upButton);
+            stage.addActor(leftButton);
 
-            downButton = new Button(resources.skin, Constants.UI.DOWN_BUTTON);
-            downButton.addListener(new InputListener() {
+            rightButton = new Button(resources.skin, Constants.UI.RIGHT_BUTTON);
+            rightButton.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(true);
+                    gs.setRight(true);
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    gs.setDecelerate(false);
+                    gs.setRight(false);
                 }
             });
-            stage.addActor(downButton);
+            stage.addActor(rightButton);
 
             pauseButton = new Button(resources.skin, Constants.UI.PAUSE_BUTTON);
             pauseButton.addListener(new ClickListener() {
@@ -650,28 +701,28 @@ public class PlayLevelScreen implements ScreenFeedback {
             } else {
                 statusLabel = new ShaderLabel(resources.fontShader, "Victory", resources.skin, Constants.UI.LARGE_FONT,
                         Color.GREEN);
-                String bestTimePref = "bestTime:" + levelToLoad;
-                Preferences prefs = Gdx.app.getPreferences(Constants.PREFERENCE_STORE);
-                float bestTime = prefs.getFloat(bestTimePref, 100000.0f);
-
-                if (totalTimeInSeconds < bestTime) {
-                    ShaderLabel newRecordLabel = new ShaderLabel(resources.fontShader, "New Record!", resources.skin, Constants.UI.DEFAULT_FONT,
-                            Color.GREEN);
-                    WidgetUtils.centerLabelOnPoint(newRecordLabel, centerX, height * 0.66f);
-                    prefs.putFloat(bestTimePref, totalTimeInSeconds);
-                    prefs.flush();
-                    ovr.addActor(newRecordLabel);
-                } else if (bestTime < 100000.0f) {
-                    ShaderLabel previousBestLabel = new ShaderLabel(resources.fontShader, "Current Record: " + formatTime(bestTime), resources.skin, Constants.UI.DEFAULT_FONT,
-                            Color.GREEN);
-                    WidgetUtils.centerLabelOnPoint(previousBestLabel, centerX, height * 0.66f);
-                    ovr.addActor(previousBestLabel);
-                }
-
-                ShaderLabel timeLabel = new ShaderLabel(resources.fontShader, "Time: " + formatTime(totalTimeInSeconds), resources.skin, Constants.UI.DEFAULT_FONT,
-                        Color.GREEN);
-                WidgetUtils.centerLabelOnPoint(timeLabel, centerX, height * 0.6f);
-                ovr.addActor(timeLabel);
+//                String bestTimePref = "bestTime:" + levelToLoad;
+//                Preferences prefs = Gdx.app.getPreferences(Constants.PREFERENCE_STORE);
+//                float bestTime = prefs.getFloat(bestTimePref, 100000.0f);
+//
+//                if (totalTimeInSeconds < bestTime) {
+//                    ShaderLabel newRecordLabel = new ShaderLabel(resources.fontShader, "New Record!", resources.skin, Constants.UI.DEFAULT_FONT,
+//                            Color.GREEN);
+//                    WidgetUtils.centerLabelOnPoint(newRecordLabel, centerX, height * 0.66f);
+//                    prefs.putFloat(bestTimePref, totalTimeInSeconds);
+//                    prefs.flush();
+//                    ovr.addActor(newRecordLabel);
+//                } else if (bestTime < 100000.0f) {
+//                    ShaderLabel previousBestLabel = new ShaderLabel(resources.fontShader, "Current Record: " + formatTime(bestTime), resources.skin, Constants.UI.DEFAULT_FONT,
+//                            Color.GREEN);
+//                    WidgetUtils.centerLabelOnPoint(previousBestLabel, centerX, height * 0.66f);
+//                    ovr.addActor(previousBestLabel);
+//                }
+//
+//                ShaderLabel timeLabel = new ShaderLabel(resources.fontShader, "Time: " + formatTime(totalTimeInSeconds), resources.skin, Constants.UI.DEFAULT_FONT,
+//                        Color.GREEN);
+//                WidgetUtils.centerLabelOnPoint(timeLabel, centerX, height * 0.6f);
+//                ovr.addActor(timeLabel);
             }
 
             WidgetUtils.centerLabelOnPoint(statusLabel, centerX, height * 0.75f);
@@ -712,8 +763,9 @@ public class PlayLevelScreen implements ScreenFeedback {
             float delta = Gdx.graphics.getDeltaTime();
 
             if (!paused) {
-                totalTimeInSeconds += delta;
-                //timerLabel.setText(formatTime(totalTimeInSeconds));
+
+//                totalTimeInSeconds += delta;
+//                timerLabel.setText(formatTime(totalTimeInSeconds));
             }
             starsCollectedLabel.setText("Stars: " + gs.starsCollected);
             distanceTraveledLabel.setText(getDistance());
@@ -745,8 +797,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             float bWidth = width * 0.08f;
             float bHeight = height * 0.125f;
 
-            upButton.setBounds(width * 0.89f, height * 0.25f, bWidth, bHeight);
-            downButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
+            leftButton.setBounds(width * 0.03f, height * 0.07f, bWidth, bHeight);
+            rightButton.setBounds(width * 0.89f, height * 0.07f, bWidth, bHeight);
             pauseButton.setBounds(width * 0.03f, height * 0.82f, bWidth, bHeight);
 
             //timerLabel.setBounds(width * 0.85f, height * 0.94f, width * 0.12f, height * 0.06f);
