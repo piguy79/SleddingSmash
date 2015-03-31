@@ -222,12 +222,12 @@ public class PlayLevelScreen implements ScreenFeedback {
             terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
 
             lastCameraYPositions = new LinkedList<Float>();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 50; i++) {
                 lastCameraYPositions.push(3.0f);
             }
 
             lastCameraXPositions = new LinkedList<Float>();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 50; i++) {
                 lastCameraXPositions.push(0.0f);
             }
 
@@ -414,7 +414,13 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void setupCamera() {
-            cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
+                @Override
+                public void lookAt(float x, float y, float z) {
+                    super.lookAt(x, y, z);
+                    up.set(0, 1, 0);
+                }
+            };
             cam.position.set(0f, 10f, 10f);
             cam.lookAt(0, 0, -20);
             cam.near = 1f;
@@ -468,7 +474,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             Vector3 currentSphereLocation = sphere.getLocationInWorld();
 
-            if (lastCameraYPositions.size() > 100) {
+            if (lastCameraYPositions.size() > 50) {
                 lastCameraYPositions.pop();
                 lastCameraXPositions.pop();
             }
@@ -494,13 +500,11 @@ public class PlayLevelScreen implements ScreenFeedback {
                     xAvg += val;
                 }
                 xAvg /= (float) lastCameraXPositions.size();
-                xAvg = Math.min(xAvg, 20.0f);
-                xAvg = Math.max(xAvg, -20.0f);
 
-                camController.camera.position.set(currentSphereLocation.x + xAvg, currentSphereLocation.y + yAvg + 3.0f, currentSphereLocation.z + 35f);
+                camController.camera.position.set(currentSphereLocation.x + xAvg, currentSphereLocation.y + yAvg + 4.0f, currentSphereLocation.z + 35f);
                 camController.camera.lookAt(currentSphereLocation);
             } else {
-                camController.camera.position.set(currentSphereLocation.x, currentSphereLocation.y + 3.0f, currentSphereLocation.z + 35f);
+                camController.camera.position.set(currentSphereLocation.x, currentSphereLocation.y + 4.0f, currentSphereLocation.z + 35f);
             }
 
             lastSphereLocation = currentSphereLocation;
