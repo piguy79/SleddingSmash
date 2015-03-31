@@ -169,7 +169,7 @@ public class PlayLevelScreen implements ScreenFeedback {
     }
 
     private class GameState {
-        private static final float MASS_OF_SLED = 10;
+        private static final float MASS_OF_SLED = 1;
         private static final float MASS_OF_CHARACTER = 200;
         private static final float PHYSICS_SCALE_FACTOR = 1f;
         private static final float sideMove = 10f;
@@ -531,32 +531,11 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void applyForce() {
-            // TODO possibly scale based on Linear velocity of the object.
-            if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
-
-                sphere.getBody().applyCentralForce(new Vector3(Gdx.input.getAccelerometerY() * 2.5f, 0, 0));
-            } else {
-                if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || left) {
-                    sphere.getBody().applyCentralForce(new Vector3(-50f, 0, 0));
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || right) {
-                    sphere.getBody().applyCentralForce(new Vector3(50f, 0, 0));
-                }
-
-
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || left) {
+                sphere.getBody().applyCentralForce(new Vector3(-50f, 0, 0));
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || right) {
+                sphere.getBody().applyCentralForce(new Vector3(50f, 0, 0));
             }
-        }
-
-        private void sledForward(float sideMovement, float forward) {
-            Matrix4 out = new Matrix4();
-            sphere.getBody().getMotionState().getWorldTransform(out);
-            Quaternion q = new Quaternion();
-
-            out.getRotation(q);
-
-            if (q.nor().getPitch() < 0) {
-                sideMovement = -sideMovement;
-            }
-            sphere.getBody().applyCentralForce(new Vector3(sideMovement * MASS_OF_SLED, 0, -forward * MASS_OF_SLED));
         }
 
         public void setLeft(boolean left) {
