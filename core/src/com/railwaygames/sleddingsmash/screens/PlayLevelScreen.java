@@ -3,7 +3,6 @@ package com.railwaygames.sleddingsmash.screens;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -617,8 +616,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private Button pauseButton;
         private ShaderLabel timerLabel;
         private ShaderLabel distanceTraveledLabel;
-        private float totalTimeInSeconds = 0.0f;
-        private float distanceTraveledInMeters = 0.0f;
+        //        private float totalTimeInSeconds = 0.0f;
         private boolean paused = false;
 
         public Hud(final GameState gs) {
@@ -691,28 +689,28 @@ public class PlayLevelScreen implements ScreenFeedback {
             } else {
                 statusLabel = new ShaderLabel(resources.fontShader, "Victory", resources.skin, Constants.UI.LARGE_FONT,
                         Color.GREEN);
-                String bestTimePref = "bestTime:" + levelToLoad;
-                Preferences prefs = Gdx.app.getPreferences(Constants.PREFERENCE_STORE);
-                float bestTime = prefs.getFloat(bestTimePref, 100000.0f);
-
-                if (totalTimeInSeconds < bestTime) {
-                    ShaderLabel newRecordLabel = new ShaderLabel(resources.fontShader, "New Record!", resources.skin, Constants.UI.DEFAULT_FONT,
-                            Color.GREEN);
-                    WidgetUtils.centerLabelOnPoint(newRecordLabel, centerX, height * 0.66f);
-                    prefs.putFloat(bestTimePref, totalTimeInSeconds);
-                    prefs.flush();
-                    ovr.addActor(newRecordLabel);
-                } else if (bestTime < 100000.0f) {
-                    ShaderLabel previousBestLabel = new ShaderLabel(resources.fontShader, "Current Record: " + formatTime(bestTime), resources.skin, Constants.UI.DEFAULT_FONT,
-                            Color.GREEN);
-                    WidgetUtils.centerLabelOnPoint(previousBestLabel, centerX, height * 0.66f);
-                    ovr.addActor(previousBestLabel);
-                }
-
-                ShaderLabel timeLabel = new ShaderLabel(resources.fontShader, "Time: " + formatTime(totalTimeInSeconds), resources.skin, Constants.UI.DEFAULT_FONT,
-                        Color.GREEN);
-                WidgetUtils.centerLabelOnPoint(timeLabel, centerX, height * 0.6f);
-                ovr.addActor(timeLabel);
+//                String bestTimePref = "bestTime:" + levelToLoad;
+//                Preferences prefs = Gdx.app.getPreferences(Constants.PREFERENCE_STORE);
+//                float bestTime = prefs.getFloat(bestTimePref, 100000.0f);
+//
+//                if (totalTimeInSeconds < bestTime) {
+//                    ShaderLabel newRecordLabel = new ShaderLabel(resources.fontShader, "New Record!", resources.skin, Constants.UI.DEFAULT_FONT,
+//                            Color.GREEN);
+//                    WidgetUtils.centerLabelOnPoint(newRecordLabel, centerX, height * 0.66f);
+//                    prefs.putFloat(bestTimePref, totalTimeInSeconds);
+//                    prefs.flush();
+//                    ovr.addActor(newRecordLabel);
+//                } else if (bestTime < 100000.0f) {
+//                    ShaderLabel previousBestLabel = new ShaderLabel(resources.fontShader, "Current Record: " + formatTime(bestTime), resources.skin, Constants.UI.DEFAULT_FONT,
+//                            Color.GREEN);
+//                    WidgetUtils.centerLabelOnPoint(previousBestLabel, centerX, height * 0.66f);
+//                    ovr.addActor(previousBestLabel);
+//                }
+//
+//                ShaderLabel timeLabel = new ShaderLabel(resources.fontShader, "Time: " + formatTime(totalTimeInSeconds), resources.skin, Constants.UI.DEFAULT_FONT,
+//                        Color.GREEN);
+//                WidgetUtils.centerLabelOnPoint(timeLabel, centerX, height * 0.6f);
+//                ovr.addActor(timeLabel);
             }
 
             WidgetUtils.centerLabelOnPoint(statusLabel, centerX, height * 0.75f);
@@ -753,8 +751,8 @@ public class PlayLevelScreen implements ScreenFeedback {
             float delta = Gdx.graphics.getDeltaTime();
 
             if (!paused) {
-                totalTimeInSeconds += delta;
-                timerLabel.setText(formatTime(totalTimeInSeconds));
+//                totalTimeInSeconds += delta;
+//                timerLabel.setText(formatTime(totalTimeInSeconds));
             }
 
             distanceTraveledLabel.setText(getDistance());
