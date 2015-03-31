@@ -29,12 +29,13 @@ public class GameObject extends ModelInstance implements Disposable {
         this.body = new btRigidBody(constructionInfo);
         this.body.userData = this;
         this.motionState = new MotionState(this.transform);
-        ((btRigidBody)this.body).setMotionState(motionState);
+        ((btRigidBody) this.body).setMotionState(motionState);
     }
 
     public void setPosition(Vector3 newPosition) {
         this.position = newPosition;
     }
+
 
     public Vector3 getLocationInWorld() {
         Vector3 output = new Vector3();
@@ -42,24 +43,23 @@ public class GameObject extends ModelInstance implements Disposable {
         return output;
     }
 
-    public float height(){
+    public float height() {
         BoundingBox box = new BoundingBox();
         calculateBoundingBox(box);
         return box.getHeight();
     }
 
-    public float width(){
+    public float width() {
         BoundingBox box = new BoundingBox();
         calculateBoundingBox(box);
         return box.getWidth();
     }
 
-    public void applyForce(Vector3 force){
+    public void applyForce(Vector3 force) {
         Vector3 pos = getLocationInWorld();
         Vector3 correctedForce = (pos.add(force));
         getBody().applyCentralForce(correctedForce);
     }
-
 
 
     public btRigidBody getBody() {
@@ -100,27 +100,31 @@ public class GameObject extends ModelInstance implements Disposable {
         }
     }
 
-    public enum GameObjectType{
-        CHARACTER, TREE, ROCK, PLANE
+    public enum GameObjectType {
+        CHARACTER, TREE, ROCK, PLANE, STAR
     }
 
     static class MotionState extends btMotionState {
         private final Matrix4 transform;
 
-        public MotionState (final Matrix4 transform) {
+        public MotionState(final Matrix4 transform) {
             this.transform = transform;
         }
 
-        /** For dynamic and static bodies this method is called by bullet once to get the initial state of the body. For kinematic
-         * bodies this method is called on every update, unless the body is deactivated. */
+        /**
+         * For dynamic and static bodies this method is called by bullet once to get the initial state of the body. For kinematic
+         * bodies this method is called on every update, unless the body is deactivated.
+         */
         @Override
-        public void getWorldTransform (final Matrix4 worldTrans) {
+        public void getWorldTransform(final Matrix4 worldTrans) {
             worldTrans.set(transform);
         }
 
-        /** For dynamic bodies this method is called by bullet every update to inform about the new position and rotation. */
+        /**
+         * For dynamic bodies this method is called by bullet every update to inform about the new position and rotation.
+         */
         @Override
-        public void setWorldTransform (final Matrix4 worldTrans) {
+        public void setWorldTransform(final Matrix4 worldTrans) {
             transform.set(worldTrans);
         }
     }

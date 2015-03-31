@@ -54,6 +54,8 @@ import com.railwaygames.sleddingsmash.levels.LevelBuilder;
 import com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier;
 import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.InterpolationChoice;
+import com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator;
+import com.railwaygames.sleddingsmash.levels.obstacles.StarObstacleGenerator;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
 
 import java.util.ArrayList;
@@ -72,6 +74,7 @@ import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.DENSITY;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_X;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.END_Z;
+import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.HEIGHT_FROM_GROUND;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.MODEL;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_X;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_Z;
@@ -83,6 +86,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public ModelBatch modelBatch;
     public Model model;
     public Map<String, Model> treeModelMap;
+    public Model star;
     public Array<GameObject> instances;
     public CameraInputController camController;
     GameObject sphere;
@@ -103,6 +107,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Level level = new Level();
 
     private String[] treeModels = new String[]{"tree_1"};
+    private String[] starModels = new String[]{"star"};
+
     private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
 
     @Override
@@ -148,6 +154,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         setupCamera();
 
         createTree();
+        createStarModel();
 
         menuHandlerMap.put("New", createNewRunnable());
         menuHandlerMap.put("Add", createAddRunnable());
@@ -157,7 +164,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("Load", loadLevelRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
-        menuHandlerMap.put("Trees", createTreeObstaclesRunnable(null));
+        menuHandlerMap.put("Trees", createObstaclesRunnable(ObstacleType.TREE, treeModels, null));
+        menuHandlerMap.put("Star", createObstaclesRunnable(ObstacleType.STAR, starModels, null));
 
         Gdx.input.setInputProcessor(stage);
 
@@ -324,8 +332,13 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private void createTree() {
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        treeModelMap.put("tree", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree.g3db", Files.FileType.Internal)));
         treeModelMap.put("tree_1", modelLoader.loadModel(Gdx.files.getFileHandle("data/tree_1.g3db", Files.FileType.Internal)));
+    }
+
+    private void createStarModel() {
+        UBJsonReader jsonReader = new UBJsonReader();
+        G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
+        star = modelLoader.loadModel(Gdx.files.getFileHandle("data/star.g3db", Files.FileType.Internal));
     }
 
     private void showMenus(boolean right, String... menus) {
@@ -422,7 +435,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         if (split[0].equals("OBSTACLE")) {
             Obstacle obstacle = level.obstacles.get(Integer.valueOf(split[1]));
-            createTreeObstaclesRunnable(obstacle).run();
+            createObstaclesRunnable(obstacle.type, obstacle.availableModels, obstacle).run();
         } else {
             Modifier modifier = level.modifiers.get(Integer.valueOf(split[1]));
             createSlopeModifierRunnable(modifier.type, modifier).run();
@@ -569,7 +582,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return new Runnable() {
             @Override
             public void run() {
-                showMenus(true, "Transform", "Scale", "Trees");
+                showMenus(true, "Transform", "Scale", "Trees", "Star");
                 showMenus(false);
             }
         };
@@ -596,15 +609,20 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private boolean applyObstacles(Group group) {
         for (Obstacle obstacle : level.obstacles) {
-            TreeObstacleGenerator treeGenerator = new TreeObstacleGenerator(treeModelMap.get(obstacle.getModelToUse()));
+            ObstacleGenerator generator;
+            if (obstacle.type.equals(ObstacleType.TREE)) {
+                generator = new TreeObstacleGenerator(treeModelMap.get(obstacle.getModelToUse()));
+            } else {
+                generator = new StarObstacleGenerator(star);
+            }
             List<GameObject> gameObjects = new ArrayList<GameObject>();
             boolean needsPositions = obstacle.generatedPositions == null;
 
             if (needsPositions) {
                 obstacle.generatedPositions = new ArrayList<Vector3>();
-                gameObjects = treeGenerator.generateObstacles(plane.model, obstacle.params, new Vector3(0, 1, 0), new Vector3(-level.width * 0.5f, 0, 0));
+                gameObjects = generator.generateObstacles(plane.model, obstacle.params, new Vector3(0, 1, 0), new Vector3(-level.width * 0.5f, 0, 0));
             } else {
-                gameObjects = treeGenerator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f, 0, 0));
+                gameObjects = generator.generateAt(obstacle.generatedPositions, obstacle.params, new Vector3(-level.width * 0.5f, 0, 0));
             }
 
             for (GameObject object : gameObjects) {
@@ -672,7 +690,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         textField.setText(value.toString());
     }
 
-    private Runnable createTreeObstaclesRunnable(final Obstacle obstacleToEdit) {
+    private Runnable createObstaclesRunnable(final ObstacleType type, final String[] models, final Obstacle obstacleToEdit) {
         return new Runnable() {
             @Override
             public void run() {
@@ -680,7 +698,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 if (obstacleToEdit != null) {
                     obstacle = obstacleToEdit;
                 } else {
-                    obstacle = new Obstacle(ObstacleType.TREE);
+                    obstacle = new Obstacle(type, models);
                     level.obstacles.add(obstacle);
                 }
                 float height = Gdx.graphics.getHeight();
@@ -720,9 +738,17 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 angle.setTextFieldListener(createTextListener(obstacle.params, ANGLE, Float.class));
                 setText(angle, (Float) obstacle.params.get(ANGLE));
 
+                if (obstacle.type.equals(ObstacleType.STAR)) {
+                    y -= height * 0.07f;
+                    final TextField heightFromGround = createLabelWithTextField(group, "distanceFromGround", y, width);
+                    heightFromGround.setTextFieldListener(createTextListener(obstacle.params, HEIGHT_FROM_GROUND, Float.class));
+                    setText(heightFromGround, (Float) obstacle.params.get(HEIGHT_FROM_GROUND));
+                }
+
+
                 y -= height * 0.07f;
                 Array<String> choices = new Array<String>();
-                for (String choice : treeModels) {
+                for (String choice : models) {
                     choices.add(choice);
                 }
 
@@ -1086,7 +1112,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     public enum ObstacleType {
-        TREE
+        TREE, STAR
     }
 
     public static class Level {
@@ -1123,14 +1149,16 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public static class Obstacle {
         public Map<String, Object> params = new HashMap<String, Object>();
         public List<Vector3> generatedPositions;
+        public String[] availableModels;
 
-        ObstacleType type;
+        public ObstacleType type;
 
         public Obstacle() {
         }
 
-        public Obstacle(ObstacleType type) {
+        public Obstacle(ObstacleType type, String[] availableTypes) {
             this.type = type;
+            this.availableModels = availableTypes;
         }
 
         public String getModelToUse() {

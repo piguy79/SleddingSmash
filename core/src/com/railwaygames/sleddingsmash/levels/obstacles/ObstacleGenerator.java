@@ -25,6 +25,7 @@ public abstract class ObstacleGenerator {
     public static final String END_Z = "endZ";
     public static final String DENSITY = "density";
     public static final String ANGLE = "angle";
+    public static final String HEIGHT_FROM_GROUND = "heightFromGorund";
     public static final String MODEL = "model";
 
     private Map<String, Object> defaultParams = new HashMap<String, Object>() {{
@@ -34,6 +35,7 @@ public abstract class ObstacleGenerator {
         put(END_Z, 0.1f);
         put(DENSITY, 20f);
         put(ANGLE, 60f);
+        put(HEIGHT_FROM_GROUND, 0f);
         put(MODEL, "tree");
     }};
 
@@ -59,7 +61,7 @@ public abstract class ObstacleGenerator {
                 int randomIndex = (int) MathUtils.randomInRange(0, locations.size());
                 if (!usedIndexes.contains(randomIndex)) {
                     usedIndexes.add(randomIndex);
-                    gameObjects.add(placeObstacle(locations.get(randomIndex), offset));
+                    gameObjects.add(placeObstacle(locations.get(randomIndex), offset, params));
                 }
             }
         }
@@ -71,13 +73,13 @@ public abstract class ObstacleGenerator {
         List<GameObject> gameObjects = new ArrayList<GameObject>();
 
         for (Vector3 loc : locations) {
-            gameObjects.add(placeObstacle(loc, offset));
+            gameObjects.add(placeObstacle(loc, offset, params));
         }
 
         return gameObjects;
     }
 
 
-    abstract GameObject placeObstacle(Vector3 vector, Vector3 offset);
+    abstract GameObject placeObstacle(Vector3 vector, Vector3 offset, Map<String, Object> params);
 
 }

@@ -33,6 +33,8 @@ public class Constants {
         public static final int SPHERE_FLAG = 2;
         public static final int TREE_FLAG = 3;
         public static final int PLANE_FLAG = 4;
+        public static final int STAR_FLAG = 5;
+
     }
 
     public static class Colors {
