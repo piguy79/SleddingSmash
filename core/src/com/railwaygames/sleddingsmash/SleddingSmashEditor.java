@@ -500,7 +500,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 return super.keyDown(keycode);
             }
         };
-        camController.translateUnits = 100f;
+        camController.translateUnits = 200f;
     }
 
     private void createPhysicsWorld() {
@@ -610,9 +610,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private boolean applyObstacles(Group group) {
         for (Obstacle obstacle : level.obstacles) {
             ObstacleGenerator generator;
-            if(obstacle.type.equals(ObstacleType.TREE)){
+            if (obstacle.type.equals(ObstacleType.TREE)) {
                 generator = new TreeObstacleGenerator(treeModelMap.get(obstacle.getModelToUse()));
-            }else{
+            } else {
                 generator = new StarObstacleGenerator(star);
             }
             List<GameObject> gameObjects = new ArrayList<GameObject>();
@@ -738,7 +738,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 angle.setTextFieldListener(createTextListener(obstacle.params, ANGLE, Float.class));
                 setText(angle, (Float) obstacle.params.get(ANGLE));
 
-                if(obstacle.type.equals(ObstacleType.STAR)){
+                if (obstacle.type.equals(ObstacleType.STAR)) {
                     y -= height * 0.07f;
                     final TextField heightFromGround = createLabelWithTextField(group, "distanceFromGround", y, width);
                     heightFromGround.setTextFieldListener(createTextListener(obstacle.params, HEIGHT_FROM_GROUND, Float.class));

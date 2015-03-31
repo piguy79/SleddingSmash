@@ -27,15 +27,12 @@ import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
-import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
-import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
@@ -177,7 +174,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private static final float rotation = 0.5f;
         private static final float LINEAR_SLEEP = 10;
         private static final float ANGULAR_SLEEP = 10;
-        private final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 4, 0);
+        private final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 7, 0);
 
         public Environment lights;
         public PerspectiveCamera cam;
@@ -258,9 +255,9 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             for (SleddingSmashEditor.Obstacle obstacle : level.obstacles) {
                 ObstacleGenerator generator;
-                if(obstacle.type.equals(SleddingSmashEditor.ObstacleType.TREE)){
+                if (obstacle.type.equals(SleddingSmashEditor.ObstacleType.TREE)) {
                     generator = new TreeObstacleGenerator(treeModels.get(obstacle.getModelToUse()));
-                }else{
+                } else {
                     generator = new StarObstacleGenerator(star);
                 }
                 List<GameObject> gameObjects = new ArrayList<GameObject>();
@@ -278,12 +275,12 @@ public class PlayLevelScreen implements ScreenFeedback {
                         obstacle.generatedPositions.add(object.position);
                     }
                     // DEBUG
-                    if(object.gameObjectType.equals(GameObject.GameObjectType.STAR)) {
+                    if (object.gameObjectType.equals(GameObject.GameObjectType.STAR)) {
                         collisionWorld.addCollisionObject(object.getBody());
                         constructors.add(object.constructor);
                         instances.add(object);
 
-                    }else{
+                    } else {
                         constructors.add(object.constructor);
                         instances.add(object);
                         dynamicsWorld.addCollisionObject(object.getBody());
@@ -550,20 +547,20 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             @Override
             public void onContactProcessed(btCollisionObject colObj0, boolean match0, btCollisionObject colObj1, boolean match1) {
-                if(typeExists(GameObject.GameObjectType.TREE, colObj0, colObj1)){
+                if (typeExists(GameObject.GameObjectType.TREE, colObj0, colObj1)) {
                     sphere.getBody().setActivationState(Collision.ISLAND_SLEEPING);
-                } else if(typeExists(GameObject.GameObjectType.STAR, colObj0, colObj1)){
+                } else if (typeExists(GameObject.GameObjectType.STAR, colObj0, colObj1)) {
                     btCollisionObject object = findObject(GameObject.GameObjectType.STAR, colObj0, colObj1);
-                    GameObject star = (GameObject)object.userData;
+                    GameObject star = (GameObject) object.userData;
                     starsCollected++;
                     int removal = -1;
-                    for(int i = 0; i < instances.size; i++){
-                        if(instances.get(i).equals(star)){
+                    for (int i = 0; i < instances.size; i++) {
+                        if (instances.get(i).equals(star)) {
                             removal = i;
                         }
                     }
 
-                    if(removal > 0){
+                    if (removal > 0) {
                         dynamicsWorld.removeRigidBody(instances.get(removal).getBody());
                         instances.removeIndex(removal);
                     }
@@ -572,8 +569,8 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             }
 
-            private boolean typeExists(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2){
-                if(((GameObject) obj1.userData).gameObjectType.equals(entity) || ((GameObject) obj2.userData).gameObjectType.equals(entity)){
+            private boolean typeExists(GameObject.GameObjectType entity, btCollisionObject obj1, btCollisionObject obj2) {
+                if (((GameObject) obj1.userData).gameObjectType.equals(entity) || ((GameObject) obj2.userData).gameObjectType.equals(entity)) {
                     return true;
                 }
 
@@ -601,7 +598,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         //private ShaderLabel timerLabel;
         private ShaderLabel distanceTraveledLabel;
         private ShaderLabel starsCollectedLabel;
-       // private float totalTimeInSeconds = 0.0f;
+        // private float totalTimeInSeconds = 0.0f;
         private float distanceTraveledInMeters = 0.0f;
 
         private boolean paused = false;
