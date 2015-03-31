@@ -11,16 +11,30 @@ arrow_down
   orig: 100, 100
   offset: 0, 0
   index: -1
-arrow_up
+arrow_left
   rotate: false
   xy: 504, 300
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
+arrow_right
+  rotate: false
+  xy: 606, 402
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+arrow_up
+  rotate: false
+  xy: 504, 198
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 button_clear
   rotate: false
-  xy: 606, 351
+  xy: 504, 147
   size: 50, 49
   split: 24, 25, 24, 24
   orig: 50, 49
@@ -28,14 +42,14 @@ button_clear
   index: -1
 cursor
   rotate: false
-  xy: 504, 116
+  xy: 708, 320
   size: 15, 182
   orig: 15, 182
   offset: 0, 0
   index: -1
 pause
   rotate: false
-  xy: 606, 402
+  xy: 606, 300
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

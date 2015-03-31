@@ -6,7 +6,7 @@ public class Constants {
     public static final String APP_TITLE = "Sledding Smash";
     public static final String PREFERENCE_STORE = "SleddingSmash";
     public static SimpleDateFormat timeRemainingFormat = new SimpleDateFormat("mm:ss");
-    public static final float MAX_VELOCITY = 90.0f;
+    public static final float MAX_VELOCITY = 130.0f;
 
     public static class UI {
         public static final String X_SMALL_FONT = "xSmallFont";

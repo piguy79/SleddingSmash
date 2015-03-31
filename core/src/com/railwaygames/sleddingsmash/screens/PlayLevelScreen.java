@@ -175,7 +175,7 @@ public class PlayLevelScreen implements ScreenFeedback {
         private static final float rotation = 0.5f;
         private static final float LINEAR_SLEEP = 10;
         private static final float ANGULAR_SLEEP = 10;
-        private final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 3, 0);
+        private final Vector3 GRAVITY_VEC = new Vector3(0, -10 * 7, 0);
 
         public Environment lights;
         public PerspectiveCamera cam;

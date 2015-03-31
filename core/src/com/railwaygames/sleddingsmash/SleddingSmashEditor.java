@@ -487,7 +487,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 return super.keyDown(keycode);
             }
         };
-        camController.translateUnits = 100f;
+        camController.translateUnits = 200f;
     }
 
     private void createPhysicsWorld() {

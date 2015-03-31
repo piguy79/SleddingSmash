@@ -44,11 +44,11 @@ public class UISkin extends Skin {
             add(Constants.UI.PAUSE_BUTTON, new Button.ButtonStyle(trd, trd, trd));
         }
         {
-            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
+            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_left"));
             add(Constants.UI.LEFT_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
         }
         {
-            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_up"));
+            TextureRegionDrawable arrow = new TextureRegionDrawable(menusAtlas.findRegion("arrow_right"));
             add(Constants.UI.RIGHT_BUTTON, new Button.ButtonStyle(arrow, arrow, arrow));
         }
         {
