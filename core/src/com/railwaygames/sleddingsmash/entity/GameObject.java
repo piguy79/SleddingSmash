@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Disposable;
@@ -35,6 +36,8 @@ public class GameObject extends ModelInstance implements Disposable {
     public void setPosition(Vector3 newPosition) {
         this.position = newPosition;
     }
+
+
 
     public Vector3 getLocationInWorld() {
         Vector3 output = new Vector3();
@@ -101,7 +104,7 @@ public class GameObject extends ModelInstance implements Disposable {
     }
 
     public enum GameObjectType{
-        CHARACTER, TREE, ROCK, PLANE
+        CHARACTER, TREE, ROCK, PLANE, STAR
     }
 
     static class MotionState extends btMotionState {

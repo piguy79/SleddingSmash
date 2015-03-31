@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
 import com.railwaygames.sleddingsmash.Constants;
 import com.railwaygames.sleddingsmash.entity.GameObject;
 
+import java.util.Map;
+
 /**
  * Created by conormullen on 2/19/15.
  */
@@ -23,7 +25,7 @@ public class TreeObstacleGenerator extends ObstacleGenerator {
     }
 
     @Override
-    GameObject placeObstacle(Vector3 vector, Vector3 offset) {
+    GameObject placeObstacle(Vector3 vector, Vector3 offset, Map<String, Object> params) {
 
         btCylinderShape cylinder = new btCylinderShape(new Vector3(2,6,2));
         GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.TREE, cylinder, 0);
