@@ -20,7 +20,7 @@ public class StarObstacleGenerator extends ObstacleGenerator {
 
     @Override
     GameObject placeObstacle(Vector3 vector, Vector3 offset, Map<String, Object> params) {
-        btSphereShape sphere = new btSphereShape(3);
+        btSphereShape sphere = new btSphereShape(5);
         GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.STAR, sphere, 0);
         GameObject star = constructor.construct();
 
@@ -30,6 +30,7 @@ public class StarObstacleGenerator extends ObstacleGenerator {
         Vector3 position = new Vector3(offset.x + vector.x, vector.y + distanceFromGround, vector.z);
         star.transform.setToTranslation(position);
         star.transform.rotate(new Vector3(1f, 0, 0), 90);
+        star.transform.scale(3,3,3);
         Matrix4 starPosition = star.transform.cpy();
         star.getBody().setWorldTransform(starPosition);
         star.getBody().setContactCallbackFlag(Constants.CollisionsFlag.STAR_FLAG);

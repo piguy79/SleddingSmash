@@ -43,6 +43,10 @@ public class GameObject extends ModelInstance implements Disposable {
         return output;
     }
 
+    public boolean isStar(){
+        return this.gameObjectType.equals(GameObjectType.STAR);
+    }
+
     public float height() {
         BoundingBox box = new BoundingBox();
         calculateBoundingBox(box);

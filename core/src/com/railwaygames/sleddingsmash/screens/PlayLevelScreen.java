@@ -513,12 +513,22 @@ public class PlayLevelScreen implements ScreenFeedback {
             modelBatch.render(modelInstances, lights);
             modelBatch.end();
 
+            rotateStars();
+
             // DEBUG PHYSICS
             //debugDrawer.begin(cam);
             //collisionWorld.debugDrawWorld();
             //debugDrawer.end();
         }
 
+
+        public void rotateStars(){
+            for(GameObject obj : instances){
+                if(obj.isStar()){
+                    obj.transform.rotate(new Vector3(0,0,1), 12);
+                }
+            }
+        }
         public Vector3 getSphereLocation() {
             return sphere.getLocationInWorld();
         }
@@ -743,7 +753,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 //                totalTimeInSeconds += delta;
 //                timerLabel.setText(formatTime(totalTimeInSeconds));
             }
-            starsCollectedLabel.setText("Stars: " + gs.starsCollected);
+            starsCollectedLabel.setText("Stars: " + gs.starsCollected + "/" + gs.level.numberOfStars);
             distanceTraveledLabel.setText(getDistance());
 
             stage.act(delta);

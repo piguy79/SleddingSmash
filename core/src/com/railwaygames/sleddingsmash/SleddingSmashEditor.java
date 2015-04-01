@@ -442,9 +442,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         }
     }
 
-    private void createPlane(float width, float length) {
+    private void createPlane(float width, float length, int numberOfStars) {
         this.level.width = width;
         this.level.length = length;
+        this.level.numberOfStars = numberOfStars;
 
         TextureLoader.TextureParameter tp = new TextureLoader.TextureParameter();
         tp.magFilter = Texture.TextureFilter.Linear;
@@ -540,7 +541,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         dispose();
 
         createPhysicsWorld();
-        createPlane(level.width, level.length);
+        createPlane(level.width, level.length, level.numberOfStars);
     }
 
     @Override
@@ -1056,6 +1057,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 final TextField lengthTextField = createLabelWithTextField(group, "length", y, width);
 
                 y -= height * 0.1f;
+                final TextField numberOfStarsLabel = createLabelWithTextField(group, "stars", y, width);
+
+                y -= height * 0.1f;
 
                 {
                     Label label = new Label("ok", resources.skin, "default");
@@ -1067,7 +1071,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     label.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()));
+                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()), Integer.valueOf(numberOfStarsLabel.getText()));
                             finalizePlane();
                             group.remove();
                             showMenus(true, homeMenu);
@@ -1120,6 +1124,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         public List<Obstacle> obstacles = new ArrayList<Obstacle>();
         public float width;
         public float length;
+        public int numberOfStars = 0;
     }
 
     public static class Modifier {
