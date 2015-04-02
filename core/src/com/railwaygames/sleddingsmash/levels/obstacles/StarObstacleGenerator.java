@@ -20,7 +20,7 @@ public class StarObstacleGenerator extends ObstacleGenerator {
 
     @Override
     GameObject placeObstacle(Vector3 vector, Vector3 offset, Map<String, Object> params) {
-        btSphereShape sphere = new btSphereShape(5);
+        btSphereShape sphere = new btSphereShape(1.2f);
         GameObject.Constructor constructor = new GameObject.Constructor(model, GameObject.GameObjectType.STAR, sphere, 0);
         GameObject star = constructor.construct();
 
