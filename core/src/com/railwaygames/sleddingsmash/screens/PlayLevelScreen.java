@@ -573,7 +573,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                         }
                     }
 
-                    if (removal > 0) {
+                    if (removal >= 0) {
                         collisionWorld.removeCollisionObject(instances.get(removal).getBody());
                         instances.removeIndex(removal);
                     }
