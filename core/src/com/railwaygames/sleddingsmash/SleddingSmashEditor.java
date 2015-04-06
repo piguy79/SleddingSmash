@@ -478,10 +478,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         new BumpyTerrainModifier().modify(model, params);
     }
 
-    private void createPlane(float width, float length, int numberOfStars, int numberOfBumps) {
+    private void createPlane(float width, float length, int numberOfBumps) {
         level.width = width;
         level.length = length;
-        level.numberOfStars = numberOfStars;
 
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(BumpyTerrainModifier.COUNT, numberOfBumps);
@@ -574,7 +573,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void reset() {
         dispose();
-
         createPhysicsWorld();
         createPlane(level);
     }
@@ -1105,17 +1103,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 }
 
                 y -= height * 0.1f;
-                final TextField numberOfStarsLabel = createLabelWithTextField(group, "stars", y, width);
-                numberOfStarsLabel.setText(Integer.toString((int) level.numberOfStars));
-
-
-                y -= height * 0.1f;
                 final TextField numberOfBumps = createLabelWithTextField(group, "bumps", y, width);
                 numberOfBumps.setText(Integer.toString((int) level.hills.size()));
 
-
                 y -= height * 0.1f;
-
                 {
                     Label label = new Label("ok", resources.skin, "default");
                     label.setColor(textColor);
@@ -1127,7 +1118,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             dispose();
-                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()), Integer.valueOf(numberOfStarsLabel.getText()), Integer.valueOf(numberOfBumps.getText()));
+                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()), Integer.valueOf(numberOfBumps.getText()));
                             for (Obstacle o : level.obstacles) {
                                 o.generatedPositions = null;
                             }
@@ -1184,7 +1175,6 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         public List<Hill> hills = new ArrayList<Hill>();
         public float width = 0.0f;
         public float length = 0.0f;
-        public int numberOfStars = 0;
     }
 
     public static class Modifier {

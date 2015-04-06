@@ -26,7 +26,7 @@ modifiers: [
 			}
 			impactAmount: {
 				class: java.lang.Float
-				value: -120
+				value: -90
 			}
 			impactAxis: {
 				class: java.lang.String
@@ -60,7 +60,7 @@ modifiers: [
 			}
 			impactAmount: {
 				class: java.lang.Float
-				value: 120
+				value: 50
 			}
 			impactAxis: {
 				class: java.lang.String
@@ -86,15 +86,15 @@ modifiers: [
 			}
 			evalAxisStartRatio: {
 				class: java.lang.Float
-				value: 0
+				value: 0.2
 			}
 			evalAxis: {
 				class: java.lang.String
-				value: z
+				value: x
 			}
 			impactAmount: {
 				class: java.lang.Float
-				value: -60
+				value: 5
 			}
 			impactAxis: {
 				class: java.lang.String
@@ -116,7 +116,41 @@ modifiers: [
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
-				value: pow2
+				value: fade
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -250
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.3
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
 			}
 			evalAxisStartRatio: {
 				class: java.lang.Float
@@ -128,7 +162,41 @@ modifiers: [
 			}
 			impactAmount: {
 				class: java.lang.Float
-				value: -40
+				value: -300
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: x
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.2
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0.3
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -120
 			}
 			impactAxis: {
 				class: java.lang.String
@@ -146,15 +214,15 @@ modifiers: [
 			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
-				value: 0.3
+				value: 0.05
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
-				value: bounce
+				value: linear
 			}
 			evalAxisStartRatio: {
 				class: java.lang.Float
-				value: 0.7
+				value: 0
 			}
 			evalAxis: {
 				class: java.lang.String
@@ -162,7 +230,75 @@ modifiers: [
 			}
 			impactAmount: {
 				class: java.lang.Float
-				value: -50
+				value: -30
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.2
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0.8
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -120
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
+			}
+		}
+	}
+	{
+		type: TRANSFORM
+		params: {
+			class: java.util.HashMap
+			modificationType: {
+				class: java.lang.String
+				value: t
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.04
+			}
+			interpolation: {
+				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
+				value: linear
+			}
+			evalAxisStartRatio: {
+				class: java.lang.Float
+				value: 0
+			}
+			evalAxis: {
+				class: java.lang.String
+				value: z
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -80
 			}
 			impactAxis: {
 				class: java.lang.String
@@ -177,7 +313,151 @@ obstacles: [
 			class: java.util.HashMap
 			startX: {
 				class: java.lang.Float
-				value: 0
+				value: 0.3
+			}
+			model: {
+				class: java.lang.String
+				value: star
+			}
+			density: {
+				class: java.lang.Float
+				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.35
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.18
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 4
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.15
+			}
+			angle: {
+				class: java.lang.Float
+				value: 90
+			}
+		}
+		generatedPositions: [
+			{
+				x: 90
+				y: -354.2561
+				z: -510
+			}
+		]
+		availableModels: [
+			star
+		]
+		type: STAR
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			startX: {
+				class: java.lang.Float
+				value: 0.7
+			}
+			model: {
+				class: java.lang.String
+				value: star
+			}
+			density: {
+				class: java.lang.Float
+				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.75
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.5
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 4
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.45
+			}
+			angle: {
+				class: java.lang.Float
+				value: 90
+			}
+		}
+		generatedPositions: [
+			{
+				x: 149.99997
+				y: -564.9951
+				z: -1500
+			}
+		]
+		availableModels: [
+			star
+		]
+		type: STAR
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			startX: {
+				class: java.lang.Float
+				value: 0.3
+			}
+			model: {
+				class: java.lang.String
+				value: star
+			}
+			density: {
+				class: java.lang.Float
+				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.35
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.7
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 4
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.65
+			}
+			angle: {
+				class: java.lang.Float
+				value: 90
+			}
+		}
+		generatedPositions: [
+			{
+				x: -180
+				y: -566.671
+				z: -2100
+			}
+		]
+		availableModels: [
+			star
+		]
+		type: STAR
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			startX: {
+				class: java.lang.Float
+				value: 0.1
 			}
 			model: {
 				class: java.lang.String
@@ -185,254 +465,394 @@ obstacles: [
 			}
 			density: {
 				class: java.lang.Float
-				value: 45
+				value: 30
 			}
 			endX: {
 				class: java.lang.Float
-				value: 1
+				value: 0.8
+			}
+			endZ: {
+				class: java.lang.Float
+				value: 0.6
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
+			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.2
+			}
+			angle: {
+				class: java.lang.Float
+				value: 40
+			}
+		}
+		generatedPositions: [
+			{
+				x: -33.333374
+				y: -566.06287
+				z: -1690
+			}
+			{
+				x: 79.99996
+				y: -530.6081
+				z: -1320
+			}
+			{
+				x: 170
+				y: -443.47
+				z: -820
+			}
+			{
+				x: 86.666626
+				y: -565
+				z: -1690
+			}
+			{
+				x: 120
+				y: -436.09973
+				z: -740
+			}
+			{
+				x: -53.333366
+				y: -560.03894
+				z: -1450
+			}
+			{
+				x: -43.33336
+				y: -566.1827
+				z: -1720
+			}
+			{
+				x: 70
+				y: -438.92883
+				z: -740
+			}
+			{
+				x: -46.666695
+				y: -569.3987
+				z: -1550
+			}
+			{
+				x: 79.99997
+				y: -565.05
+				z: -1500
+			}
+			{
+				x: 23.333294
+				y: -520
+				z: -1250
+			}
+			{
+				x: -46.666702
+				y: -565
+				z: -1790
+			}
+			{
+				x: 79.99997
+				y: -565
+				z: -1740
+			}
+			{
+				x: 100
+				y: -446.24777
+				z: -820
+			}
+			{
+				x: -13.333366
+				y: -554.0001
+				z: -1420
+			}
+			{
+				x: 80
+				y: -494.8889
+				z: -1130
+			}
+			{
+				x: 120
+				y: -438.1266
+				z: -750
+			}
+			{
+				x: 63.333305
+				y: -557.271
+				z: -1460
+			}
+			{
+				x: 100
+				y: -465.77777
+				z: -990
+			}
+			{
+				x: 99.99996
+				y: -541
+				z: -1380
+			}
+			{
+				x: 3.3332977
+				y: -565.2354
+				z: -1730
+			}
+			{
+				x: 130
+				y: -443.22794
+				z: -800
+			}
+			{
+				x: 160
+				y: -475.81287
+				z: -1060
+			}
+			{
+				x: 29.99996
+				y: -510
+				z: -1200
+			}
+			{
+				x: 80
+				y: -448.68402
+				z: -860
+			}
+			{
+				x: 149.99997
+				y: -565
+				z: -1530
+			}
+			{
+				x: 140
+				y: -445.51053
+				z: -880
+			}
+			{
+				x: 49.99997
+				y: -565
+				z: -1650
+			}
+			{
+				x: 170
+				y: -411.2612
+				z: -650
+			}
+			{
+				x: 29.99997
+				y: -565.2787
+				z: -1530
+			}
+		]
+		availableModels: [
+			tree_1
+		]
+		type: TREE
+	}
+	{
+		params: {
+			class: java.util.HashMap
+			startX: {
+				class: java.lang.Float
+				value: 0.1
+			}
+			model: {
+				class: java.lang.String
+				value: tree_1
+			}
+			density: {
+				class: java.lang.Float
+				value: 35
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.8
 			}
 			endZ: {
 				class: java.lang.Float
 				value: 1
 			}
-			startZ: {
+			heightFromGorund: {
 				class: java.lang.Float
 				value: 0
 			}
+			startZ: {
+				class: java.lang.Float
+				value: 0.6
+			}
 			angle: {
 				class: java.lang.Float
-				value: 60
+				value: 50
 			}
 		}
 		generatedPositions: [
 			{
-				x: 70
-				y: -219.19997
-				z: -670
+				x: -100
+				y: -655.5583
+				z: -2860
 			}
 			{
-				x: 230
-				y: -149.99994
-				z: -150
+				x: -30
+				y: -593
+				z: -2540
 			}
 			{
-				x: 80
-				y: -218.57774
-				z: -660
+				x: -20.000015
+				y: -565.0233
+				z: -1860
 			}
 			{
-				x: 210
-				y: -136.44385
-				z: -80
+				x: -90
+				y: -647
+				z: -2810
 			}
 			{
-				x: 200
-				y: -219.21552
-				z: -830
+				x: 3.333313
+				y: -565
+				z: -2000
 			}
 			{
-				x: 60
-				y: -121.09456
-				z: -10
+				x: -143.33336
+				y: -567.7778
+				z: -1930
 			}
 			{
-				x: 250
-				y: -202.55995
-				z: -970
+				x: -180
+				y: -628.6666
+				z: -2710
 			}
 			{
-				x: 60
-				y: -154.00546
-				z: -170
+				x: -110
+				y: -646.8734
+				z: -2810
 			}
 			{
-				x: 50
-				y: -229.114
-				z: -870
+				x: -150
+				y: -663
+				z: -2890
 			}
 			{
-				x: 150
-				y: -179.99312
-				z: -340
+				x: -40
+				y: -565.1942
+				z: -2350
 			}
 			{
-				x: 250
-				y: -218.3328
-				z: -720
+				x: -150
+				y: -560.5994
+				z: -2400
 			}
 			{
-				x: 220
-				y: -218.16519
-				z: -710
+				x: -10
+				y: -525.49384
+				z: -2210
 			}
 			{
-				x: 180
-				y: -219.64438
-				z: -680
+				x: -90
+				y: -564.89246
+				z: -2380
 			}
 			{
-				x: 100
-				y: -121.945595
-				z: -10
+				x: -226.66669
+				y: -570
+				z: -2000
 			}
 			{
-				x: 40
-				y: -214.57962
-				z: -810
+				x: -230
+				y: -576.0145
+				z: -2430
 			}
 			{
-				x: 70
-				y: -122.01673
-				z: -10
+				x: -100
+				y: -633
+				z: -2740
 			}
 			{
-				x: 160
-				y: -220.17297
-				z: -830
+				x: -160.00003
+				y: -569.8497
+				z: -1830
 			}
 			{
-				x: 170
-				y: -194.55704
-				z: -990
+				x: -60
+				y: -637
+				z: -2760
 			}
 			{
-				x: 230
-				y: -120
+				x: -90
+				y: -680.8839
+				z: -2980
 			}
 			{
-				x: 80
-				y: -166.37457
-				z: -230
+				y: -567
+				z: -2660
 			}
 			{
-				x: 90
-				y: -180.00012
-				z: -350
+				x: -30
+				y: -565
+				z: -2120
 			}
 			{
-				x: 260
-				y: -196.8445
-				z: -970
+				x: -210
+				y: -608.3334
+				z: -2600
 			}
 			{
-				x: 80
-				y: -154.12195
-				z: -170
+				x: -140
+				y: -565
+				z: -2290
 			}
 			{
-				x: 190
-				y: -195.01953
-				z: -530
+				x: -210
+				y: -568.3334
+				z: -2230
 			}
 			{
-				x: 180
-				y: -228.33311
-				z: -870
+				x: -160
+				y: -564.1323
+				z: -2390
 			}
 			{
-				x: 120
-				y: -123.427826
-				z: -20
+				x: -190
+				y: -567.2435
+				z: -2350
 			}
 			{
-				x: 120
-				y: -215.49426
-				z: -810
+				x: -30
+				y: -681
+				z: -2980
 			}
 			{
-				x: 200
-				y: -160.3923
-				z: -200
+				x: -180
+				y: -680.66815
+				z: -2970
 			}
 			{
-				x: 230
-				y: -165.98706
-				z: -230
+				x: -50
+				y: -645
+				z: -2800
 			}
 			{
-				x: 120
-				y: -133.99402
-				z: -70
+				x: -120
+				y: -582.89435
+				z: -2490
 			}
 			{
-				x: 240
-				y: -220.42215
-				z: -680
+				x: -170
+				y: -610.403
+				z: -2620
 			}
 			{
-				x: 100
-				y: -127.9641
-				z: -50
+				x: -60
+				y: -680.4453
+				z: -2990
 			}
 			{
-				x: 150
-				y: -178.97632
-				z: -360
+				x: -100.000015
+				y: -565.55554
+				z: -1920
 			}
-			{
-				x: 220
-				y: -190.7621
-				z: -510
-			}
-			{
-				x: 90
-				y: -178.30438
-				z: -420
-			}
-			{
-				x: 180
-				y: -220.26462
-				z: -720
-			}
-			{
-				x: 80
-				y: -179.9653
-				z: -300
-			}
-			{
-				x: 150
-				y: -214.6366
-				z: -810
-			}
-			{
-				x: 260
-				y: -220.38792
-				z: -780
-			}
-			{
-				x: 50
-				y: -121.51559
-				z: -10
-			}
-			{
-				x: 200
-				y: -196.58398
-				z: -530
-			}
-			{
-				x: 70
-				y: -176.10297
-				z: -280
-			}
-			{
-				x: 170
-				y: -218.57036
-				z: -660
-			}
-			{
-				x: 260
-				y: -219.1054
-				z: -660
-			}
-			{
-				x: 40
-				y: -179.69406
-				z: -420
-			}
+		]
+		availableModels: [
+			tree_1
 		]
 		type: TREE
 	}
 ]
 width: 300
-length: 1000
+length: 3000
 }

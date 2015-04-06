@@ -208,9 +208,11 @@ public class PlayLevelScreen implements ScreenFeedback {
         private LinkedList<Float> lastCameraYPositions;
         private LinkedList<Float> lastCameraXPositions;
         private Vector3 lastSphereLocation;
+        private int numberOfStars;
 
         public void buildLevel(Level level) {
             this.level = level;
+            this.numberOfStars = 0;
             lights = new Environment();
             lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
             lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -277,6 +279,7 @@ public class PlayLevelScreen implements ScreenFeedback {
                         collisionWorld.addCollisionObject(object.getBody());
                         constructors.add(object.constructor);
                         instances.add(object);
+                        numberOfStars++;
 
                     } else {
                         constructors.add(object.constructor);
@@ -568,8 +571,8 @@ public class PlayLevelScreen implements ScreenFeedback {
                         }
                     }
 
-                    if (removal > 0) {
-                        dynamicsWorld.removeRigidBody(instances.get(removal).getBody());
+                    if (removal >= 0) {
+                        collisionWorld.removeCollisionObject(instances.get(removal).getBody());
                         instances.removeIndex(removal);
                     }
 
@@ -751,7 +754,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 //                totalTimeInSeconds += delta;
 //                timerLabel.setText(formatTime(totalTimeInSeconds));
             }
-            starsCollectedLabel.setText("Stars: " + gs.starsCollected + "/" + gs.level.numberOfStars);
+            starsCollectedLabel.setText("Stars: " + gs.starsCollected + "/" + gs.numberOfStars);
             distanceTraveledLabel.setText(getDistance());
 
             stage.act(delta);
