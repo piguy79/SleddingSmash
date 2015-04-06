@@ -39,7 +39,7 @@ public class LevelSelectScreen implements ScreenFeedback {
         stage = new Stage();
 
         for (int i = 0; i < levels.size(); ++i) {
-            ShaderLabel label = new ShaderLabel(resources.fontShader, "Level " + (i + 1), resources.skin, Constants.UI.SMALL_FONT,
+            ShaderLabel label = new ShaderLabel(resources.fontShader, "Level " + (i + 1), resources.skin, Constants.UI.DEFAULT_FONT,
                     Color.WHITE);
             final int index = i;
             label.addListener(new ClickListener() {
@@ -70,7 +70,7 @@ public class LevelSelectScreen implements ScreenFeedback {
 
         for (ShaderLabel label : levelLabels) {
             WidgetUtils.centerLabelOnPoint(label, centerX, y);
-            y -= height * 0.07f;
+            y -= height * 0.12f;
         }
     }
 

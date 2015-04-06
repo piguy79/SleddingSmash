@@ -4,13 +4,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -24,13 +24,13 @@ modifiers: [
 				class: java.lang.String
 				value: x
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: 100
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: 100
 			}
 		}
 	}
@@ -38,13 +38,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.5
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -58,13 +58,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -400
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -400
 			}
 		}
 	}
@@ -72,13 +72,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -92,13 +92,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -100
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -100
 			}
 		}
 	}
@@ -106,13 +106,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.5
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -126,13 +126,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -200
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -200
 			}
 		}
 	}
@@ -140,13 +140,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.05
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -160,13 +160,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -40
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -40
 			}
 		}
 	}
@@ -174,13 +174,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -194,13 +194,13 @@ modifiers: [
 				class: java.lang.String
 				value: x
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -60
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -60
 			}
 		}
 	}
@@ -208,13 +208,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -228,13 +228,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -200
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: x
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -200
 			}
 		}
 	}
@@ -242,13 +242,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.2
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -262,13 +262,13 @@ modifiers: [
 				class: java.lang.String
 				value: x
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: 70
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: 70
 			}
 		}
 	}
@@ -276,13 +276,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.3
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -296,13 +296,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -300
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: y
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -300
 			}
 		}
 	}
@@ -310,13 +310,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.2
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -329,28 +329,28 @@ modifiers: [
 			evalAxis: {
 				class: java.lang.String
 				value: z
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
 			}
 			impactAmount: {
 				class: java.lang.Float
 				value: -150
 			}
-			impactAxis: {
-				class: java.lang.String
-				value: y
-			}
 		}
 	}
 	{
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.3
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -364,13 +364,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -600
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: x
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -600
 			}
 		}
 	}
@@ -378,13 +378,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -398,13 +398,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: 500
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: x
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: 500
 			}
 		}
 	}
@@ -412,13 +412,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.2
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -431,28 +431,28 @@ modifiers: [
 			evalAxis: {
 				class: java.lang.String
 				value: x
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
 			}
 			impactAmount: {
 				class: java.lang.Float
 				value: 50
 			}
-			impactAxis: {
-				class: java.lang.String
-				value: y
-			}
 		}
 	}
 	{
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 1
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -465,28 +465,28 @@ modifiers: [
 			evalAxis: {
 				class: java.lang.String
 				value: z
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
 			}
 			impactAmount: {
 				class: java.lang.Float
 				value: -1600
 			}
-			impactAxis: {
-				class: java.lang.String
-				value: y
-			}
 		}
 	}
 	{
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			evalAxisInterpolationDuration: {
-				class: java.lang.Float
-				value: 0.1
-			}
 			modificationType: {
 				class: java.lang.String
 				value: t
+			}
+			evalAxisInterpolationDuration: {
+				class: java.lang.Float
+				value: 0.1
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -500,13 +500,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAxis: {
-				class: java.lang.String
-				value: y
-			}
 			impactAmount: {
 				class: java.lang.Float
 				value: -100
+			}
+			impactAxis: {
+				class: java.lang.String
+				value: y
 			}
 		}
 	}
@@ -514,13 +514,13 @@ modifiers: [
 		type: TRANSFORM
 		params: {
 			class: java.util.HashMap
-			modificationType: {
-				class: java.lang.String
-				value: t
-			}
 			evalAxisInterpolationDuration: {
 				class: java.lang.Float
 				value: 0.2
+			}
+			modificationType: {
+				class: java.lang.String
+				value: t
 			}
 			interpolation: {
 				class: com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier$InterpolationChoice
@@ -534,13 +534,13 @@ modifiers: [
 				class: java.lang.String
 				value: z
 			}
-			impactAmount: {
-				class: java.lang.Float
-				value: -400
-			}
 			impactAxis: {
 				class: java.lang.String
 				value: x
+			}
+			impactAmount: {
+				class: java.lang.Float
+				value: -400
 			}
 		}
 	}
@@ -549,25 +549,29 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			startX: {
-				class: java.lang.Float
-				value: 0.05
-			}
 			model: {
 				class: java.lang.String
 				value: tree_1
 			}
-			density: {
+			startX: {
 				class: java.lang.Float
-				value: 20
+				value: 0.05
 			}
 			endX: {
 				class: java.lang.Float
 				value: 0.4
 			}
+			density: {
+				class: java.lang.Float
+				value: 20
+			}
 			endZ: {
 				class: java.lang.Float
 				value: 0.6
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
 			}
 			startZ: {
 				class: java.lang.Float
@@ -580,104 +584,104 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -529.7509
-				y: -1223.5973
-				z: -3230
+				x: -559.53534
+				y: -1258.0765
+				z: -3310
 			}
 			{
-				x: -493.43466
-				y: -1261.9296
-				z: -3330
+				x: -335.02463
+				y: -1349.648
+				z: -3570
 			}
 			{
-				x: -330.5386
-				y: -1280.7625
-				z: -3380
+				x: -434.1909
+				y: -1295.617
+				z: -3420
 			}
 			{
-				x: -375.72
-				y: -1242.868
+				x: -475.72
+				y: -1242.8662
 				z: -3280
 			}
 			{
-				x: -301.71387
-				y: -1356.7244
-				z: -3590
+				x: -338.89087
+				y: -1229.8538
+				z: -3250
 			}
 			{
-				x: -357.98627
-				y: -1342.6409
-				z: -3550
-			}
-			{
-				x: -476.69406
-				y: -1258.1028
-				z: -3320
-			}
-			{
-				x: -509.75095
-				y: -1223.5482
-				z: -3230
-			}
-			{
-				x: -465.6155
-				y: -1269.4879
-				z: -3350
-			}
-			{
-				x: -474.61313
-				y: -1284.4749
-				z: -3390
-			}
-			{
-				x: -539.9248
-				y: -1220.1207
+				x: -399.92477
+				y: -1219.4451
 				z: -3220
 			}
 			{
-				x: -490.5386
-				y: -1280.7625
-				z: -3380
+				x: -345.6155
+				y: -1265.0051
+				z: -3350
 			}
 			{
-				x: -379.99698
-				y: -1306.6255
-				z: -3450
+				x: -534.02814
+				y: -1245.3445
+				z: -3290
 			}
 			{
-				x: -456.0147
-				y: -1277.0032
+				x: -372.4153
+				y: -1317.565
+				z: -3480
+			}
+			{
+				x: -498.89087
+				y: -1231.0892
+				z: -3250
+			}
+			{
+				x: -521.04
+				y: -1267.7549
+				z: -3360
+			}
+			{
+				x: -386.69406
+				y: -1258.1538
+				z: -3320
+			}
+			{
+				x: -550
+				y: -1213.5736
+				z: -3200
+			}
+			{
+				x: -398.46
+				y: -1302.9778
+				z: -3440
+			}
+			{
+				x: -411.97388
+				y: -1250.6664
+				z: -3300
+			}
+			{
+				x: -316.0147
+				y: -1276.0056
 				z: -3370
 			}
 			{
-				x: -393.43466
-				y: -1261.9296
-				z: -3330
+				x: -505.6155
+				y: -1268.0282
+				z: -3350
 			}
 			{
-				x: -519.42096
-				y: -1227.4153
-				z: -3240
+				x: -299.26495
+				y: -1339.0774
+				z: -3540
 			}
 			{
-				x: -366.52942
-				y: -1299.2864
-				z: -3430
+				x: -394.1909
+				y: -1295.6165
+				z: -3420
 			}
 			{
-				x: -371.43198
-				y: -1291.9028
-				z: -3410
-			}
-			{
-				x: -399.99042
-				y: -1215.7405
-				z: -3210
-			}
-			{
-				x: -343.43466
-				y: -1261.9296
-				z: -3330
+				x: -394.02817
+				y: -1246.7576
+				z: -3290
 			}
 		]
 		type: TREE
@@ -685,25 +689,29 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			startX: {
-				class: java.lang.Float
-				value: 0.1
-			}
 			model: {
 				class: java.lang.String
 				value: tree_1
 			}
-			density: {
+			startX: {
 				class: java.lang.Float
-				value: 60
+				value: 0.1
 			}
 			endX: {
 				class: java.lang.Float
 				value: 0.9
 			}
+			density: {
+				class: java.lang.Float
+				value: 60
+			}
 			endZ: {
 				class: java.lang.Float
 				value: 0.4
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
 			}
 			startZ: {
 				class: java.lang.Float
@@ -716,84 +724,144 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -474.43835
-				y: -1154.4038
-				z: -3010
+				x: -100.218376
+				y: -863.5276
+				z: -2150
 			}
 			{
-				x: -325.31546
-				y: -1129.1592
+				x: -161.90602
+				y: -757.9442
+				z: -1850
+			}
+			{
+				x: -50
+				y: -445.04526
+				z: -920
+			}
+			{
+				x: -451.1864
+				y: -1087.4265
+				z: -2810
+			}
+			{
+				x: -99.5076
+				y: -774.3312
+				z: -1900
+			}
+			{
+				x: -264.04932
+				y: -962.25745
+				z: -2430
+			}
+			{
+				x: -130.06018
+				y: -682.2355
+				z: -1640
+			}
+			{
+				x: -151.89252
+				y: -710.4302
+				z: -1730
+			}
+			{
+				x: -42.849792
+				y: -721.0196
+				z: -1750
+			}
+			{
+				x: -21.964119
+				y: -835.0008
+				z: -2070
+			}
+			{
+				x: -495.31546
+				y: -1128.6681
 				z: -2930
 			}
 			{
-				x: -50
-				y: -555.48206
-				z: -1270
+				x: -10.000967
+				y: -671.5511
+				z: -1610
 			}
 			{
-				x: -101.29295
-				y: -777.86084
-				z: -1910
+				x: -238.71875
+				y: -965.771
+				z: -2440
 			}
 			{
-				x: -311.9803
-				y: -931.24585
-				z: -2340
+				x: -90
+				y: -509.7449
+				z: -1130
 			}
 			{
-				x: -479.1127
-				y: -1182.0463
-				z: -3100
+				x: -99.08371
+				y: -913.1289
+				z: -2290
 			}
 			{
-				x: -110
-				y: -490.59387
-				z: -1070
+				x: -51.89252
+				y: -713.9402
+				z: -1730
 			}
 			{
-				x: -298.68195
-				y: -1006.1902
-				z: -2550
+				x: -498.8306
+				y: -1179.0654
+				z: -3090
 			}
 			{
-				x: -367.35275
-				y: -1074.418
-				z: -2760
+				x: -216.43509
+				y: -860.0089
+				z: -2140
 			}
 			{
-				x: -50
-				y: -599.2224
-				z: -1400
+				x: -194.08679
+				y: -816.1438
+				z: -2010
 			}
 			{
-				x: -301.31805
-				y: -905.728
-				z: -2250
+				x: -192.00241
+				y: -845.6688
+				z: -2100
 			}
 			{
-				x: -303.69052
-				y: -1094.0927
-				z: -2820
+				x: -413.02402
+				y: -1007.708
+				z: -2560
 			}
 			{
-				x: -204.29745
-				y: -1000.25995
-				z: -2540
+				x: -170
+				y: -444.36884
+				z: -910
 			}
 			{
-				x: -322.74924
-				y: -922.55945
-				z: -2320
+				x: -32.00241
+				y: -845.6688
+				z: -2100
 			}
 			{
-				x: -267.9976
-				y: -1054.4932
-				z: -2700
+				x: -170.64474
+				y: -756.7611
+				z: -1840
 			}
 			{
-				x: -100
-				y: -414.63293
-				z: -820
+				x: -498.70697
+				y: -1115.425
+				z: -2890
+			}
+			{
+				x: -241.28123
+				y: -937.81433
+				z: -2360
+			}
+			{
+				x: -508.4309
+				y: -1099.9337
+				z: -2840
+			}
+			{
+				x: -497.1502
+				y: -1166.5535
+				z: -3050
 			}
 			{
 				x: -307.28006
@@ -801,214 +869,149 @@ obstacles: [
 				z: -2670
 			}
 			{
-				x: -130
-				y: -539.074
-				z: -1220
+				x: -288.1671
+				y: -920.2655
+				z: -2310
 			}
 			{
-				x: -405.77002
-				y: -1016.77026
-				z: -2590
+				x: -40
+				y: -552.1967
+				z: -1260
 			}
 			{
-				x: -178.01974
-				y: -972.07086
-				z: -2460
+				x: -278.0437
+				y: -1027.5684
+				z: -2620
 			}
 			{
-				x: -270.083
-				y: -885.0999
-				z: -2200
+				x: -354.32956
+				y: -1071.1399
+				z: -2750
+			}
+			{
+				x: -93.61099
+				y: -916.69653
+				z: -2300
+			}
+			{
+				x: -447.32108
+				y: -1017.3318
+				z: -2570
+			}
+			{
+				x: -60
+				y: -613.0002
+				z: -1440
+			}
+			{
+				x: -458.0359
+				y: -1064.518
+				z: -2730
+			}
+			{
+				x: -211.9803
+				y: -930.4237
+				z: -2340
+			}
+			{
+				x: -220.21838
+				y: -863.60913
+				z: -2150
 			}
 			{
 				x: -120
-				y: -548.91785
-				z: -1250
+				y: -657.72546
+				z: -1570
 			}
 			{
-				x: -80
-				y: -585.66406
-				z: -1360
+				x: -479.97427
+				y: -1203.0046
+				z: -3170
 			}
 			{
-				x: -80.00097
+				x: -159.5076
+				y: -774.63684
+				z: -1900
+			}
+			{
+				x: -110
+				y: -410.7925
+				z: -810
+			}
+			{
+				x: -100.12674
+				y: -905.81287
+				z: -2270
+			}
+			{
+				x: -110
+				y: -500.09293
+				z: -1100
+			}
+			{
+				x: -40
+				y: -444.77606
+				z: -920
+			}
+			{
+				x: -341.5706
+				y: -1013.9679
+				z: -2580
+			}
+			{
+				x: -351.2235
+				y: -1067.4412
+				z: -2740
+			}
+			{
+				x: -293.611
+				y: -917.2732
+				z: -2300
+			}
+			{
+				x: -224.22995
+				y: -884.85956
+				z: -2210
+			}
+			{
+				x: -443.02402
+				y: -1013.8771
+				z: -2560
+			}
+			{
+				x: -58.37172
+				y: -745.75635
+				z: -1820
+			}
+			{
+				x: -110
+				y: -456.22833
+				z: -960
+			}
+			{
+				x: -375.93222
+				y: -1034.3359
+				z: -2640
+			}
+			{
+				x: -40.00097
 				y: -671.7085
 				z: -1610
 			}
 			{
-				x: -110
-				y: -509.7449
-				z: -1130
-			}
-			{
-				x: -150
-				y: -628.37756
-				z: -1480
-			}
-			{
-				x: -349.6867
-				y: -1194.7572
-				z: -3130
-			}
-			{
-				x: -152.34029
-				y: -719.2926
-				z: -1740
-			}
-			{
-				x: -97.81149
-				y: -770.72595
-				z: -1890
-			}
-			{
-				x: -40
-				y: -585.66406
-				z: -1360
-			}
-			{
-				x: -413.56497
-				y: -1042.5812
-				z: -2660
-			}
-			{
-				x: -292.01892
-				y: -1030.9888
-				z: -2630
-			}
-			{
-				x: -353.69052
-				y: -1094.0789
-				z: -2820
-			}
-			{
-				x: -110
-				y: -606.03564
-				z: -1420
-			}
-			{
-				x: -110.00767
-				y: -675.17285
-				z: -1620
-			}
-			{
-				x: -160
-				y: -647.6627
-				z: -1530
-			}
-			{
-				x: -304.04932
-				y: -961.05804
-				z: -2430
-			}
-			{
-				x: -364.32956
-				y: -1071.146
-				z: -2750
-			}
-			{
-				x: -10
-				y: -443.99503
-				z: -920
-			}
-			{
-				x: -96.309494
-				y: -802.8642
-				z: -1980
-			}
-			{
-				x: -140.02563
-				y: -679.2909
+				x: -70.025635
+				y: -675.1378
 				z: -1630
 			}
 			{
-				x: -91.96412
-				y: -835.0008
-				z: -2070
-			}
-			{
-				x: -316.83206
-				y: -1113.5002
-				z: -2880
-			}
-			{
-				x: -451.1864
-				y: -1090.8008
-				z: -2810
-			}
-			{
-				x: -50
-				y: -440.9346
-				z: -910
-			}
-			{
-				x: -40
-				y: -503.32175
-				z: -1110
-			}
-			{
-				x: -206.43509
-				y: -859.9302
-				z: -2140
-			}
-			{
-				x: -218.77646
-				y: -835.21277
-				z: -2060
-			}
-			{
-				x: -70
-				y: -609.41583
-				z: -1430
-			}
-			{
-				x: -64.06775
-				y: -867.053
-				z: -2160
-			}
-			{
-				x: -388.59375
-				y: -1087.5632
-				z: -2800
-			}
-			{
-				x: -231.83286
-				y: -983.08167
-				z: -2490
-			}
-			{
-				x: -90
-				y: -599.2224
-				z: -1400
-			}
-			{
-				x: -396.389
-				y: -988.8878
-				z: -2500
-			}
-			{
-				x: -70
-				y: -474.7919
-				z: -1020
-			}
-			{
-				x: -373.37653
-				y: -970.9933
-				z: -2450
-			}
-			{
-				x: -427.35275
-				y: -1073.8438
-				z: -2760
-			}
-			{
-				x: -222.64539
-				y: -976.1579
-				z: -2470
-			}
-			{
 				x: -20
-				y: -599.2224
-				z: -1400
+				y: -454.23944
+				z: -970
+			}
+			{
+				x: -130.08301
+				y: -881.2619
+				z: -2200
 			}
 		]
 		type: TREE
@@ -1016,25 +1019,29 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			startX: {
-				class: java.lang.Float
-				value: 0.4
-			}
 			model: {
 				class: java.lang.String
 				value: tree_1
 			}
-			density: {
+			startX: {
 				class: java.lang.Float
-				value: 40
+				value: 0.4
 			}
 			endX: {
 				class: java.lang.Float
 				value: 0.9
 			}
+			density: {
+				class: java.lang.Float
+				value: 40
+			}
 			endZ: {
 				class: java.lang.Float
 				value: 0.95
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
 			}
 			startZ: {
 				class: java.lang.Float
@@ -1047,199 +1054,204 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -527.138
-				y: -1899.809
-				z: -5930
+				x: -381.02917
+				y: -1876.1035
+				z: -5740
 			}
 			{
-				x: -525.9911
-				y: -1945.3247
+				x: -484.97296
+				y: -1864.6284
+				z: -5630
+			}
+			{
+				x: -475.9911
+				y: -1945.3071
 				z: -6180
 			}
 			{
-				x: -460
-				y: -2097.1777
-				z: -6700
+				x: -470
+				y: -2215.3835
+				z: -7030
+			}
+			{
+				x: -489.78864
+				y: -1979.1991
+				z: -6320
+			}
+			{
+				x: -475.22412
+				y: -1919.5056
+				z: -6050
 			}
 			{
 				x: -510
-				y: -2343.7246
-				z: -7410
+				y: -2285.4622
+				z: -7230
 			}
 			{
-				x: -524.23395
-				y: -1938.8081
-				z: -6150
+				x: -526.8788
+				y: -1878.3035
+				z: -5760
 			}
 			{
-				x: -434.0329
-				y: -1917.5253
-				z: -6040
+				x: -496.4895
+				y: -1947.5156
+				z: -6190
 			}
 			{
-				x: -500
-				y: -2161.1943
-				z: -6880
+				x: -488.47034
+				y: -1925.5631
+				z: -6080
 			}
 			{
-				x: -510
-				y: -2226.1506
-				z: -7060
-			}
-			{
-				x: -470
-				y: -2073.1973
-				z: -6630
-			}
-			{
-				x: -470
-				y: -2388.0583
-				z: -7560
-			}
-			{
-				x: -480
-				y: -2197.351
-				z: -6980
-			}
-			{
-				x: -480
-				y: -2373.783
-				z: -7510
-			}
-			{
-				x: -450
-				y: -2396.3896
-				z: -7590
-			}
-			{
-				x: -470
-				y: -2229.692
-				z: -7070
-			}
-			{
-				x: -518.0199
-				y: -1874.9988
-				z: -5730
-			}
-			{
-				x: -470
-				y: -2086.7905
-				z: -6670
-			}
-			{
-				x: -468.96826
-				y: -1901.2118
-				z: -5940
-			}
-			{
-				x: -500
-				y: -2132.4368
-				z: -6800
-			}
-			{
-				x: -490
-				y: -2288.8394
-				z: -7240
-			}
-			{
-				x: -490
-				y: -2343.8364
-				z: -7410
-			}
-			{
-				x: -399.71844
-				y: -1879.423
-				z: -5770
-			}
-			{
-				x: -449.94708
-				y: -1988.5037
-				z: -6350
-			}
-			{
-				x: -480
-				y: -2328.1218
-				z: -7360
-			}
-			{
-				x: -495.22473
+				x: -385.22473
 				y: -1881.6865
 				z: -5790
 			}
 			{
-				x: -425.53577
-				y: -1886.1904
-				z: -5830
+				x: -480
+				y: -2184.713
+				z: -6940
 			}
 			{
-				x: -484.86377
-				y: -1940.9642
-				z: -6160
+				x: -514.0741
+				y: -1861.1031
+				z: -5600
 			}
 			{
-				x: -460
-				y: -2364.9924
-				z: -7480
-			}
-			{
-				x: -510
-				y: -2046.8407
-				z: -6550
-			}
-			{
-				x: -479.44568
-				y: -1924.8926
-				z: -6090
-			}
-			{
-				x: -459.9887
-				y: -1992.7277
-				z: -6370
-			}
-			{
-				x: -469.701
-				y: -1976.5967
-				z: -6310
-			}
-			{
-				x: -455.22412
-				y: -1919.2711
-				z: -6050
-			}
-			{
-				x: -520
-				y: -2396.4443
-				z: -7590
-			}
-			{
-				x: -488.70374
-				y: -1910.6482
-				z: -6000
-			}
-			{
-				x: -460
-				y: -2344.7983
-				z: -7410
+				x: -500
+				y: -2374.0823
+				z: -7510
 			}
 			{
 				x: -490
-				y: -2327.7905
-				z: -7360
+				y: -2257.9202
+				z: -7150
 			}
 			{
-				x: -440
-				y: -2332.124
-				z: -7370
+				x: -438.70374
+				y: -1910.5939
+				z: -6000
+			}
+			{
+				x: -470
+				y: -2299.859
+				z: -7270
+			}
+			{
+				x: -396.87878
+				y: -1878.2771
+				z: -5760
+			}
+			{
+				x: -510
+				y: -2179.3027
+				z: -6930
 			}
 			{
 				x: -480
-				y: -2200.9873
-				z: -6990
+				y: -2352.8481
+				z: -7440
 			}
 			{
-				x: -454.0329
-				y: -1917.5253
-				z: -6040
+				x: -409.21777
+				y: -1894.1326
+				z: -5890
+			}
+			{
+				x: -500
+				y: -2204.5657
+				z: -7000
+			}
+			{
+				x: -480
+				y: -2043.6692
+				z: -6540
+			}
+			{
+				x: -460
+				y: -2222.5508
+				z: -7050
+			}
+			{
+				x: -501.83527
+				y: -1872.888
+				z: -5710
+			}
+			{
+				x: -520
+				y: -2053.3152
+				z: -6570
+			}
+			{
+				x: -487.9657
+				y: -1887.6208
+				z: -5840
+			}
+			{
+				x: -460
+				y: -2360.6558
+				z: -7470
+			}
+			{
+				x: -480
+				y: -2003.0964
+				z: -6400
+			}
+			{
+				x: -510
+				y: -2275.2383
+				z: -7200
+			}
+			{
+				x: -500
+				y: -2331.356
+				z: -7370
+			}
+			{
+				x: -452.64636
+				y: -1890.1449
+				z: -5860
+			}
+			{
+				x: -504.23395
+				y: -1939.4136
+				z: -6150
+			}
+			{
+				x: -450.12134
+				y: -1912.25
+				z: -6010
+			}
+			{
+				x: -427.75446
+				y: -1858.91
+				z: -5610
+			}
+			{
+				x: -440
+				y: -2282.073
+				z: -7220
+			}
+			{
+				x: -510
+				y: -2053.3152
+				z: -6570
+			}
+			{
+				x: -462.64636
+				y: -1890.1514
+				z: -5860
+			}
+			{
+				x: -391.02917
+				y: -1876.1035
+				z: -5740
+			}
+			{
+				x: -434.10126
+				y: -1905.4824
+				z: -5970
 			}
 		]
 		type: TREE
@@ -1247,25 +1259,29 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			model: {
-				class: java.lang.String
-				value: tree_1
-			}
 			startX: {
 				class: java.lang.Float
 				value: 0.05
 			}
-			endX: {
-				class: java.lang.Float
-				value: 0.3
+			model: {
+				class: java.lang.String
+				value: tree_1
 			}
 			density: {
 				class: java.lang.Float
 				value: 60
 			}
+			endX: {
+				class: java.lang.Float
+				value: 0.3
+			}
 			endZ: {
 				class: java.lang.Float
 				value: 0.95
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
 			}
 			startZ: {
 				class: java.lang.Float
@@ -1278,299 +1294,304 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -595.9911
-				y: -1963.1036
-				z: -6180
+				x: -620
+				y: -2322.3486
+				z: -7250
 			}
 			{
-				x: -580
-				y: -2243.7708
-				z: -7080
+				x: -583.0466
+				y: -1896.9551
+				z: -5820
 			}
 			{
-				x: -617.44226
-				y: -1951.7888
-				z: -6070
+				x: -567.8906
+				y: -1888.8643
+				z: -5800
 			}
 			{
-				x: -630
-				y: -2375.8123
-				z: -7400
+				x: -570
+				y: -2157.152
+				z: -6850
 			}
 			{
-				x: -600
-				y: -2141.6226
-				z: -6770
+				x: -647.36505
+				y: -1994.0972
+				z: -6210
 			}
 			{
 				x: -650
-				y: -2390.1587
+				y: -2390.211
 				z: -7420
 			}
 			{
-				x: -580
-				y: -2293.1343
-				z: -7230
-			}
-			{
-				x: -650
-				y: -2197.2297
-				z: -6860
-			}
-			{
-				x: -620
-				y: -2061.1519
-				z: -6500
-			}
-			{
-				x: -580
-				y: -2132.285
-				z: -6770
-			}
-			{
-				x: -628.91064
-				y: -1998.4897
-				z: -6260
-			}
-			{
-				x: -620
-				y: -2303.041
-				z: -7200
-			}
-			{
-				x: -580
-				y: -2050.936
-				z: -6530
-			}
-			{
-				x: -600
-				y: -2393.3413
-				z: -7510
-			}
-			{
-				x: -597.9657
-				y: -1906.4274
-				z: -5840
-			}
-			{
-				x: -620
-				y: -2137.7786
-				z: -6730
-			}
-			{
-				x: -640
-				y: -2254.8896
-				z: -7030
-			}
-			{
-				x: -629.701
-				y: -2011.5345
-				z: -6310
-			}
-			{
-				x: -580
-				y: -2044.6201
-				z: -6510
-			}
-			{
-				x: -609.701
-				y: -2001.4409
-				z: -6310
-			}
-			{
-				x: -650
-				y: -2229.7896
-				z: -6950
-			}
-			{
-				x: -602.83386
-				y: -1953.0103
-				z: -6130
-			}
-			{
-				x: -565.2481
-				y: -1903.5457
-				z: -5920
-			}
-			{
 				x: -590
-				y: -2291.0835
-				z: -7220
-			}
-			{
-				x: -612.83386
-				y: -1960.0579
-				z: -6130
+				y: -2368.1514
+				z: -7440
 			}
 			{
 				x: -580
-				y: -2250.8652
-				z: -7100
-			}
-			{
-				x: -589.9727
-				y: -2004.8391
-				z: -6360
-			}
-			{
-				x: -631.2877
-				y: -1932.6124
-				z: -5900
-			}
-			{
-				x: -625.2481
-				y: -1931.2688
-				z: -5920
-			}
-			{
-				x: -590
-				y: -2336.7026
-				z: -7340
-			}
-			{
-				x: -590
-				y: -2215.9087
-				z: -6990
-			}
-			{
-				x: -593.5576
-				y: -1949.5006
-				z: -6140
-			}
-			{
-				x: -580
-				y: -2157.2695
-				z: -6840
-			}
-			{
-				x: -639.85785
-				y: -2021.3058
-				z: -6330
-			}
-			{
-				x: -640
-				y: -2175.549
-				z: -6810
-			}
-			{
-				x: -650
-				y: -2279.8857
-				z: -7090
-			}
-			{
-				x: -580
-				y: -2271.9204
-				z: -7160
+				y: -2375.4717
+				z: -7480
 			}
 			{
 				x: -620
-				y: -2202.9133
-				z: -6910
-			}
-			{
-				x: -640
-				y: -2136.6838
-				z: -6700
-			}
-			{
-				x: -571.0292
-				y: -1883.2007
-				z: -5740
-			}
-			{
-				x: -580.36865
-				y: -1939.0013
-				z: -6100
-			}
-			{
-				x: -600
-				y: -2029.6975
-				z: -6430
-			}
-			{
-				x: -650
-				y: -2285.2026
-				z: -7110
-			}
-			{
-				x: -600
-				y: -2402.2412
-				z: -7540
-			}
-			{
-				x: -630
-				y: -2401.806
-				z: -7490
-			}
-			{
-				x: -580
-				y: -2384.271
-				z: -7510
-			}
-			{
-				x: -620
-				y: -2392.1943
-				z: -7470
-			}
-			{
-				x: -620
-				y: -2195.9734
+				y: -2194.8357
 				z: -6890
 			}
 			{
-				x: -579.4614
-				y: -1981.7267
+				x: -590
+				y: -2202.0098
+				z: -6950
+			}
+			{
+				x: -629.4614
+				y: -2006.2781
 				z: -6290
 			}
 			{
-				x: -630
-				y: -2250.4624
-				z: -7030
+				x: -635.2241
+				y: -1954.3049
+				z: -6050
+			}
+			{
+				x: -600
+				y: -2050.8252
+				z: -6500
+			}
+			{
+				x: -595.449
+				y: -1960.6492
+				z: -6170
+			}
+			{
+				x: -600
+				y: -2372.854
+				z: -7440
 			}
 			{
 				x: -610
-				y: -2346.7815
-				z: -7340
+				y: -2404.5396
+				z: -7530
 			}
 			{
-				x: -569.78864
-				y: -1985.8525
-				z: -6320
+				x: -621.2877
+				y: -1926.2992
+				z: -5900
+			}
+			{
+				x: -620
+				y: -2406.8474
+				z: -7520
+			}
+			{
+				x: -620
+				y: -2315.604
+				z: -7230
+			}
+			{
+				x: -644.10126
+				y: -1946.958
+				z: -5970
+			}
+			{
+				x: -600
+				y: -2191.9019
+				z: -6910
+			}
+			{
+				x: -610
+				y: -2279.45
+				z: -7140
 			}
 			{
 				x: -590
-				y: -2179.769
-				z: -6890
+				y: -2197.8806
+				z: -6940
+			}
+			{
+				x: -640
+				y: -2207.6533
+				z: -6900
+			}
+			{
+				x: -645.9911
+				y: -1984.411
+				z: -6180
 			}
 			{
 				x: -590
-				y: -2042.8511
-				z: -6490
+				y: -2024.7844
+				z: -6430
 			}
 			{
-				x: -602.5004
-				y: -1901.6208
-				z: -5780
+				x: -610
+				y: -2186.1936
+				z: -6880
 			}
 			{
-				x: -590
-				y: -2244.6133
-				z: -7070
+				x: -607.22815
+				y: -1932.217
+				z: -5990
+			}
+			{
+				x: -605.449
+				y: -1963.9458
+				z: -6170
 			}
 			{
 				x: -630
-				y: -2353.6592
-				z: -7330
+				y: -2207.1484
+				z: -6910
+			}
+			{
+				x: -570
+				y: -2292.1885
+				z: -7230
+			}
+			{
+				x: -590
+				y: -2194.2239
+				z: -6930
+			}
+			{
+				x: -579.9964
+				y: -2005.9846
+				z: -6380
+			}
+			{
+				x: -572.7858
+				y: -1917.9403
+				z: -6030
+			}
+			{
+				x: -620
+				y: -2429.3135
+				z: -7600
+			}
+			{
+				x: -610
+				y: -2078.6904
+				z: -6570
+			}
+			{
+				x: -600
+				y: -2418.982
+				z: -7600
 			}
 			{
 				x: -580
-				y: -2114.638
-				z: -6720
+				y: -2387.1755
+				z: -7520
 			}
 			{
 				x: -630
-				y: -2221.616
-				z: -6950
+				y: -2115.0427
+				z: -6650
+			}
+			{
+				x: -604.8638
+				y: -1962.224
+				z: -6160
+			}
+			{
+				x: -570
+				y: -2221.7627
+				z: -7030
+			}
+			{
+				x: -600
+				y: -2245.9849
+				z: -7060
+			}
+			{
+				x: -630
+				y: -2286.1355
+				z: -7130
+			}
+			{
+				x: -632.83386
+				y: -1971.0391
+				z: -6130
+			}
+			{
+				x: -590
+				y: -2105.184
+				z: -6680
+			}
+			{
+				x: -650
+				y: -2375.888
+				z: -7390
+			}
+			{
+				x: -620
+				y: -2252.7163
+				z: -7050
+			}
+			{
+				x: -580
+				y: -2146.5366
+				z: -6810
+			}
+			{
+				x: -588.66907
+				y: -1970.3435
+				z: -6250
+			}
+			{
+				x: -610
+				y: -2381.113
+				z: -7450
+			}
+			{
+				x: -640
+				y: -2298.8782
+				z: -7150
+			}
+			{
+				x: -569.9999
+				y: -2005.0752
+				z: -6390
+			}
+			{
+				x: -623.29803
+				y: -1928.5269
+				z: -5910
+			}
+			{
+				x: -630
+				y: -2047.8545
+				z: -6440
+			}
+			{
+				x: -619.9471
+				y: -2014.9948
+				z: -6350
+			}
+			{
+				x: -609.85785
+				y: -2006.7849
+				z: -6330
+			}
+			{
+				x: -644.8638
+				y: -1980.5214
+				z: -6160
+			}
+			{
+				x: -649.4457
+				y: -1969.7771
+				z: -6090
+			}
+			{
+				x: -630
+				y: -2078.7808
+				z: -6540
+			}
+			{
+				x: -650
+				y: -2065.0618
+				z: -6470
 			}
 		]
 		type: TREE
@@ -1578,25 +1599,29 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			startX: {
-				class: java.lang.Float
-				value: 0
-			}
 			model: {
 				class: java.lang.String
 				value: tree_1
 			}
-			density: {
+			startX: {
 				class: java.lang.Float
-				value: 40
+				value: 0
 			}
 			endX: {
 				class: java.lang.Float
 				value: 1
 			}
+			density: {
+				class: java.lang.Float
+				value: 40
+			}
 			endZ: {
 				class: java.lang.Float
 				value: 0.8
+			}
+			heightFromGorund: {
+				class: java.lang.Float
+				value: 0
 			}
 			startZ: {
 				class: java.lang.Float
@@ -1609,194 +1634,204 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -483.84082
-				y: -1845.1702
-				z: -5450
+				x: 1.0509033
+				y: -1705.1903
+				z: -4860
 			}
 			{
-				x: -74.00937
-				y: -1505.162
-				z: -4220
+				x: -354.97296
+				y: -1864.791
+				z: -5630
 			}
 			{
-				x: -306.58963
-				y: -1790.0125
-				z: -5150
+				x: -12.91272
+				y: -1593.218
+				z: -4520
 			}
 			{
-				x: -223.55377
-				y: -1747.1924
-				z: -4990
+				x: -323.1179
+				y: -1835.4192
+				z: -5380
 			}
 			{
-				x: -475.43323
-				y: -1870.836
-				z: -5690
+				x: -84.96805
+				y: -1764.11
+				z: -5060
 			}
 			{
-				x: -628.47034
-				y: -1959.1971
-				z: -6080
-			}
-			{
-				x: 42.061768
-				y: -1521.259
-				z: -4280
-			}
-			{
-				x: 140
-				y: -1450
-				z: -4000
-			}
-			{
-				x: -155.00452
-				y: -1703.9843
-				z: -4850
-			}
-			{
-				x: -82.772064
-				y: -1558.7568
-				z: -4410
-			}
-			{
-				x: -659.9999
-				y: -2044.5107
-				z: -6390
-			}
-			{
-				x: -552.64636
-				y: -1891.8646
-				z: -5860
-			}
-			{
-				x: -212.61096
-				y: -1783.0382
-				z: -5120
-			}
-			{
-				x: -314.99548
-				y: -1856.6726
-				z: -5550
-			}
-			{
-				x: 96.94733
-				y: -1499.9465
-				z: -4200
-			}
-			{
-				x: -10.554352
-				y: -1529.5931
-				z: -4310
-			}
-			{
-				x: -543.9822
-				y: -1878.1047
-				z: -5750
-			}
-			{
-				x: -417.06555
-				y: -1854.5403
-				z: -5530
-			}
-			{
-				x: -469.78864
-				y: -1979.1757
+				x: -529.78864
+				y: -1976.1929
 				z: -6320
 			}
 			{
-				x: -64.00937
-				y: -1505.162
-				z: -4220
+				x: -406.5639
+				y: -1848.7426
+				z: -5480
 			}
 			{
-				x: -484.95496
-				y: -1873.9805
-				z: -5720
+				x: 77.96564
+				y: -1606.2532
+				z: -4560
 			}
 			{
-				x: 7.7449646
-				y: -1494.7977
+				x: -11.912231
+				y: -1492.2574
+				z: -4170
+			}
+			{
+				x: -314.05664
+				y: -1808.2776
+				z: -5230
+			}
+			{
+				x: -123.436066
+				y: -1725.7844
+				z: -4920
+			}
+			{
+				x: -659.4457
+				y: -1972.752
+				z: -6090
+			}
+			{
+				x: -456.5639
+				y: -1848.8335
+				z: -5480
+			}
+			{
+				x: -86.95352
+				y: -1612.8518
+				z: -4580
+			}
+			{
+				x: 87.744965
+				y: -1494.771
 				z: -4180
 			}
 			{
-				x: -39.664124
-				y: -1602.9574
-				z: -4550
+				x: -590
+				y: -2016.0588
+				z: -6400
 			}
 			{
-				x: -472.06207
-				y: -1932.6545
-				z: -6120
+				x: -475.22473
+				y: -1881.6865
+				z: -5790
 			}
 			{
-				x: -399.5835
-				y: -1830.7795
-				z: -5350
+				x: -308.89832
+				y: -1858.595
+				z: -5560
 			}
 			{
-				x: -454.0741
-				y: -1861.823
-				z: -5600
+				x: -11.52948
+				y: -1532.4021
+				z: -4320
 			}
 			{
-				x: -268.72565
-				y: -1775.2563
+				x: -492.78583
+				y: -1915.7329
+				z: -6030
+			}
+			{
+				x: 52.8338
+				y: -1516.0366
+				z: -4270
+			}
+			{
+				x: -266.58963
+				y: -1789.1067
+				z: -5150
+			}
+			{
+				x: -357.06555
+				y: -1853.9321
+				z: -5530
+			}
+			{
+				x: -99.502014
+				y: -1616.1494
+				z: -4590
+			}
+			{
+				x: -103.42474
+				y: -1693.3425
+				z: -4820
+			}
+			{
+				x: -20.211243
+				y: -1469.6659
+				z: -4080
+			}
+			{
+				x: -342.152
+				y: -1867.3207
+				z: -5680
+			}
+			{
+				x: -352.0296
+				y: -1820.3782
+				z: -5290
+			}
+			{
+				x: 38.96817
+				y: -1574.102
+				z: -4460
+			}
+			{
+				x: -188.72565
+				y: -1775.2583
 				z: -5090
 			}
 			{
-				x: -358.11444
-				y: -1846.3959
-				z: -5460
+				x: -411.27438
+				y: -1823.7395
+				z: -5310
 			}
 			{
-				x: -434.11584
-				y: -1832.3442
-				z: -5360
+				x: 21.996399
+				y: -1670.1562
+				z: -4750
 			}
 			{
-				x: -121.18164
-				y: -1663.2559
-				z: -4730
+				x: -490.73755
+				y: -1849.7839
+				z: -5490
 			}
 			{
-				x: -134.56708
-				y: -1666.6547
-				z: -4740
+				x: -270.73752
+				y: -1847.4626
+				z: -5490
 			}
 			{
-				x: -173.34155
-				y: -1777.9062
-				z: -5100
+				x: 129.30511
+				y: -1475.8784
+				z: -4120
 			}
 			{
-				x: -121.10162
-				y: -1700.0421
-				z: -4840
+				x: -459.701
+				y: -1974.5374
+				z: -6310
 			}
 			{
-				x: -101.98016
-				y: -1642.9121
-				z: -4670
+				x: 101.2879
+				y: -1586.6821
+				z: -4500
 			}
 			{
-				x: -435.9911
-				y: -1945.3071
-				z: -6180
+				x: 48.661133
+				y: -1653.1361
+				z: -4700
 			}
 			{
-				x: -196.65845
-				y: -1822.1777
-				z: -5300
+				x: -578.0878
+				y: -1962.2993
+				z: -6230
 			}
 			{
-				x: -645.2241
-				y: -1957.7644
-				z: -6050
-			}
-			{
-				x: -237.97162
-				y: -1750.113
-				z: -5000
+				x: -528.0199
+				y: -1873.3689
+				z: -5730
 			}
 		]
 		type: TREE
@@ -1804,21 +1839,21 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			model: {
-				class: java.lang.String
-				value: star
-			}
 			startX: {
 				class: java.lang.Float
 				value: 0.5
 			}
-			endX: {
-				class: java.lang.Float
-				value: 0.6
+			model: {
+				class: java.lang.String
+				value: star
 			}
 			density: {
 				class: java.lang.Float
 				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.6
 			}
 			endZ: {
 				class: java.lang.Float
@@ -1840,8 +1875,8 @@ obstacles: [
 		generatedPositions: [
 			{
 				x: -60
-				y: -408.2011
-				z: -800
+				y: -422.92935
+				z: -850
 			}
 		]
 		availableModels: [
@@ -1852,21 +1887,21 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			model: {
-				class: java.lang.String
-				value: star
-			}
 			startX: {
 				class: java.lang.Float
 				value: 0.6
 			}
-			endX: {
-				class: java.lang.Float
-				value: 0.7
+			model: {
+				class: java.lang.String
+				value: star
 			}
 			density: {
 				class: java.lang.Float
 				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.7
 			}
 			endZ: {
 				class: java.lang.Float
@@ -1887,9 +1922,9 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: -242.64539
-				y: -976.29144
-				z: -2470
+				x: -227.25078
+				y: -976.4233
+				z: -2480
 			}
 		]
 		availableModels: [
@@ -1900,21 +1935,21 @@ obstacles: [
 	{
 		params: {
 			class: java.util.HashMap
-			model: {
-				class: java.lang.String
-				value: star
-			}
 			startX: {
 				class: java.lang.Float
 				value: 0.8
 			}
-			endX: {
-				class: java.lang.Float
-				value: 0.9
+			model: {
+				class: java.lang.String
+				value: star
 			}
 			density: {
 				class: java.lang.Float
 				value: 1
+			}
+			endX: {
+				class: java.lang.Float
+				value: 0.9
 			}
 			endZ: {
 				class: java.lang.Float
@@ -1935,15 +1970,6017 @@ obstacles: [
 		}
 		generatedPositions: [
 			{
-				x: 117.22797
-				y: -1558.7568
-				z: -4410
+				x: 107.744965
+				y: -1494.6842
+				z: -4180
 			}
 		]
 		availableModels: [
 			star
 		]
 		type: STAR
+	}
+]
+hills: [
+	{
+		x: 269.8556
+		z: -1281.6733
+		radius: 41.812645
+		height: 5.4878283
+	}
+	{
+		x: 3.1170845
+		z: -6433.161
+		radius: 22.48372
+		height: 0.49941194
+	}
+	{
+		x: 125.893875
+		z: -3820.5242
+		radius: 42.090942
+		height: 2.7721658
+	}
+	{
+		x: 49.36546
+		z: -864.1283
+		radius: 30.60841
+		height: -0.4116032
+	}
+	{
+		x: 282.45273
+		z: -5229.6973
+		radius: 0.3538885
+		height: 0.044954516
+	}
+	{
+		x: 203.63303
+		z: -4649.2666
+		radius: 23.154102
+		height: 2.1048021
+	}
+	{
+		x: 204.95473
+		z: -389.12338
+		radius: 15.025406
+		height: 0.69426906
+	}
+	{
+		x: 172.27408
+		z: -4253.633
+		radius: 15.627236
+		height: 0.75495136
+	}
+	{
+		x: 199.62411
+		z: -7896.7007
+		radius: 16.591415
+		height: 1.194114
+	}
+	{
+		x: 278.88663
+		z: -2345.3918
+		radius: 36.238594
+		height: 5.197388
+	}
+	{
+		x: 58.57528
+		z: -5023.074
+		radius: 8.163851
+		height: 0.52467495
+	}
+	{
+		x: 227.54968
+		z: -5192.246
+		radius: 47.706627
+		height: 5.2256002
+	}
+	{
+		x: 50.866673
+		z: -6620.0273
+		radius: 33.415894
+		height: -1.9260693
+	}
+	{
+		x: 165.73701
+		z: -402.10733
+		radius: 40.279667
+		height: 2.730613
+	}
+	{
+		x: 135.69246
+		z: -5263.745
+		radius: 37.70871
+		height: -2.7244875
+	}
+	{
+		x: 260.57944
+		z: -3289.2532
+		radius: 18.047321
+		height: -1.2909505
+	}
+	{
+		x: 248.88327
+		z: -3914.1772
+		radius: 0.73007965
+		height: 5.354583E-4
+	}
+	{
+		x: 177.14716
+		z: -4147.222
+		radius: 13.111334
+		height: -1.0243315
+	}
+	{
+		x: 88.888306
+		z: -6371.7764
+		radius: 31.465117
+		height: 3.676648
+	}
+	{
+		x: 222.4244
+		z: -2709.6987
+		radius: 24.6863
+		height: -1.8821832
+	}
+	{
+		x: 203.4104
+		z: -812.84546
+		radius: 28.819502
+		height: 0.7745588
+	}
+	{
+		x: 293.64804
+		z: -6080.6353
+		radius: 42.700485
+		height: 5.453435
+	}
+	{
+		x: 252.86609
+		z: -5684.7446
+		radius: 23.715475
+		height: 3.1221068
+	}
+	{
+		x: 44.682114
+		z: -4414.863
+		radius: 27.967054
+		height: -2.1095467
+	}
+	{
+		x: 1.8425359
+		z: -1242.2184
+		radius: 30.980917
+		height: 0.9402368
+	}
+	{
+		x: 159.09996
+		z: -4630.44
+		radius: 33.4961
+		height: -1.468489
+	}
+	{
+		x: 264.72305
+		z: -4006.079
+		radius: 1.8518498
+		height: -0.02124697
+	}
+	{
+		x: 193.64627
+		z: -4433.9897
+		radius: 14.017673
+		height: -0.72201794
+	}
+	{
+		x: 206.65335
+		z: -7425.5103
+		radius: 30.40862
+		height: 0.8980465
+	}
+	{
+		x: 230.75032
+		z: -6940.2764
+		radius: 33.286232
+		height: -2.1048307
+	}
+	{
+		x: 76.02009
+		z: -2025.228
+		radius: 29.766161
+		height: -2.3637698
+	}
+	{
+		x: 153.76299
+		z: -2167.2668
+		radius: 41.236748
+		height: 5.4502735
+	}
+	{
+		x: 219.61388
+		z: -2318.7573
+		radius: 6.338536
+		height: -0.42974812
+	}
+	{
+		x: 33.588562
+		z: -3687.936
+		radius: 5.5628185
+		height: 0.15554371
+	}
+	{
+		x: 206.64838
+		z: -1769.0735
+		radius: 22.99819
+		height: 0.16391158
+	}
+	{
+		x: 90.3842
+		z: -6720.054
+		radius: 44.787086
+		height: -3.1461828
+	}
+	{
+		x: 162.80754
+		z: -3077.8552
+		radius: 4.4501348
+		height: 0.4121411
+	}
+	{
+		x: 268.99792
+		z: -7935.2163
+		radius: 22.394289
+		height: 2.295268
+	}
+	{
+		x: 190.49281
+		z: -1084.5996
+		radius: 0.6414143
+		height: 0.049454402
+	}
+	{
+		x: 141.81786
+		z: -5268.3604
+		radius: 24.097229
+		height: 3.4722338
+	}
+	{
+		x: 126.44206
+		z: -5556.854
+		radius: 36.526176
+		height: 4.753315
+	}
+	{
+		x: 227.70403
+		z: -2009.0208
+		radius: 2.80601
+		height: 0.28942722
+	}
+	{
+		x: 162.89233
+		z: -1152.8063
+		radius: 39.00663
+		height: 0.0642004
+	}
+	{
+		x: 190.67488
+		z: -1455.5735
+		radius: 38.370804
+		height: 3.2895129
+	}
+	{
+		x: 233.45815
+		z: -7837.4956
+		radius: 44.370235
+		height: 1.5252204
+	}
+	{
+		x: 257.0203
+		z: -4413.716
+		radius: 21.668526
+		height: -0.35259628
+	}
+	{
+		x: 39.89715
+		z: -7033.8774
+		radius: 2.0434031
+		height: 0.062509775
+	}
+	{
+		x: 264.5131
+		z: -7820.439
+		radius: 35.10366
+		height: 3.3221889
+	}
+	{
+		x: 170.93521
+		z: -4790.009
+		radius: 2.9820597
+		height: -0.02428843
+	}
+	{
+		x: 132.39049
+		z: -4774.733
+		radius: 14.093612
+		height: 0.1457535
+	}
+	{
+		x: 39.322735
+		z: -1243.5942
+		radius: 23.519337
+		height: 3.2461796
+	}
+	{
+		x: 215.7781
+		z: -4256.2866
+		radius: 36.608845
+		height: 4.0182514
+	}
+	{
+		x: 138.29387
+		z: -5665.146
+		radius: 37.990746
+		height: -1.1703092
+	}
+	{
+		x: 83.22769
+		z: -2813.4211
+		radius: 0.33815134
+		height: -0.024374457
+	}
+	{
+		x: 293.6009
+		z: -6361.004
+		radius: 15.957135
+		height: 1.6252162
+	}
+	{
+		x: 31.040894
+		z: -2501.5125
+		radius: 9.549368
+		height: -0.7515409
+	}
+	{
+		x: 62.29526
+		z: -6717.4766
+		radius: 32.34571
+		height: 2.8407257
+	}
+	{
+		x: 123.05066
+		z: -3353.1536
+		radius: 6.2158127
+		height: 0.6031128
+	}
+	{
+		x: 4.4274836
+		z: -667.3346
+		radius: 31.329493
+		height: -0.8644388
+	}
+	{
+		x: 19.532394
+		z: -4661.3037
+		radius: 42.4788
+		height: 3.0071173
+	}
+	{
+		x: 228.83743
+		z: -2859.9282
+		radius: 47.265472
+		height: 3.0825276
+	}
+	{
+		x: 233.91661
+		z: -3356.6768
+		radius: 4.0165434
+		height: 0.46579355
+	}
+	{
+		x: 189.20723
+		z: -2816.1602
+		radius: 48.51179
+		height: 6.0679493
+	}
+	{
+		x: 130.9749
+		z: -3760.6182
+		radius: 6.389679
+		height: 0.40866828
+	}
+	{
+		x: 181.54837
+		z: -2349.5767
+		radius: 32.44428
+		height: 4.466091
+	}
+	{
+		x: 55.15123
+		z: -6994.7188
+		radius: 48.93388
+		height: 5.0459356
+	}
+	{
+		x: 269.29517
+		z: -1534.8187
+		radius: 12.492615
+		height: 1.1486275
+	}
+	{
+		x: 52.71037
+		z: -6328.4155
+		radius: 23.269691
+		height: -0.20192909
+	}
+	{
+		x: 237.17607
+		z: -504.6879
+		radius: 0.5164983
+		height: 0.06688619
+	}
+	{
+		x: 26.375307
+		z: -745.83795
+		radius: 36.00006
+		height: -2.71554
+	}
+	{
+		x: 50.035202
+		z: -6357.076
+		radius: 0.34205875
+		height: -0.011140626
+	}
+	{
+		x: 236.1256
+		z: -1013.13184
+		radius: 17.665741
+		height: -1.3849314
+	}
+	{
+		x: 67.775444
+		z: -4453.008
+		radius: 40.778873
+		height: 0.16346717
+	}
+	{
+		x: 234.8284
+		z: -4527.5312
+		radius: 2.5289776
+		height: -0.17188162
+	}
+	{
+		x: 42.595413
+		z: -7387.0444
+		radius: 38.93788
+		height: 5.179819
+	}
+	{
+		x: 102.37424
+		z: -5229.4106
+		radius: 26.255754
+		height: -1.4996716
+	}
+	{
+		x: 199.692
+		z: -911.3044
+		radius: 47.170536
+		height: -2.7991982
+	}
+	{
+		x: 116.98926
+		z: -2858.5835
+		radius: 1.0668923
+		height: 0.11312114
+	}
+	{
+		x: 277.60022
+		z: -94.34519
+		radius: 49.449448
+		height: 5.241207
+	}
+	{
+		x: 177.3958
+		z: -1836.0807
+		radius: 40.42835
+		height: 1.8815732
+	}
+	{
+		x: 279.3426
+		z: -6996.158
+		radius: 35.510887
+		height: 1.9174166
+	}
+	{
+		x: 64.49328
+		z: -52.67407
+		radius: 17.851015
+		height: 0.34470224
+	}
+	{
+		x: 160.5595
+		z: -7140.528
+		radius: 43.57947
+		height: 3.3592644
+	}
+	{
+		x: 206.23131
+		z: -1845.3843
+		radius: 6.870298
+		height: -0.21312714
+	}
+	{
+		x: 255.79285
+		z: -66.00349
+		radius: 24.995249
+		height: 2.474934
+	}
+	{
+		x: 284.34662
+		z: -3443.2288
+		radius: 11.775865
+		height: -0.40491074
+	}
+	{
+		x: 119.094505
+		z: -5236.735
+		radius: 46.56362
+		height: -1.7537273
+	}
+	{
+		x: 296.6361
+		z: -5163.4565
+		radius: 11.161788
+		height: 0.29127967
+	}
+	{
+		x: 130.13162
+		z: -2594.4197
+		radius: 8.948338
+		height: -0.28577644
+	}
+	{
+		x: 63.437435
+		z: -2639.523
+		radius: 48.867455
+		height: 7.2643576
+	}
+	{
+		x: 91.9607
+		z: -1032.617
+		radius: 21.927877
+		height: -0.13510919
+	}
+	{
+		x: 141.98938
+		z: -7362.052
+		radius: 19.379528
+		height: 1.2704946
+	}
+	{
+		x: 221.64218
+		z: -6074.6714
+		radius: 39.83557
+		height: -2.2208323
+	}
+	{
+		x: 287.34372
+		z: -4814.0366
+		radius: 7.2652845
+		height: 0.8455564
+	}
+	{
+		x: 109.867485
+		z: -4036.5005
+		radius: 23.00374
+		height: -0.5856762
+	}
+	{
+		x: 73.50046
+		z: -481.52695
+		radius: 2.7076378
+		height: 0.2757119
+	}
+	{
+		x: 0.7704252
+		z: -1955.4998
+		radius: 3.5321686
+		height: 0.48179737
+	}
+	{
+		x: 63.438293
+		z: -2021.0574
+		radius: 27.71215
+		height: -1.7860738
+	}
+	{
+		x: 118.094765
+		z: -4566.8027
+		radius: 46.201244
+		height: 3.3306692
+	}
+	{
+		x: 191.71228
+		z: -3865.063
+		radius: 20.056366
+		height: -0.22124565
+	}
+	{
+		x: 138.8899
+		z: -3608.1648
+		radius: 7.850056
+		height: 1.0247021
+	}
+	{
+		x: 198.29045
+		z: -2546.5325
+		radius: 34.55176
+		height: 0.052180767
+	}
+	{
+		x: 90.90639
+		z: -734.69867
+		radius: 11.039771
+		height: 0.5154735
+	}
+	{
+		x: 127.30144
+		z: -1024.1495
+		radius: 33.68862
+		height: 2.905101
+	}
+	{
+		x: 124.86356
+		z: -7324.7344
+		radius: 10.322606
+		height: 1.2679806
+	}
+	{
+		x: 179.36464
+		z: -2289.1743
+		radius: 2.234175
+		height: 0.13031413
+	}
+	{
+		x: 287.76047
+		z: -6458.0347
+		radius: 41.93669
+		height: 0.7540717
+	}
+	{
+		x: 181.1753
+		z: -2535.3108
+		radius: 32.85429
+		height: 1.3606031
+	}
+	{
+		x: 298.40274
+		z: -347.62613
+		radius: 10.247177
+		height: -0.3157165
+	}
+	{
+		x: 211.01587
+		z: -4172.8135
+		radius: 42.329037
+		height: 3.137908
+	}
+	{
+		x: 1.3166323
+		z: -4506.4966
+		radius: 26.753822
+		height: 3.3690603
+	}
+	{
+		x: 93.86589
+		z: -6968.0835
+		radius: 40.43242
+		height: -2.1443582
+	}
+	{
+		x: 50.222614
+		z: -3930.3994
+		radius: 29.985466
+		height: -1.6127307
+	}
+	{
+		x: 54.78211
+		z: -1590.0012
+		radius: 36.046646
+		height: 3.4878628
+	}
+	{
+		x: 47.24002
+		z: -578.0269
+		radius: 27.101654
+		height: 3.2729897
+	}
+	{
+		x: 94.220695
+		z: -7844.2476
+		radius: 27.581152
+		height: 2.0386002
+	}
+	{
+		x: 138.99481
+		z: -3429.7944
+		radius: 10.52168
+		height: 1.2502854
+	}
+	{
+		x: 223.97353
+		z: -1876.864
+		radius: 37.26681
+		height: 4.6461353
+	}
+	{
+		x: 145.80232
+		z: -6406.488
+		radius: 15.401467
+		height: 2.2631571
+	}
+	{
+		x: 177.39032
+		z: -2628.3015
+		radius: 11.395517
+		height: -0.13074571
+	}
+	{
+		x: 275.09677
+		z: -1429.0248
+		radius: 46.278503
+		height: 1.8200433
+	}
+	{
+		x: 282.55856
+		z: -5819.2065
+		radius: 21.075552
+		height: 2.279015
+	}
+	{
+		x: 45.279522
+		z: -3900.579
+		radius: 13.705187
+		height: 1.0428447
+	}
+	{
+		x: 162.11307
+		z: -7749.1953
+		radius: 10.57301
+		height: -0.7743234
+	}
+	{
+		x: 221.15797
+		z: -5892.318
+		radius: 34.1909
+		height: 1.470357
+	}
+	{
+		x: 98.347
+		z: -3189.866
+		radius: 2.809575
+		height: -0.09641516
+	}
+	{
+		x: 37.146683
+		z: -6314.0034
+		radius: 9.273089
+		height: 0.31549144
+	}
+	{
+		x: 77.296364
+		z: -3653.3035
+		radius: 34.087
+		height: -1.99423
+	}
+	{
+		x: 59.40315
+		z: -5350.706
+		radius: 12.037711
+		height: 1.3876785
+	}
+	{
+		x: 0.46970472
+		z: -4317.3145
+		radius: 2.6085901
+		height: -0.10212744
+	}
+	{
+		x: 113.069466
+		z: -4446.883
+		radius: 21.909315
+		height: -1.3856738
+	}
+	{
+		x: 127.89499
+		z: -5888.6587
+		radius: 27.867952
+		height: -2.020462
+	}
+	{
+		x: 75.79228
+		z: -7119.067
+		radius: 11.031083
+		height: 1.3827591
+	}
+	{
+		x: 291.15543
+		z: -7685.513
+		radius: 30.475431
+		height: -1.7013087
+	}
+	{
+		x: 13.692598
+		z: -1878.4237
+		radius: 48.055187
+		height: -0.45412683
+	}
+	{
+		x: 90.086296
+		z: -2220.4275
+		radius: 4.4924245
+		height: -0.22810493
+	}
+	{
+		x: 110.957436
+		z: -6544.416
+		radius: 47.66368
+		height: -3.2700782
+	}
+	{
+		x: 261.8044
+		z: -3565.016
+		radius: 16.843983
+		height: 1.7767848
+	}
+	{
+		x: 19.225206
+		z: -7230.835
+		radius: 6.6403484
+		height: -0.19266358
+	}
+	{
+		x: 85.74228
+		z: -7777.6387
+		radius: 30.879936
+		height: 2.0486286
+	}
+	{
+		x: 27.936594
+		z: -3285.4458
+		radius: 29.813734
+		height: -2.0202389
+	}
+	{
+		x: 163.35886
+		z: -1675.3224
+		radius: 13.654928
+		height: 1.7949089
+	}
+	{
+		x: 231.823
+		z: -3464.4922
+		radius: 11.691714
+		height: -0.8646905
+	}
+	{
+		x: 186.19846
+		z: -2231.1646
+		radius: 48.9976
+		height: 0.100467205
+	}
+	{
+		x: 246.70424
+		z: -4623.319
+		radius: 2.1079023
+		height: 0.23317266
+	}
+	{
+		x: 280.97028
+		z: -6878.482
+		radius: 40.93931
+		height: 4.2329865
+	}
+	{
+		x: 299.7674
+		z: -2204.3535
+		radius: 46.700222
+		height: 5.520784
+	}
+	{
+		x: 195.31966
+		z: -1002.94446
+		radius: 4.572604
+		height: 0.6821004
+	}
+	{
+		x: 95.49891
+		z: -3803.7063
+		radius: 5.5419245
+		height: -0.09470591
+	}
+	{
+		x: 262.96375
+		z: -2903.9465
+		radius: 3.9098887
+		height: 0.11898744
+	}
+	{
+		x: 33.441402
+		z: -3097.6274
+		radius: 15.74541
+		height: 1.4275472
+	}
+	{
+		x: 61.862732
+		z: -506.46866
+		radius: 8.812462
+		height: 1.0487385
+	}
+	{
+		x: 128.94757
+		z: -1410.0817
+		radius: 26.359114
+		height: 0.8016727
+	}
+	{
+		x: 54.09904
+		z: -4104.6753
+		radius: 5.560339
+		height: -0.15126011
+	}
+	{
+		x: 163.10251
+		z: -6202.6865
+		radius: 46.377808
+		height: -1.7460259
+	}
+	{
+		x: 171.13608
+		z: -1418.5033
+		radius: 8.133121
+		height: 0.06487316
+	}
+	{
+		x: 162.98688
+		z: -1768.2595
+		radius: 9.186633
+		height: 1.1679974
+	}
+	{
+		x: 183.12854
+		z: -3244.4868
+		radius: 29.772234
+		height: -1.4731693
+	}
+	{
+		x: 88.452324
+		z: -1409.235
+		radius: 19.259123
+		height: -1.4010928
+	}
+	{
+		x: 165.95604
+		z: -1982.0709
+		radius: 36.89486
+		height: 4.6866956
+	}
+	{
+		x: 76.58133
+		z: -4382.188
+		radius: 9.429614
+		height: 1.3121061
+	}
+	{
+		x: 54.652122
+		z: -3316.664
+		radius: 19.929855
+		height: -0.35202646
+	}
+	{
+		x: 270.00323
+		z: -2889.7249
+		radius: 49.56026
+		height: 7.0641594
+	}
+	{
+		x: 46.900253
+		z: -5340.6777
+		radius: 28.145992
+		height: -0.033266068
+	}
+	{
+		x: 230.23828
+		z: -2400.9883
+		radius: 9.923065
+		height: 0.49982142
+	}
+	{
+		x: 95.26895
+		z: -1393.8059
+		radius: 28.042814
+		height: 3.9229476
+	}
+	{
+		x: 112.24177
+		z: -4582.021
+		radius: 45.11714
+		height: -1.316169
+	}
+	{
+		x: 101.857765
+		z: -4903.792
+		radius: 7.3744125
+		height: -0.31218916
+	}
+	{
+		x: 151.31982
+		z: -117.2482
+		radius: 26.841602
+		height: -1.073774
+	}
+	{
+		x: 104.02601
+		z: -508.93283
+		radius: 9.376482
+		height: 0.3956247
+	}
+	{
+		x: 188.58902
+		z: -4703.3184
+		radius: 16.344334
+		height: 2.3116395
+	}
+	{
+		x: 114.87612
+		z: -7743.5737
+		radius: 44.266907
+		height: -2.3334804
+	}
+	{
+		x: 136.15152
+		z: -5496.56
+		radius: 29.866991
+		height: 1.9818652
+	}
+	{
+		x: 257.16364
+		z: -5567.8394
+		radius: 37.590237
+		height: -0.9260671
+	}
+	{
+		x: 258.1577
+		z: -7295.3047
+		radius: 12.906514
+		height: 1.6215318
+	}
+	{
+		x: 104.30527
+		z: -4022.8528
+		radius: 37.47633
+		height: 0.048324823
+	}
+	{
+		x: 218.92812
+		z: -1738.3146
+		radius: 1.6134992
+		height: 0.10058297
+	}
+	{
+		x: 117.15778
+		z: -7292.697
+		radius: 15.383514
+		height: 1.1176264
+	}
+	{
+		x: 124.30647
+		z: -4800.5825
+		radius: 12.147711
+		height: 0.4979592
+	}
+	{
+		x: 40.238342
+		z: -6454.3564
+		radius: 7.3965483
+		height: -0.0631724
+	}
+	{
+		x: 257.41602
+		z: -5867.7393
+		radius: 11.311064
+		height: 1.4401753
+	}
+	{
+		x: 296.05942
+		z: -6196.9087
+		radius: 5.64969
+		height: -0.17110899
+	}
+	{
+		x: 184.99059
+		z: -1670.329
+		radius: 34.27839
+		height: 2.3875885
+	}
+	{
+		x: 191.24933
+		z: -3791.1902
+		radius: 21.945232
+		height: 3.0460105
+	}
+	{
+		x: 85.45263
+		z: -2359.192
+		radius: 27.746275
+		height: -1.3691717
+	}
+	{
+		x: 23.130539
+		z: -591.21277
+		radius: 8.13775
+		height: -0.24261522
+	}
+	{
+		x: 24.909912
+		z: -3003.216
+		radius: 9.320333
+		height: 0.33291304
+	}
+	{
+		x: 150.42769
+		z: -348.56195
+		radius: 30.354435
+		height: 3.107193
+	}
+	{
+		x: 182.24272
+		z: -3790.6995
+		radius: 46.461155
+		height: 1.9331427
+	}
+	{
+		x: 66.77708
+		z: -6621.0347
+		radius: 6.621784
+		height: -0.48661616
+	}
+	{
+		x: 299.45364
+		z: -4215.5747
+		radius: 20.809338
+		height: -1.1110476
+	}
+	{
+		x: 290.70963
+		z: -1556.7656
+		radius: 29.968988
+		height: -0.5742004
+	}
+	{
+		x: 8.451509
+		z: -2529.7505
+		radius: 6.209783
+		height: -0.49108502
+	}
+	{
+		x: 60.778915
+		z: -2335.0923
+		radius: 11.578306
+		height: 1.05424
+	}
+	{
+		x: 260.44174
+		z: -1742.8115
+		radius: 1.2557278
+		height: 0.00433442
+	}
+	{
+		x: 99.50655
+		z: -5545.4067
+		radius: 41.052742
+		height: 5.005669
+	}
+	{
+		x: 159.09464
+		z: -1450.3359
+		radius: 19.672684
+		height: -0.41712046
+	}
+	{
+		x: 284.8165
+		z: -7785.2485
+		radius: 23.37136
+		height: 3.329624
+	}
+	{
+		x: 73.663574
+		z: -4772.074
+		radius: 4.362678
+		height: -0.15045704
+	}
+	{
+		x: 142.63017
+		z: -4758.8813
+		radius: 14.602545
+		height: 1.2338865
+	}
+	{
+		x: 83.22516
+		z: -7681.2397
+		radius: 43.42908
+		height: -0.67326474
+	}
+	{
+		x: 249.2945
+		z: -1157.6149
+		radius: 40.94546
+		height: -1.9504731
+	}
+	{
+		x: 278.213
+		z: -4006.1675
+		radius: 29.002344
+		height: 1.5553496
+	}
+	{
+		x: 7.514495
+		z: -1603.1053
+		radius: 48.17013
+		height: 4.2613482
+	}
+	{
+		x: 220.41718
+		z: -1385.5795
+		radius: 12.186931
+		height: 1.3696461
+	}
+	{
+		x: 234.46231
+		z: -2934.9048
+		radius: 41.026337
+		height: 5.63053
+	}
+	{
+		x: 37.620872
+		z: -5458.7197
+		radius: 19.949812
+		height: 1.15062
+	}
+	{
+		x: 175.73485
+		z: -2123.491
+		radius: 34.69174
+		height: 0.26093197
+	}
+	{
+		x: 4.04665
+		z: -3571.5986
+		radius: 12.270768
+		height: -0.0055146217
+	}
+	{
+		x: 233.83138
+		z: -4090.0388
+		radius: 2.8294766
+		height: -0.054673135
+	}
+	{
+		x: 32.783802
+		z: -5280.6
+		radius: 20.374865
+		height: -0.34514928
+	}
+	{
+		x: 174.82358
+		z: -7714.178
+		radius: 19.325584
+		height: -1.3608549
+	}
+	{
+		x: 281.36874
+		z: -6934.706
+		radius: 19.367386
+		height: 1.7415235
+	}
+	{
+		x: 51.88939
+		z: -6310.9946
+		radius: 3.2765195
+		height: -0.09564875
+	}
+	{
+		x: 246.69034
+		z: -5617.5815
+		radius: 1.0915457
+		height: 0.055917382
+	}
+	{
+		x: 59.3828
+		z: -858.51117
+		radius: 39.297142
+		height: 3.9306672
+	}
+	{
+		x: 100.39227
+		z: -5730.7695
+		radius: 25.5293
+		height: 2.2955961
+	}
+	{
+		x: 106.11148
+		z: -2256.9148
+		radius: 7.7194223
+		height: 0.75710887
+	}
+	{
+		x: 290.94373
+		z: -3499.2588
+		radius: 41.565548
+		height: -2.527111
+	}
+	{
+		x: 271.4939
+		z: -900.76733
+		radius: 21.752224
+		height: 2.8863895
+	}
+	{
+		x: 13.551055
+		z: -680.65344
+		radius: 30.43606
+		height: -1.8066995
+	}
+	{
+		x: 83.26816
+		z: -3845.4568
+		radius: 31.172451
+		height: 0.25761485
+	}
+	{
+		x: 24.081573
+		z: -4759.215
+		radius: 37.67942
+		height: 5.016691
+	}
+	{
+		x: 30.423986
+		z: -1849.136
+		radius: 14.617886
+		height: 1.9543525
+	}
+	{
+		x: 48.17192
+		z: -6906.0117
+		radius: 21.913332
+		height: -0.623855
+	}
+	{
+		x: 100.030174
+		z: -2571.399
+		radius: 45.052006
+		height: -1.0918081
+	}
+	{
+		x: 11.692452
+		z: -2986.4353
+		radius: 11.255556
+		height: -0.10215026
+	}
+	{
+		x: 101.62911
+		z: -4209.9473
+		radius: 25.471142
+		height: -1.4531882
+	}
+	{
+		x: 293.7398
+		z: -4896.329
+		radius: 20.70983
+		height: 2.4981704
+	}
+	{
+		x: 17.870249
+		z: -1856.4921
+		radius: 4.4242234
+		height: 0.23084646
+	}
+	{
+		x: 178.32936
+		z: -7507.9766
+		radius: 46.33704
+		height: -0.5211246
+	}
+	{
+		x: 195.05455
+		z: -853.14856
+		radius: 43.415485
+		height: 2.5402677
+	}
+	{
+		x: 55.95961
+		z: -6507.211
+		radius: 14.532033
+		height: -0.78056574
+	}
+	{
+		x: 62.26168
+		z: -5430.564
+		radius: 20.760412
+		height: 0.72937655
+	}
+	{
+		x: 101.22008
+		z: -4402.879
+		radius: 27.226269
+		height: -0.35976708
+	}
+	{
+		x: 142.73178
+		z: -909.0369
+		radius: 18.965233
+		height: -0.21440637
+	}
+	{
+		x: 227.61497
+		z: -7989.9253
+		radius: 6.3367443
+		height: 0.034577787
+	}
+	{
+		x: 196.17383
+		z: -5743.8735
+		radius: 5.200304
+		height: 0.74060845
+	}
+	{
+		x: 195.77426
+		z: -6547.3354
+		radius: 3.281404
+		height: 0.22571588
+	}
+	{
+		x: 205.6724
+		z: -7696.234
+		radius: 26.93767
+		height: 3.4193573
+	}
+	{
+		x: 26.223936
+		z: -2052.194
+		radius: 1.8814255
+		height: 0.21347809
+	}
+	{
+		x: 197.86452
+		z: -410.7128
+		radius: 7.32311
+		height: -0.17315358
+	}
+	{
+		x: 42.88766
+		z: -4691.1064
+		radius: 5.470629
+		height: -0.37855032
+	}
+	{
+		x: 60.058933
+		z: -2680.9148
+		radius: 37.35302
+		height: 5.0219936
+	}
+	{
+		x: 248.49138
+		z: -4950.2324
+		radius: 11.532376
+		height: 1.3877676
+	}
+	{
+		x: 292.96915
+		z: -684.26135
+		radius: 24.42638
+		height: 0.81784487
+	}
+	{
+		x: 8.04296
+		z: -7565.1855
+		radius: 39.684227
+		height: -3.0212114
+	}
+	{
+		x: 212.73254
+		z: -3467.2898
+		radius: 19.342207
+		height: -1.4382514
+	}
+	{
+		x: 291.55853
+		z: -6612.042
+		radius: 41.330708
+		height: 4.0760384
+	}
+	{
+		x: 90.887
+		z: -3962.69
+		radius: 6.3126984
+		height: 0.7857456
+	}
+	{
+		x: 2.2076712
+		z: -7020.717
+		radius: 31.80446
+		height: -1.4082209
+	}
+	{
+		x: 295.9775
+		z: -7819.3286
+		radius: 3.062471
+		height: -0.24091008
+	}
+	{
+		x: 191.0491
+		z: -7791.9497
+		radius: 48.31613
+		height: 2.7906597
+	}
+	{
+		x: 175.464
+		z: -6326.5137
+		radius: 30.584167
+		height: 3.3442485
+	}
+	{
+		x: 34.528805
+		z: -199.1587
+		radius: 49.53327
+		height: 2.3061695
+	}
+	{
+		x: 91.60271
+		z: -3713.7424
+		radius: 24.620739
+		height: -0.13024068
+	}
+	{
+		x: 25.91254
+		z: -4256.401
+		radius: 35.108574
+		height: -0.3522458
+	}
+	{
+		x: 199.97273
+		z: -3107.195
+		radius: 23.444725
+		height: 1.71067
+	}
+	{
+		x: 6.8244634
+		z: -733.70233
+		radius: 25.977797
+		height: 3.2158585
+	}
+	{
+		x: 134.31984
+		z: -1424.2097
+		radius: 29.004856
+		height: -0.4330958
+	}
+	{
+		x: 140.06396
+		z: -2000.998
+		radius: 8.747589
+		height: 1.1602967
+	}
+	{
+		x: 236.38913
+		z: -5486.9995
+		radius: 1.0102559
+		height: 0.056353107
+	}
+	{
+		x: 99.87228
+		z: -2981.936
+		radius: 9.993677
+		height: 0.90804005
+	}
+	{
+		x: 244.41867
+		z: -3636.8564
+		radius: 6.022604
+		height: 0.32728618
+	}
+	{
+		x: 230.82109
+		z: -3498.7944
+		radius: 28.789572
+		height: -1.3735514
+	}
+	{
+		x: 128.96602
+		z: -5130.0957
+		radius: 6.1265254
+		height: 0.88749105
+	}
+	{
+		x: 101.49474
+		z: -7289.762
+		radius: 18.286211
+		height: 1.006376
+	}
+	{
+		x: 39.73907
+		z: -5596.984
+		radius: 34.248547
+		height: 2.7876303
+	}
+	{
+		x: 154.13802
+		z: -979.83276
+		radius: 19.66282
+		height: 2.0642557
+	}
+	{
+		x: 2.1037393
+		z: -2844.9114
+		radius: 15.694925
+		height: 1.8864999
+	}
+	{
+		x: 226.44144
+		z: -6286.562
+		radius: 14.269289
+		height: 1.9871075
+	}
+	{
+		x: 76.93986
+		z: -5287.0474
+		radius: 7.978667
+		height: 0.39152914
+	}
+	{
+		x: 196.6358
+		z: -4741.9375
+		radius: 22.280388
+		height: 2.8593173
+	}
+	{
+		x: 272.51736
+		z: -1277.7372
+		radius: 43.50603
+		height: -3.4244213
+	}
+	{
+		x: 278.06805
+		z: -211.61331
+		radius: 38.682156
+		height: -0.2701974
+	}
+	{
+		x: 172.0647
+		z: -3635.8853
+		radius: 22.19285
+		height: -1.5744468
+	}
+	{
+		x: 64.430016
+		z: -6492.756
+		radius: 9.91073
+		height: 0.29730207
+	}
+	{
+		x: 115.70103
+		z: -5637.5786
+		radius: 13.5809765
+		height: 1.7516423
+	}
+	{
+		x: 1.8123643
+		z: -5271.756
+		radius: 16.963982
+		height: -0.7257544
+	}
+	{
+		x: 150.40468
+		z: -6759.196
+		radius: 40.525146
+		height: 4.030929
+	}
+	{
+		x: 38.75514
+		z: -1723.0485
+		radius: 43.306206
+		height: 5.9632235
+	}
+	{
+		x: 236.68896
+		z: -4452.26
+		radius: 29.020622
+		height: 1.3809655
+	}
+	{
+		x: 180.46715
+		z: -3030.3054
+		radius: 18.38626
+		height: 1.6201125
+	}
+	{
+		x: 175.65796
+		z: -2231.2683
+		radius: 21.241858
+		height: 2.3419824
+	}
+	{
+		x: 248.38583
+		z: -3111.23
+		radius: 40.089367
+		height: 0.63234496
+	}
+	{
+		x: 195.11354
+		z: -6355.7773
+		radius: 11.362563
+		height: -0.6555624
+	}
+	{
+		x: 121.24972
+		z: -2827.2236
+		radius: 41.94299
+		height: 6.091296
+	}
+	{
+		x: 208.38608
+		z: -1387.9589
+		radius: 26.227444
+		height: 1.3466909
+	}
+	{
+		x: 8.855032
+		z: -959.1609
+		radius: 33.397034
+		height: 0.44227386
+	}
+	{
+		x: 34.560112
+		z: -906.9054
+		radius: 35.44593
+		height: -1.5287551
+	}
+	{
+		x: 84.66864
+		z: -5230.531
+		radius: 3.998693
+		height: -0.12673566
+	}
+	{
+		x: 243.76738
+		z: -7660.9204
+		radius: 37.978237
+		height: 1.4659102
+	}
+	{
+		x: 78.469
+		z: -2659.1882
+		radius: 44.78226
+		height: 1.720051
+	}
+	{
+		x: 66.21872
+		z: -7439.0464
+		radius: 34.78402
+		height: -1.165115
+	}
+	{
+		x: 105.18711
+		z: -6518.9727
+		radius: 2.6942375
+		height: 0.3456958
+	}
+	{
+		x: 278.64703
+		z: -2943.0818
+		radius: 9.603971
+		height: 0.02385509
+	}
+	{
+		x: 181.11922
+		z: -3192.4365
+		radius: 46.374016
+		height: 2.085501
+	}
+	{
+		x: 156.83275
+		z: -7941.336
+		radius: 2.444696
+		height: 0.051659286
+	}
+	{
+		x: 153.68332
+		z: -195.9381
+		radius: 34.11047
+		height: -0.7703991
+	}
+	{
+		x: 157.88419
+		z: -3985.3745
+		radius: 22.837101
+		height: 2.845036
+	}
+	{
+		x: 45.891125
+		z: -2658.3489
+		radius: 37.29476
+		height: 1.665848
+	}
+	{
+		x: 170.94434
+		z: -7970.9976
+		radius: 12.438678
+		height: 1.4164151
+	}
+	{
+		x: 291.7076
+		z: -3534.6223
+		radius: 35.189667
+		height: 3.9778616
+	}
+	{
+		x: 49.9959
+		z: -824.71246
+		radius: 29.049978
+		height: -0.9639206
+	}
+	{
+		x: 213.46977
+		z: -2835.4778
+		radius: 9.3357725
+		height: -0.079934895
+	}
+	{
+		x: 217.43683
+		z: -5596.9424
+		radius: 36.615566
+		height: 2.9221442
+	}
+	{
+		x: 67.53665
+		z: -1154.4454
+		radius: 28.41479
+		height: -1.6792809
+	}
+	{
+		x: 202.09784
+		z: -5243.2207
+		radius: 48.279797
+		height: 4.273491
+	}
+	{
+		x: 59.342373
+		z: -2773.5269
+		radius: 26.890343
+		height: 3.0148492
+	}
+	{
+		x: 250.37396
+		z: -374.62753
+		radius: 32.06772
+		height: -0.96168923
+	}
+	{
+		x: 4.0242505
+		z: -1628.717
+		radius: 43.246563
+		height: 4.847051
+	}
+	{
+		x: 124.14203
+		z: -5258.713
+		radius: 1.2613827
+		height: 0.07084497
+	}
+	{
+		x: 83.7976
+		z: -5416.6406
+		radius: 46.144726
+		height: -1.908581
+	}
+	{
+		x: 74.135925
+		z: -6352.1567
+		radius: 24.04194
+		height: 2.3049197
+	}
+	{
+		x: 228.2493
+		z: -3123.552
+		radius: 39.31835
+		height: 2.3247626
+	}
+	{
+		x: 52.451393
+		z: -5646.42
+		radius: 49.467766
+		height: 4.5023584
+	}
+	{
+		x: 218.72195
+		z: -7257.947
+		radius: 48.526955
+		height: -1.1267548
+	}
+	{
+		x: 202.85245
+		z: -1107.6332
+		radius: 9.358973
+		height: -0.5740382
+	}
+	{
+		x: 292.96042
+		z: -68.038445
+		radius: 6.3888774
+		height: -0.34382677
+	}
+	{
+		x: 42.55114
+		z: -6491.9707
+		radius: 18.158598
+		height: 0.53420925
+	}
+	{
+		x: 1.1928105
+		z: -7025.3467
+		radius: 13.413429
+		height: -0.58465606
+	}
+	{
+		x: 124.13257
+		z: -6817.766
+		radius: 5.3408
+		height: -0.27013436
+	}
+	{
+		x: 39.81755
+		z: -2855.651
+		radius: 16.052704
+		height: 0.2909671
+	}
+	{
+		x: 141.29707
+		z: -3775.6165
+		radius: 27.436352
+		height: 2.2207909
+	}
+	{
+		x: 163.86855
+		z: -5398.555
+		radius: 5.0933385
+		height: -0.008736342
+	}
+	{
+		x: 117.09141
+		z: -3357.7214
+		radius: 19.24577
+		height: 2.7723732
+	}
+	{
+		x: 154.4304
+		z: -2576.9187
+		radius: 0.20857465
+		height: -0.0013072733
+	}
+	{
+		x: 288.30078
+		z: -7987.7134
+		radius: 6.3103595
+		height: 0.31092328
+	}
+	{
+		x: 92.1753
+		z: -7757.395
+		radius: 48.99089
+		height: -1.3555095
+	}
+	{
+		x: 174.67377
+		z: -5432.226
+		radius: 13.211526
+		height: -0.28068054
+	}
+	{
+		x: 163.19377
+		z: -4783.341
+		radius: 31.28555
+		height: -0.06638646
+	}
+	{
+		x: 96.65169
+		z: -4775.4487
+		radius: 14.768638
+		height: 1.7850507
+	}
+	{
+		x: 298.29083
+		z: -1961.333
+		radius: 22.145353
+		height: 2.4913454
+	}
+	{
+		x: 80.27464
+		z: -3737.9224
+		radius: 39.705753
+		height: 3.2041426
+	}
+	{
+		x: 21.919783
+		z: -282.55225
+		radius: 29.22694
+		height: -2.1116886
+	}
+	{
+		x: 162.9359
+		z: -5620.8203
+		radius: 48.85755
+		height: 5.6877007
+	}
+	{
+		x: 161.92514
+		z: -3160.276
+		radius: 32.94891
+		height: 3.3970945
+	}
+	{
+		x: 188.65651
+		z: -6156.971
+		radius: 22.484735
+		height: -0.6979066
+	}
+	{
+		x: 46.266926
+		z: -4964.7397
+		radius: 20.232088
+		height: 2.5913196
+	}
+	{
+		x: 256.55212
+		z: -549.86456
+		radius: 3.7692695
+		height: 0.30164608
+	}
+	{
+		x: 87.89793
+		z: -1636.6079
+		radius: 15.142311
+		height: -0.12581754
+	}
+	{
+		x: 61.163654
+		z: -6981.9033
+		radius: 8.05972
+		height: -0.55795944
+	}
+	{
+		x: 233.966
+		z: -4660.3086
+		radius: 22.25592
+		height: 0.89957464
+	}
+	{
+		x: 238.32417
+		z: -873.1348
+		radius: 19.937042
+		height: 0.42359543
+	}
+	{
+		x: 130.51308
+		z: -1678.4833
+		radius: 11.068387
+		height: 0.5917154
+	}
+	{
+		x: 205.23318
+		z: -171.72719
+		radius: 12.671105
+		height: 0.4814751
+	}
+	{
+		x: 28.842995
+		z: -1028.7972
+		radius: 32.266342
+		height: 0.04564643
+	}
+	{
+		x: 258.41077
+		z: -7957.4307
+		radius: 37.13829
+		height: 2.7775602
+	}
+	{
+		x: 34.72983
+		z: -3484.3667
+		radius: 19.183304
+		height: -0.91765076
+	}
+	{
+		x: 168.2031
+		z: -639.2786
+		radius: 39.770435
+		height: 3.9341137
+	}
+	{
+		x: 176.63873
+		z: -2479.045
+		radius: 40.25944
+		height: 3.829435
+	}
+	{
+		x: 83.511604
+		z: -28.776052
+		radius: 31.605503
+		height: 1.361903
+	}
+	{
+		x: 244.131
+		z: -4098.8257
+		radius: 30.825684
+		height: 2.2369363
+	}
+	{
+		x: 35.417065
+		z: -5569.8267
+		radius: 43.010204
+		height: -1.2782161
+	}
+	{
+		x: 222.62547
+		z: -4120.6064
+		radius: 45.032482
+		height: 3.7974317
+	}
+	{
+		x: 103.37102
+		z: -5006.6475
+		radius: 11.14496
+		height: 0.5194223
+	}
+	{
+		x: 125.68792
+		z: -5379.569
+		radius: 31.243525
+		height: 2.4810836
+	}
+	{
+		x: 82.62623
+		z: -3770.9248
+		radius: 9.741476
+		height: 1.1163657
+	}
+	{
+		x: 201.02039
+		z: -746.4186
+		radius: 46.71475
+		height: 3.5469513
+	}
+	{
+		x: 266.57788
+		z: -7369.453
+		radius: 43.263245
+		height: 4.1919956
+	}
+	{
+		x: 161.3224
+		z: -995.74054
+		radius: 39.87892
+		height: 4.303257
+	}
+	{
+		x: 232.68776
+		z: -5053.5176
+		radius: 40.019314
+		height: -0.48960805
+	}
+	{
+		x: 66.19585
+		z: -4846.7163
+		radius: 41.056152
+		height: -1.4250798
+	}
+	{
+		x: 95.66281
+		z: -5051.2603
+		radius: 41.301594
+		height: 3.6128404
+	}
+	{
+		x: 156.26543
+		z: -2457.458
+		radius: 14.910605
+		height: 1.5023544
+	}
+	{
+		x: 66.5604
+		z: -5644.291
+		radius: 46.116043
+		height: 5.6219254
+	}
+	{
+		x: 15.6866255
+		z: -1654.1992
+		radius: 40.47372
+		height: 3.0216372
+	}
+	{
+		x: 231.49196
+		z: -4369.7764
+		radius: 33.57804
+		height: 2.9362724
+	}
+	{
+		x: 214.21286
+		z: -4176.6055
+		radius: 47.054314
+		height: -2.979226
+	}
+	{
+		x: 138.59676
+		z: -5629.2783
+		radius: 47.54227
+		height: -1.4961166
+	}
+	{
+		x: 54.994015
+		z: -5220.446
+		radius: 46.855812
+		height: 5.1813374
+	}
+	{
+		x: 256.95792
+		z: -4985.573
+		radius: 40.53738
+		height: 5.3873167
+	}
+	{
+		x: 129.2779
+		z: -3558.8743
+		radius: 17.620941
+		height: 0.09705436
+	}
+	{
+		x: 246.13255
+		z: -2428.7126
+		radius: 36.575798
+		height: 4.642435
+	}
+	{
+		x: 154.18674
+		z: -3523.5815
+		radius: 1.1242175
+		height: 0.006033227
+	}
+	{
+		x: 149.9674
+		z: -2892.5706
+		radius: 34.908955
+		height: 3.1793892
+	}
+	{
+		x: 44.740494
+		z: -127.05265
+		radius: 45.83252
+		height: 2.0495207
+	}
+	{
+		x: 203.37276
+		z: -4303.1304
+		radius: 39.29827
+		height: 4.0423536
+	}
+	{
+		x: 246.29881
+		z: -4607.1934
+		radius: 34.55404
+		height: -0.08465934
+	}
+	{
+		x: 115.72563
+		z: -7439.76
+		radius: 9.872217
+		height: -0.5692312
+	}
+	{
+		x: 128.59363
+		z: -1675.5679
+		radius: 0.39601108
+		height: 0.012907423
+	}
+	{
+		x: 269.5746
+		z: -3890.7239
+		radius: 47.139694
+		height: -0.351429
+	}
+	{
+		x: 217.5242
+		z: -3750.4976
+		radius: 46.85139
+		height: 3.110489
+	}
+	{
+		x: 148.31795
+		z: -4384.186
+		radius: 30.230164
+		height: 4.0772705
+	}
+	{
+		x: 15.886426
+		z: -1456.2777
+		radius: 0.33492807
+		height: 0.010997383
+	}
+	{
+		x: 181.5273
+		z: -3775.948
+		radius: 43.93073
+		height: -0.13871789
+	}
+	{
+		x: 39.208443
+		z: -3669.7534
+		radius: 35.98889
+		height: -0.52565336
+	}
+	{
+		x: 71.58801
+		z: -4975.1763
+		radius: 41.59053
+		height: 2.378563
+	}
+	{
+		x: 267.8642
+		z: -2395.5105
+		radius: 30.07872
+		height: 0.77356935
+	}
+	{
+		x: 240.32896
+		z: -2089.37
+		radius: 3.4628038
+		height: -0.1703651
+	}
+	{
+		x: 191.63707
+		z: -3750.9304
+		radius: 4.7990117
+		height: 0.52719676
+	}
+	{
+		x: 209.31297
+		z: -1069.8147
+		radius: 12.554812
+		height: 0.41922033
+	}
+	{
+		x: 297.90527
+		z: -4342.3564
+		radius: 43.810036
+		height: 3.1007152
+	}
+	{
+		x: 102.4601
+		z: -6138.775
+		radius: 32.556072
+		height: 4.343711
+	}
+	{
+		x: 129.62097
+		z: -2313.6243
+		radius: 19.3252
+		height: 0.45270193
+	}
+	{
+		x: 134.67554
+		z: -6279.675
+		radius: 34.915115
+		height: 1.9627938
+	}
+	{
+		x: 114.25489
+		z: -6348.208
+		radius: 34.06972
+		height: -0.13613129
+	}
+	{
+		x: 225.15408
+		z: -6071.519
+		radius: 34.63513
+		height: 0.78669333
+	}
+	{
+		x: 39.878532
+		z: -7906.224
+		radius: 43.930817
+		height: -0.4963026
+	}
+	{
+		x: 149.03288
+		z: -3148.797
+		radius: 6.858801
+		height: -0.18619657
+	}
+	{
+		x: 29.55564
+		z: -3977.5535
+		radius: 39.619724
+		height: 4.302109
+	}
+	{
+		x: 116.06458
+		z: -568.1327
+		radius: 18.812601
+		height: -1.1095989
+	}
+	{
+		x: 40.214783
+		z: -7632.3257
+		radius: 28.165918
+		height: 0.7561283
+	}
+	{
+		x: 239.98248
+		z: -362.91568
+		radius: 24.180954
+		height: 2.1406837
+	}
+	{
+		x: 287.17517
+		z: -1650.0142
+		radius: 17.563734
+		height: 0.9157808
+	}
+	{
+		x: 137.22977
+		z: -6567.175
+		radius: 29.480469
+		height: -1.3085124
+	}
+	{
+		x: 270.49728
+		z: -508.3992
+		radius: 20.391815
+		height: -0.79097795
+	}
+	{
+		x: 268.72467
+		z: -3989.9395
+		radius: 4.504646
+		height: 0.012914598
+	}
+	{
+		x: 154.33046
+		z: -4013.6384
+		radius: 4.725646
+		height: 0.30955723
+	}
+	{
+		x: 113.33336
+		z: -1021.3364
+		radius: 21.409296
+		height: 1.2757465
+	}
+	{
+		x: 225.42905
+		z: -3852.706
+		radius: 33.16346
+		height: 2.6535764
+	}
+	{
+		x: 36.72238
+		z: -2751.679
+		radius: 19.509043
+		height: -1.2869555
+	}
+	{
+		x: 232.00917
+		z: -6349.441
+		radius: 43.285885
+		height: -3.1154191
+	}
+	{
+		x: 294.26273
+		z: -6684.7915
+		radius: 5.3551955
+		height: 0.73892915
+	}
+	{
+		x: 179.11807
+		z: -4705.463
+		radius: 35.369637
+		height: 0.106704
+	}
+	{
+		x: 281.65735
+		z: -3326.8247
+		radius: 10.165291
+		height: 0.4638642
+	}
+	{
+		x: 31.687662
+		z: -4007.1956
+		radius: 45.67549
+		height: 3.4887536
+	}
+	{
+		x: 21.963673
+		z: -5931.805
+		radius: 39.17465
+		height: 2.5157614
+	}
+	{
+		x: 51.444164
+		z: -4280.26
+		radius: 46.13099
+		height: 0.33336186
+	}
+	{
+		x: 252.68356
+		z: -7685.1772
+		radius: 9.980233
+		height: -0.3852538
+	}
+	{
+		x: 268.84613
+		z: -872.47375
+		radius: 23.728037
+		height: -1.2356945
+	}
+	{
+		x: 251.59212
+		z: -6606.5825
+		radius: 39.447124
+		height: 1.6482892
+	}
+	{
+		x: 66.22214
+		z: -7446.723
+		radius: 5.455834
+		height: 0.5272304
+	}
+	{
+		x: 114.97739
+		z: -453.12445
+		radius: 1.2479413
+		height: -0.04661368
+	}
+	{
+		x: 123.28044
+		z: -4864.938
+		radius: 7.0893607
+		height: 0.7482706
+	}
+	{
+		x: 176.96283
+		z: -7904.3755
+		radius: 38.605503
+		height: -2.8487592
+	}
+	{
+		x: 51.16231
+		z: -1244.4358
+		radius: 46.653793
+		height: -3.6868324
+	}
+	{
+		x: 233.58456
+		z: -6310.37
+		radius: 29.309046
+		height: 2.1544414
+	}
+	{
+		x: 116.2109
+		z: -6467.881
+		radius: 25.885105
+		height: -0.5412191
+	}
+	{
+		x: 110.294846
+		z: -6283.835
+		radius: 12.574327
+		height: -0.7255764
+	}
+	{
+		x: 229.62766
+		z: -6428.0996
+		radius: 45.50724
+		height: 5.391958
+	}
+	{
+		x: 186.56422
+		z: -5417.912
+		radius: 49.817894
+		height: 6.920766
+	}
+	{
+		x: 254.18788
+		z: -289.01785
+		radius: 32.646076
+		height: 2.5540564
+	}
+	{
+		x: 266.25378
+		z: -5410.6143
+		radius: 3.915862
+		height: -0.30680612
+	}
+	{
+		x: 54.187824
+		z: -6043.9536
+		radius: 21.200575
+		height: 2.9199357
+	}
+	{
+		x: 57.429596
+		z: -6877.2725
+		radius: 34.017506
+		height: 3.0758975
+	}
+	{
+		x: 189.79437
+		z: -5652.528
+		radius: 38.491398
+		height: 1.9995914
+	}
+	{
+		x: 100.29115
+		z: -2132.2224
+		radius: 15.483957
+		height: -0.9994916
+	}
+	{
+		x: 31.970217
+		z: -3037.4377
+		radius: 14.007279
+		height: 0.18777251
+	}
+	{
+		x: 256.88574
+		z: -4220.975
+		radius: 7.022357
+		height: 0.3839808
+	}
+	{
+		x: 49.14536
+		z: -2222.3428
+		radius: 38.569508
+		height: 2.6788528
+	}
+	{
+		x: 151.28046
+		z: -484.12924
+		radius: 49.585735
+		height: 6.818966
+	}
+	{
+		x: 91.80771
+		z: -2892.1123
+		radius: 14.734808
+		height: 0.017751336
+	}
+	{
+		x: 23.864044
+		z: -934.2723
+		radius: 44.108967
+		height: -1.7717143
+	}
+	{
+		x: 276.18402
+		z: -656.69025
+		radius: 1.7569343
+		height: 0.20680647
+	}
+	{
+		x: 238.4501
+		z: -1727.1168
+		radius: 17.651083
+		height: -1.1886731
+	}
+	{
+		x: 43.18337
+		z: -5299.8203
+		radius: 20.927292
+		height: 0.5583067
+	}
+	{
+		x: 155.85368
+		z: -6008.1274
+		radius: 0.014289534
+		height: 0.0019230348
+	}
+	{
+		x: 43.77497
+		z: -4293.8843
+		radius: 49.61491
+		height: 4.485607
+	}
+	{
+		x: 162.61333
+		z: -6415.884
+		radius: 45.409958
+		height: 1.6007345
+	}
+	{
+		x: 176.97209
+		z: -862.1059
+		radius: 44.826046
+		height: -0.7560384
+	}
+	{
+		x: 218.5299
+		z: -3523.4385
+		radius: 46.241943
+		height: 1.1576011
+	}
+	{
+		x: 81.59422
+		z: -1869.3656
+		radius: 49.603783
+		height: 4.6393642
+	}
+	{
+		x: 61.694912
+		z: -498.90073
+		radius: 48.57751
+		height: -2.7615762
+	}
+	{
+		x: 57.97899
+		z: -822.8797
+		radius: 48.08788
+		height: 3.5370498
+	}
+	{
+		x: 284.6792
+		z: -4266.522
+		radius: 41.37622
+		height: -1.0591891
+	}
+	{
+		x: 170.81607
+		z: -3263.993
+		radius: 47.55524
+		height: -3.2160017
+	}
+	{
+		x: 270.5548
+		z: -1449.5096
+		radius: 4.047018
+		height: 0.5739958
+	}
+	{
+		x: 159.27473
+		z: -7832.3345
+		radius: 28.261253
+		height: -1.9348286
+	}
+	{
+		x: 152.4213
+		z: -7375.836
+		radius: 9.403936
+		height: -0.27869186
+	}
+	{
+		x: 155.5969
+		z: -2283.585
+		radius: 14.402371
+		height: -0.50181973
+	}
+	{
+		x: 235.1086
+		z: -428.28082
+		radius: 41.590622
+		height: -1.9208218
+	}
+	{
+		x: 188.32779
+		z: -3742.1113
+		radius: 32.02021
+		height: 2.7623112
+	}
+	{
+		x: 92.72822
+		z: -4019.9636
+		radius: 1.0440774
+		height: 0.0786067
+	}
+	{
+		x: 121.35575
+		z: -6469.71
+		radius: 32.167496
+		height: -0.38261724
+	}
+	{
+		x: 230.74483
+		z: -4476.615
+		radius: 31.06789
+		height: 3.6777797
+	}
+	{
+		x: 254.93344
+		z: -6431.7163
+		radius: 20.156149
+		height: 2.751262
+	}
+	{
+		x: 276.2399
+		z: -3106.8376
+		radius: 13.085264
+		height: 1.6249278
+	}
+	{
+		x: 189.8519
+		z: -1941.7275
+		radius: 44.207848
+		height: -2.3394275
+	}
+	{
+		x: 35.03932
+		z: -6741.599
+		radius: 40.14219
+		height: 3.8746178
+	}
+	{
+		x: 230.93977
+		z: -7666.186
+		radius: 9.327374
+		height: -0.38648617
+	}
+	{
+		x: 229.37701
+		z: -3024.222
+		radius: 40.731026
+		height: -1.815512
+	}
+	{
+		x: 81.05922
+		z: -1270.0795
+		radius: 44.719036
+		height: 2.7159462
+	}
+	{
+		x: 104.76619
+		z: -732.10486
+		radius: 37.504856
+		height: 3.9839332
+	}
+	{
+		x: 151.77054
+		z: -3985.0022
+		radius: 15.56651
+		height: -1.1919938
+	}
+	{
+		x: 269.7504
+		z: -1411.437
+		radius: 37.952885
+		height: 2.2508333
+	}
+	{
+		x: 91.83745
+		z: -2380.8308
+		radius: 32.49637
+		height: 0.33051467
+	}
+	{
+		x: 7.2059016
+		z: -2606.1467
+		radius: 16.60721
+		height: -0.7811868
+	}
+	{
+		x: 9.74476
+		z: -4622.261
+		radius: 24.545681
+		height: 0.18944299
+	}
+	{
+		x: 270.86758
+		z: -6962.342
+		radius: 10.851276
+		height: -0.007934332
+	}
+	{
+		x: 41.400345
+		z: -6491.4614
+		radius: 3.9539177
+		height: 0.27739134
+	}
+	{
+		x: 255.75008
+		z: -5489.4844
+		radius: 14.900342
+		height: 0.9014883
+	}
+	{
+		x: 289.1934
+		z: -4458.0854
+		radius: 13.599525
+		height: -0.21978283
+	}
+	{
+		x: 106.136
+		z: -1259.5593
+		radius: 19.024233
+		height: 0.20922792
+	}
+	{
+		x: 233.58067
+		z: -3077.9048
+		radius: 10.401462
+		height: -0.7611085
+	}
+	{
+		x: 199.80327
+		z: -5825.475
+		radius: 3.5827425
+		height: -0.04665841
+	}
+	{
+		x: 93.37276
+		z: -6001.2944
+		radius: 0.5060163
+		height: 0.0577134
+	}
+	{
+		x: 122.1632
+		z: -6639.958
+		radius: 9.943936
+		height: 1.4342957
+	}
+	{
+		x: 85.89211
+		z: -5872.843
+		radius: 4.579208
+		height: 0.58127356
+	}
+	{
+		x: 218.98154
+		z: -1756.1788
+		radius: 22.855736
+		height: 1.3993423
+	}
+	{
+		x: 213.17484
+		z: -6403.317
+		radius: 44.0251
+		height: -2.9220479
+	}
+	{
+		x: 291.3539
+		z: -91.37646
+		radius: 11.341039
+		height: 0.594277
+	}
+	{
+		x: 275.38803
+		z: -7895.2437
+		radius: 1.4503305
+		height: 0.092279695
+	}
+	{
+		x: 271.60797
+		z: -7534.71
+		radius: 37.68672
+		height: 1.673413
+	}
+	{
+		x: 187.63452
+		z: -1503.3573
+		radius: 21.195148
+		height: 1.4406835
+	}
+	{
+		x: 293.80383
+		z: -5180.6064
+		radius: 6.596822
+		height: 0.03258854
+	}
+	{
+		x: 151.31708
+		z: -3511.154
+		radius: 28.25133
+		height: -0.7428583
+	}
+	{
+		x: 47.504944
+		z: -7968.8423
+		radius: 39.080227
+		height: -0.317343
+	}
+	{
+		x: 6.233646
+		z: -2904.8145
+		radius: 6.3872046
+		height: 0.43962425
+	}
+	{
+		x: 78.4907
+		z: -6012.6177
+		radius: 18.14316
+		height: 0.31762362
+	}
+	{
+		x: 164.57578
+		z: -1525.739
+		radius: 38.800194
+		height: -2.6589198
+	}
+	{
+		x: 275.08353
+		z: -895.8624
+		radius: 15.856789
+		height: -0.310866
+	}
+	{
+		x: 3.0019722
+		z: -82.94465
+		radius: 27.117071
+		height: -0.6924434
+	}
+	{
+		x: 153.76164
+		z: -7221.038
+		radius: 23.870289
+		height: -0.5998744
+	}
+	{
+		x: 163.95784
+		z: -1306.5758
+		radius: 17.062378
+		height: 1.6046445
+	}
+	{
+		x: 232.72946
+		z: -3688.6716
+		radius: 21.939625
+		height: -0.7569022
+	}
+	{
+		x: 292.415
+		z: -7523.7793
+		radius: 21.615187
+		height: -0.8884476
+	}
+	{
+		x: 257.11792
+		z: -3989.882
+		radius: 31.542408
+		height: -1.8415872
+	}
+	{
+		x: 9.200477
+		z: -7938.1914
+		radius: 44.974606
+		height: 0.5951083
+	}
+	{
+		x: 14.486135
+		z: -3793.1418
+		radius: 14.149131
+		height: 1.6167475
+	}
+	{
+		x: 197.08867
+		z: -894.2897
+		radius: 23.154324
+		height: 0.58210766
+	}
+	{
+		x: 154.29636
+		z: -2106.5293
+		radius: 36.22107
+		height: 3.1012645
+	}
+	{
+		x: 250.82751
+		z: -2407.856
+		radius: 9.526459
+		height: 1.1327038
+	}
+	{
+		x: 200.03452
+		z: -1296.7175
+		radius: 35.50519
+		height: 4.1988087
+	}
+	{
+		x: 217.27095
+		z: -2243.8047
+		radius: 46.135105
+		height: 4.035707
+	}
+	{
+		x: 17.64751
+		z: -4045.9524
+		radius: 35.69639
+		height: 3.5444126
+	}
+	{
+		x: 26.789423
+		z: -6822.623
+		radius: 24.0998
+		height: -0.7496064
+	}
+	{
+		x: 278.96985
+		z: -3528.2693
+		radius: 19.037298
+		height: 2.5093648
+	}
+	{
+		x: 92.130295
+		z: -6236.676
+		radius: 48.929317
+		height: 4.7826247
+	}
+	{
+		x: 233.81093
+		z: -5086.1963
+		radius: 28.926086
+		height: 2.1288218
+	}
+	{
+		x: 125.9002
+		z: -657.62067
+		radius: 39.066006
+		height: 1.9714484
+	}
+	{
+		x: 179.37524
+		z: -7689.1987
+		radius: 37.102474
+		height: 0.020233154
+	}
+	{
+		x: 2.8409421
+		z: -7416.1914
+		radius: 48.48106
+		height: 4.88056
+	}
+	{
+		x: 190.68718
+		z: -3455.1067
+		radius: 22.48231
+		height: -1.1279222
+	}
+	{
+		x: 268.07114
+		z: -4035.5916
+		radius: 16.641
+		height: 1.9671738
+	}
+	{
+		x: 250.69223
+		z: -7515.789
+		radius: 21.21103
+		height: 2.442789
+	}
+	{
+		x: 267.46512
+		z: -4499.7476
+		radius: 11.665675
+		height: 1.203728
+	}
+	{
+		x: 93.7068
+		z: -4508.3076
+		radius: 20.006292
+		height: -0.7159674
+	}
+	{
+		x: 51.341442
+		z: -4037.6858
+		radius: 44.998116
+		height: -2.9887905
+	}
+	{
+		x: 150.88803
+		z: -3972.8127
+		radius: 27.360115
+		height: 2.6143682
+	}
+	{
+		x: 277.6322
+		z: -1705.2593
+		radius: 48.406525
+		height: 4.976872
+	}
+	{
+		x: 261.39603
+		z: -6938.43
+		radius: 19.670818
+		height: 2.5611856
+	}
+	{
+		x: 115.7058
+		z: -45.50034
+		radius: 16.638752
+		height: -0.15238285
+	}
+	{
+		x: 87.91982
+		z: -7978.3813
+		radius: 21.875092
+		height: 0.43984997
+	}
+	{
+		x: 127.014496
+		z: -3108.8276
+		radius: 31.549545
+		height: -2.207038
+	}
+	{
+		x: 150.2395
+		z: -7015.5938
+		radius: 44.650494
+		height: 1.054579
+	}
+	{
+		x: 73.73872
+		z: -4114.3706
+		radius: 46.02087
+		height: 2.0540893
+	}
+	{
+		x: 65.495865
+		z: -7160.051
+		radius: 12.75871
+		height: -0.69704866
+	}
+	{
+		x: 281.60025
+		z: -4033.6575
+		radius: 18.495659
+		height: -1.1143689
+	}
+	{
+		x: 258.83984
+		z: -859.1294
+		radius: 31.59984
+		height: 4.2825966
+	}
+	{
+		x: 258.0158
+		z: -377.91296
+		radius: 1.445263
+		height: -0.10984204
+	}
+	{
+		x: 283.13348
+		z: -4642.175
+		radius: 1.5481036
+		height: 0.20266706
+	}
+	{
+		x: 41.76323
+		z: -7470.223
+		radius: 49.590942
+		height: 6.7747393
+	}
+	{
+		x: 161.37408
+		z: -4740.5635
+		radius: 2.1391857
+		height: 0.16662581
+	}
+	{
+		x: 235.33191
+		z: -3483.8118
+		radius: 26.199675
+		height: -0.31553686
+	}
+	{
+		x: 140.51392
+		z: -5864.508
+		radius: 30.679604
+		height: 0.4460008
+	}
+	{
+		x: 46.129368
+		z: -5527.681
+		radius: 48.274654
+		height: 7.2214627
+	}
+	{
+		x: 20.346828
+		z: -1417.8429
+		radius: 42.34839
+		height: -1.3966041
+	}
+	{
+		x: 237.7161
+		z: -4060.865
+		radius: 23.960714
+		height: -1.0159187
+	}
+	{
+		x: 196.13402
+		z: -5432.0586
+		radius: 1.3613578
+		height: -0.05079867
+	}
+	{
+		x: 267.24017
+		z: -1916.542
+		radius: 47.985058
+		height: -2.8600416
+	}
+	{
+		x: 28.640583
+		z: -500.81454
+		radius: 15.268362
+		height: 0.60703695
+	}
+	{
+		x: 260.24368
+		z: -5217.2715
+		radius: 33.45358
+		height: 5.008495
+	}
+	{
+		x: 30.254929
+		z: -1996.1956
+		radius: 36.953747
+		height: -2.5433564
+	}
+	{
+		x: 249.01306
+		z: -7462.5806
+		radius: 20.823053
+		height: -0.3956381
+	}
+	{
+		x: 30.862741
+		z: -847.95483
+		radius: 31.410404
+		height: -0.07951641
+	}
+	{
+		x: 275.6448
+		z: -2070.1753
+		radius: 17.3696
+		height: -1.0957758
+	}
+	{
+		x: 262.14752
+		z: -5166.997
+		radius: 16.857655
+		height: -0.31716108
+	}
+	{
+		x: 235.99861
+		z: -4652.0063
+		radius: 32.973618
+		height: 3.1376057
+	}
+	{
+		x: 73.98949
+		z: -2994.3462
+		radius: 2.2733612
+		height: 0.074549004
+	}
+	{
+		x: 215.71013
+		z: -4306.454
+		radius: 40.5416
+		height: -0.43336415
+	}
+	{
+		x: 171.63475
+		z: -6456.857
+		radius: 5.910503
+		height: 0.032668144
+	}
+	{
+		x: 44.43455
+		z: -5207.8755
+		radius: 1.8850766
+		height: 0.1299865
+	}
+	{
+		x: 237.30663
+		z: -3610.9072
+		radius: 1.8685805
+		height: -0.048268154
+	}
+	{
+		x: 169.49348
+		z: -1774.7614
+		radius: 12.377049
+		height: 1.6424423
+	}
+	{
+		x: 74.93091
+		z: -6255.3384
+		radius: 4.2901325
+		height: -0.29957512
+	}
+	{
+		x: 25.096788
+		z: -4697.761
+		radius: 30.206173
+		height: 2.2777653
+	}
+	{
+		x: 191.6472
+		z: -7994.871
+		radius: 11.252691
+		height: 1.2730702
+	}
+	{
+		x: 48.311085
+		z: -5108.817
+		radius: 18.549059
+		height: 1.2664721
+	}
+	{
+		x: 204.77774
+		z: -4835.276
+		radius: 42.926483
+		height: 1.9774978
+	}
+	{
+		x: 67.94719
+		z: -6172.6655
+		radius: 41.480957
+		height: 4.4810543
+	}
+	{
+		x: 137.92612
+		z: -591.51324
+		radius: 21.068192
+		height: 3.1476026
+	}
+	{
+		x: 67.53787
+		z: -5381.9487
+		radius: 16.945162
+		height: 1.3363525
+	}
+	{
+		x: 144.87738
+		z: -1390.13
+		radius: 49.421085
+		height: -1.1749845
+	}
+	{
+		x: 98.57831
+		z: -4837.1895
+		radius: 42.601463
+		height: 6.324753
+	}
+	{
+		x: 274.97153
+		z: -5547.13
+		radius: 17.09185
+		height: 0.8322797
+	}
+	{
+		x: 95.20065
+		z: -792.8832
+		radius: 22.873915
+		height: -0.076081276
+	}
+	{
+		x: 168.62227
+		z: -5102.591
+		radius: 9.47438
+		height: 0.6923316
+	}
+	{
+		x: 116.45496
+		z: -1750.9463
+		radius: 38.018257
+		height: 1.260066
+	}
+	{
+		x: 146.65306
+		z: -1293.2676
+		radius: 23.790922
+		height: -1.4659424
+	}
+	{
+		x: 117.3681
+		z: -6382.7856
+		radius: 8.529325
+		height: -0.020522535
+	}
+	{
+		x: 132.12187
+		z: -6244.4316
+		radius: 48.820812
+		height: 3.4708552
+	}
+	{
+		x: 224.95267
+		z: -2561.2266
+		radius: 20.708721
+		height: 1.1170596
+	}
+	{
+		x: 118.30714
+		z: -5162.201
+		radius: 30.887163
+		height: 2.343144
+	}
+	{
+		x: 170.33768
+		z: -2783.5537
+		radius: 41.71307
+		height: 4.879842
+	}
+	{
+		x: 271.52625
+		z: -7307.6094
+		radius: 10.671789
+		height: -0.64330345
+	}
+	{
+		x: 203.19298
+		z: -5266.9175
+		radius: 14.903212
+		height: 1.6075895
+	}
+	{
+		x: 32.458855
+		z: -4033.6614
+		radius: 27.92869
+		height: 2.3663256
+	}
+	{
+		x: 189.61931
+		z: -3997.3547
+		radius: 38.814552
+		height: -0.6979487
+	}
+	{
+		x: 154.64655
+		z: -6166.624
+		radius: 3.6664128
+		height: 0.22555584
+	}
+	{
+		x: 269.6757
+		z: -5013.667
+		radius: 45.569004
+		height: 1.8588128
+	}
+	{
+		x: 293.84103
+		z: -7012.815
+		radius: 21.869604
+		height: 2.2681808
+	}
+	{
+		x: 225.71617
+		z: -207.42026
+		radius: 7.04873
+		height: 0.17986774
+	}
+	{
+		x: 136.87245
+		z: -7272.117
+		radius: 45.33004
+		height: -3.1436727
+	}
+	{
+		x: 187.70789
+		z: -3920.2998
+		radius: 9.652047
+		height: -0.7705419
+	}
+	{
+		x: 133.70995
+		z: -139.49248
+		radius: 12.65748
+		height: 0.67598665
+	}
+	{
+		x: 276.70206
+		z: -3620.085
+		radius: 0.95180506
+		height: -0.07010589
+	}
+	{
+		x: 71.38625
+		z: -875.72687
+		radius: 26.040646
+		height: 2.25445
+	}
+	{
+		x: 162.62999
+		z: -5936.483
+		radius: 24.076538
+		height: 2.9328508
+	}
+	{
+		x: 103.458015
+		z: -7128.6665
+		radius: 1.8286254
+		height: 0.22990978
+	}
+	{
+		x: 187.59589
+		z: -1338.0781
+		radius: 18.134697
+		height: 2.5622716
+	}
+	{
+		x: 223.67409
+		z: -2286.1921
+		radius: 18.503021
+		height: 0.7044128
+	}
+	{
+		x: 80.838425
+		z: -731.6432
+		radius: 25.50231
+		height: -0.875147
+	}
+	{
+		x: 247.52335
+		z: -4142.1807
+		radius: 9.111176
+		height: 0.73985714
+	}
+	{
+		x: 66.53284
+		z: -3265.065
+		radius: 9.294326
+		height: -0.24623722
+	}
+	{
+		x: 40.33394
+		z: -3156.7056
+		radius: 7.730747
+		height: 0.8696645
+	}
+	{
+		x: 240.60547
+		z: -4615.1323
+		radius: 46.840023
+		height: 3.5450418
+	}
+	{
+		x: 105.59615
+		z: -4591.727
+		radius: 22.03599
+		height: -0.022310495
+	}
+	{
+		x: 167.73265
+		z: -5041.4375
+		radius: 27.482723
+		height: 3.0901873
+	}
+	{
+		x: 22.180336
+		z: -6803.5176
+		radius: 16.536016
+		height: -0.2425586
+	}
+	{
+		x: 124.69577
+		z: -2487.6428
+		radius: 45.52419
+		height: 3.118595
+	}
+	{
+		x: 94.12205
+		z: -5973.0767
+		radius: 3.555374
+		height: 0.22995293
+	}
+	{
+		x: 91.26449
+		z: -6011.356
+		radius: 41.633957
+		height: 4.176509
+	}
+	{
+		x: 251.64624
+		z: -7555.788
+		radius: 1.527248
+		height: -0.02288828
+	}
+	{
+		x: 164.7798
+		z: -2823.874
+		radius: 8.543981
+		height: -0.28645796
+	}
+	{
+		x: 217.10223
+		z: -2731.557
+		radius: 32.669594
+		height: -0.9509815
+	}
+	{
+		x: 149.60893
+		z: -6221.038
+		radius: 39.34884
+		height: 1.5783904
+	}
+	{
+		x: 224.4816
+		z: -6136.693
+		radius: 44.61452
+		height: -0.08876872
+	}
+	{
+		x: 47.644127
+		z: -1686.4492
+		radius: 9.231866
+		height: -0.6514308
+	}
+	{
+		x: 156.19054
+		z: -5158.7793
+		radius: 3.0612257
+		height: 0.35394046
+	}
+	{
+		x: 251.0167
+		z: -2448.3022
+		radius: 43.937485
+		height: -0.43502903
+	}
+	{
+		x: 135.74884
+		z: -1075.7755
+		radius: 15.022816
+		height: -0.0120533705
+	}
+	{
+		x: 13.198771
+		z: -3771.0796
+		radius: 40.81007
+		height: 1.2514846
+	}
+	{
+		x: 290.08728
+		z: -4320.618
+		radius: 4.737298
+		height: 0.5370301
+	}
+	{
+		x: 49.664272
+		z: -3263.3582
+		radius: 20.71966
+		height: 3.1049976
+	}
+	{
+		x: 170.1152
+		z: -152.54971
+		radius: 26.813078
+		height: 0.60316014
+	}
+	{
+		x: 194.28113
+		z: -482.9822
+		radius: 1.694815
+		height: -0.064778596
+	}
+	{
+		x: 193.23022
+		z: -7016.442
+		radius: 13.67926
+		height: 0.32851326
+	}
+	{
+		x: 212.60646
+		z: -3120.8464
+		radius: 47.582947
+		height: 5.3700056
+	}
+	{
+		x: 46.442005
+		z: -7871.355
+		radius: 16.911077
+		height: 2.4821904
+	}
+	{
+		x: 248.25696
+		z: -5044.5454
+		radius: 7.5584173
+		height: -0.51631814
+	}
+	{
+		x: 163.782
+		z: -769.5869
+		radius: 14.500753
+		height: 0.64613414
+	}
+	{
+		x: 153.52576
+		z: -7483.1313
+		radius: 24.798733
+		height: 1.5010623
+	}
+	{
+		x: 166.67073
+		z: -967.459
+		radius: 18.644104
+		height: -1.4529465
+	}
+	{
+		x: 30.41829
+		z: -4634.243
+		radius: 5.149149
+		height: 0.59002817
+	}
+	{
+		x: 230.91492
+		z: -4849.0903
+		radius: 31.113207
+		height: -2.2247074
+	}
+	{
+		x: 183.27858
+		z: -974.83997
+		radius: 49.09598
+		height: 5.051777
+	}
+	{
+		x: 19.006008
+		z: -7944.4116
+		radius: 5.785448
+		height: 0.6421214
+	}
+	{
+		x: 259.17804
+		z: -1556.8044
+		radius: 12.868951
+		height: 1.8264633
+	}
+	{
+		x: 91.39219
+		z: -3322.6658
+		radius: 40.399235
+		height: 3.5584018
+	}
+	{
+		x: 127.23847
+		z: -6568.6553
+		radius: 26.99286
+		height: -1.3312029
+	}
+	{
+		x: 285.3955
+		z: -642.6481
+		radius: 32.10672
+		height: -1.2683223
+	}
+	{
+		x: 23.061562
+		z: -3444.6265
+		radius: 13.10894
+		height: 1.7494584
+	}
+	{
+		x: 125.44633
+		z: -4140.933
+		radius: 43.89384
+		height: 5.456321
+	}
+	{
+		x: 259.43607
+		z: -7802.3564
+		radius: 2.3861418
+		height: -0.10978527
+	}
+	{
+		x: 103.30662
+		z: -1839.3423
+		radius: 41.437958
+		height: 0.36853075
+	}
+	{
+		x: 279.49527
+		z: -6490.442
+		radius: 21.342726
+		height: -1.4460423
+	}
+	{
+		x: 41.954292
+		z: -4252.897
+		radius: 22.47346
+		height: -0.9061082
+	}
+	{
+		x: 203.49602
+		z: -2027.1072
+		radius: 23.398432
+		height: -1.346178
+	}
+	{
+		x: 131.80013
+		z: -4879.5107
+		radius: 23.235575
+		height: -0.8573122
+	}
+	{
+		x: 295.39172
+		z: -7711.2334
+		radius: 6.977553
+		height: 0.7590012
+	}
+	{
+		x: 102.90951
+		z: -752.6738
+		radius: 49.052784
+		height: 0.42972636
+	}
+	{
+		x: 150.37068
+		z: -4687.0024
+		radius: 23.483225
+		height: 2.865345
+	}
+	{
+		x: 171.90059
+		z: -5338.367
+		radius: 38.65808
+		height: 1.5937202
+	}
+	{
+		x: 79.53203
+		z: -2243.403
+		radius: 40.96325
+		height: 0.77887654
+	}
+	{
+		x: 277.19083
+		z: -4057.4731
+		radius: 34.289425
+		height: 1.4220395
+	}
+	{
+		x: 42.8709
+		z: -629.85394
+		radius: 41.78774
+		height: 0.12635326
+	}
+	{
+		x: 191.26384
+		z: -4714.922
+		radius: 42.149673
+		height: 6.127033
+	}
+	{
+		x: 256.74484
+		z: -1669.1846
+		radius: 45.15897
+		height: -3.0922377
+	}
+	{
+		x: 173.62831
+		z: -1116.8237
+		radius: 30.296362
+		height: 2.2478867
+	}
+	{
+		x: 176.99336
+		z: -6449.234
+		radius: 7.7736063
+		height: 0.5838367
+	}
+	{
+		x: 103.14108
+		z: -6156.8413
+		radius: 23.531569
+		height: -0.71249115
+	}
+	{
+		x: 133.88228
+		z: -5374.3105
+		radius: 18.4578
+		height: -0.39457953
+	}
+	{
+		x: 203.36589
+		z: -653.0526
+		radius: 17.362232
+		height: -0.80499035
+	}
+	{
+		x: 70.04509
+		z: -7857.7656
+		radius: 15.095324
+		height: 2.013466
+	}
+	{
+		x: 249.64009
+		z: -6216.547
+		radius: 45.60121
+		height: -3.2384725
+	}
+	{
+		x: 107.59283
+		z: -936.9302
+		radius: 14.669116
+		height: -0.6378434
+	}
+	{
+		x: 221.5209
+		z: -4433.014
+		radius: 48.679413
+		height: 2.3581533
+	}
+	{
+		x: 245.56468
+		z: -91.66464
+		radius: 9.736565
+		height: 1.1809038
+	}
+	{
+		x: 39.283165
+		z: -2638.5706
+		radius: 2.2392628
+		height: 0.071549654
+	}
+	{
+		x: 163.89096
+		z: -5547.773
+		radius: 47.158787
+		height: 4.221197
+	}
+	{
+		x: 298.14056
+		z: -4571.0693
+		radius: 28.079914
+		height: -1.5827546
+	}
+	{
+		x: 185.04044
+		z: -7346.529
+		radius: 17.40428
+		height: -1.3077174
+	}
+	{
+		x: 288.86197
+		z: -6178.157
+		radius: 22.024399
+		height: 0.78145146
+	}
+	{
+		x: 19.523806
+		z: -461.56577
+		radius: 45.247192
+		height: 5.1216397
+	}
+	{
+		x: 168.45515
+		z: -2863.311
+		radius: 45.779114
+		height: 3.7891848
+	}
+	{
+		x: 96.42537
+		z: -5244.3804
+		radius: 35.180607
+		height: 2.5904934
+	}
+	{
+		x: 119.58929
+		z: -4451.1196
+		radius: 42.355938
+		height: 3.1198697
+	}
+	{
+		x: 155.13452
+		z: -2479.6995
+		radius: 37.365047
+		height: 0.43650126
+	}
+	{
+		x: 212.42838
+		z: -153.04663
+		radius: 47.127266
+		height: 1.551228
+	}
+	{
+		x: 49.44913
+		z: -6331.9575
+		radius: 12.43261
+		height: 0.16110349
+	}
+	{
+		x: 257.54764
+		z: -1814.9402
+		radius: 29.084284
+		height: 1.0842319
+	}
+	{
+		x: 290.22266
+		z: -4464.1426
+		radius: 35.96701
+		height: -0.22023535
+	}
+	{
+		x: 213.60422
+		z: -7727.5234
+		radius: 9.368835
+		height: -0.6805562
+	}
+	{
+		x: 227.72673
+		z: -610.25226
+		radius: 45.979805
+		height: 1.9734359
+	}
+	{
+		x: 288.43472
+		z: -3281.127
+		radius: 16.649136
+		height: 1.9743357
+	}
+	{
+		x: 249.90134
+		z: -4882.6113
+		radius: 49.203175
+		height: 2.643759
+	}
+	{
+		x: 247.25093
+		z: -4745.909
+		radius: 1.4096671
+		height: 0.19894156
+	}
+	{
+		x: 47.664207
+		z: -3095.3062
+		radius: 14.519533
+		height: 2.014541
+	}
+	{
+		x: 216.60585
+		z: -2458.8147
+		radius: 43.725586
+		height: 4.6471252
+	}
+	{
+		x: 73.4514
+		z: -2384.9812
+		radius: 44.348297
+		height: 6.6327534
+	}
+	{
+		x: 247.8019
+		z: -5698.5195
+		radius: 1.5919344
+		height: 0.0067645013
+	}
+	{
+		x: 194.16112
+		z: -4410.2476
+		radius: 27.310116
+		height: 3.7619553
+	}
+	{
+		x: 178.41307
+		z: -1529.6185
+		radius: 9.377966
+		height: 0.7109856
+	}
+	{
+		x: 114.67228
+		z: -7410.956
+		radius: 37.988876
+		height: -1.2398812
+	}
+	{
+		x: 205.59314
+		z: -1897.2964
+		radius: 48.47692
+		height: 1.8332942
+	}
+	{
+		x: 223.10999
+		z: -4408.5835
+		radius: 12.111826
+		height: 0.33646065
+	}
+	{
+		x: 259.8414
+		z: -3253.7397
+		radius: 24.72153
+		height: 1.4821255
+	}
+	{
+		x: 84.02981
+		z: -2828.9824
+		radius: 37.96805
+		height: -0.25945425
+	}
+	{
+		x: 242.89813
+		z: -4997.5376
+		radius: 49.635605
+		height: 0.38734508
+	}
+	{
+		x: 280.69244
+		z: -4828.7427
+		radius: 17.385704
+		height: -0.13531494
+	}
+	{
+		x: 268.44168
+		z: -3007.3174
+		radius: 35.09196
+		height: -1.242198
+	}
+	{
+		x: 182.60103
+		z: -1606.4171
+		radius: 12.088271
+		height: 1.2016788
+	}
+	{
+		x: 119.25889
+		z: -4550.8735
+		radius: 23.447067
+		height: 0.9766989
+	}
+	{
+		x: 189.47255
+		z: -4979.863
+		radius: 3.7501373
+		height: 0.3618052
+	}
+	{
+		x: 209.56058
+		z: -851.0314
+		radius: 37.722664
+		height: 2.8262289
+	}
+	{
+		x: 277.8157
+		z: -5510.9414
+		radius: 8.571844
+		height: 1.117103
+	}
+	{
+		x: 116.11453
+		z: -3589.4985
+		radius: 48.904697
+		height: 4.531929
+	}
+	{
+		x: 251.28664
+		z: -4458.836
+		radius: 49.695293
+		height: -1.9357891
+	}
+	{
+		x: 116.86719
+		z: -5629.9575
+		radius: 19.929892
+		height: -0.66353625
+	}
+	{
+		x: 270.99472
+		z: -4843.2295
+		radius: 3.2792277
+		height: 0.23400399
+	}
+	{
+		x: 150.72636
+		z: -241.6458
+		radius: 48.430225
+		height: -3.0448565
+	}
+	{
+		x: 16.930248
+		z: -898.59625
+		radius: 46.55533
+		height: 6.7985563
+	}
+	{
+		x: 287.1767
+		z: -3104.6707
+		radius: 42.805683
+		height: 3.3406262
+	}
+	{
+		x: 6.685547
+		z: -7200.8604
+		radius: 48.685177
+		height: 7.1874833
+	}
+	{
+		x: 269.3998
+		z: -7378.319
+		radius: 28.695553
+		height: 1.4126728
+	}
+	{
+		x: 272.642
+		z: -2747.6619
+		radius: 7.738463
+		height: 0.55904907
+	}
+	{
+		x: 269.5709
+		z: -4113.597
+		radius: 45.4186
+		height: 3.4622126
+	}
+	{
+		x: 73.79429
+		z: -3273.4893
+		radius: 49.612698
+		height: 2.300883
+	}
+	{
+		x: 270.0036
+		z: -2291.2688
+		radius: 4.4524145
+		height: 0.08353016
+	}
+	{
+		x: 293.3841
+		z: -5080.9263
+		radius: 17.214798
+		height: -0.79540694
+	}
+	{
+		x: 58.81547
+		z: -766.6202
+		radius: 44.522278
+		height: 5.119631
+	}
+	{
+		x: 48.514862
+		z: -1669.2593
+		radius: 40.72479
+		height: 5.6382027
+	}
+	{
+		x: 103.785255
+		z: -2402.2231
+		radius: 30.369827
+		height: 4.4513874
+	}
+	{
+		x: 112.91986
+		z: -4441.6997
+		radius: 42.262005
+		height: -1.8073934
+	}
+	{
+		x: 43.07431
+		z: -2669.9307
+		radius: 4.7718215
+		height: 0.17628393
+	}
+	{
+		x: 29.054935
+		z: -772.4693
+		radius: 40.77404
+		height: -0.6597514
+	}
+	{
+		x: 6.483963
+		z: -7003.364
+		radius: 15.879381
+		height: 1.9502139
+	}
+	{
+		x: 160.68825
+		z: -714.9988
+		radius: 35.468803
+		height: -2.760086
+	}
+	{
+		x: 155.92055
+		z: -5182.134
+		radius: 4.4479494
+		height: 0.38406608
+	}
+	{
+		x: 212.1587
+		z: -5632.4897
+		radius: 8.609989
+		height: -0.11936128
+	}
+	{
+		x: 208.7401
+		z: -1029.0558
+		radius: 48.028316
+		height: -1.7798419
+	}
+	{
+		x: 215.47495
+		z: -6032.0894
+		radius: 0.9962382
+		height: -0.011437967
+	}
+	{
+		x: 182.64459
+		z: -5701.5996
+		radius: 21.689022
+		height: 0.58840346
+	}
+	{
+		x: 161.4267
+		z: -5883.928
+		radius: 25.944345
+		height: 2.627191
+	}
+	{
+		x: 75.80156
+		z: -858.8271
+		radius: 47.34043
+		height: 4.5685463
+	}
+	{
+		x: 225.88058
+		z: -706.2751
+		radius: 0.096798904
+		height: -0.005317528
+	}
+	{
+		x: 170.85896
+		z: -7985.07
+		radius: 16.230827
+		height: 0.01911521
+	}
+	{
+		x: 17.432165
+		z: -6698.0474
+		radius: 31.873983
+		height: 2.7049685
+	}
+	{
+		x: 126.52717
+		z: -2151.595
+		radius: 31.68479
+		height: 1.0677423
+	}
+	{
+		x: 147.5858
+		z: -199.94156
+		radius: 20.891329
+		height: -1.1528573
+	}
+	{
+		x: 195.40002
+		z: -2497.5078
+		radius: 31.654215
+		height: 0.6935811
+	}
+	{
+		x: 199.63478
+		z: -4765.4263
+		radius: 34.16177
+		height: 0.47899604
+	}
+	{
+		x: 181.68674
+		z: -1711.1453
+		radius: 13.152255
+		height: 1.2455739
+	}
+	{
+		x: 147.41304
+		z: -5122.8447
+		radius: 37.403755
+		height: -2.1817145
+	}
+	{
+		x: 227.52661
+		z: -6793.2046
+		radius: 43.14052
+		height: 2.507372
+	}
+	{
+		x: 50.090763
+		z: -1309.883
+		radius: 22.275206
+		height: 1.0659286
+	}
+	{
+		x: 91.55823
+		z: -1382.8627
+		radius: 2.939818
+		height: 0.31392038
+	}
+	{
+		x: 124.18539
+		z: -6261.653
+		radius: 32.853638
+		height: 1.1074545
+	}
+	{
+		x: 258.41547
+		z: -1928.132
+		radius: 25.7348
+		height: 3.4249864
+	}
+	{
+		x: 68.96018
+		z: -133.6352
+		radius: 7.1828604
+		height: 0.015593648
+	}
+	{
+		x: 192.82156
+		z: -5981.706
+		radius: 49.242756
+		height: 0.69713473
+	}
+	{
+		x: 196.38214
+		z: -640.7381
+		radius: 12.206498
+		height: -0.14680338
+	}
+	{
+		x: 226.95367
+		z: -903.5444
+		radius: 18.11692
+		height: 1.7024444
+	}
+	{
+		x: 91.811
+		z: -2693.7185
+		radius: 12.908647
+		height: 0.04077506
+	}
+	{
+		x: 144.74948
+		z: -3251.4404
+		radius: 33.154594
+		height: -0.47524452
+	}
+	{
+		x: 206.59142
+		z: -6614.2163
+		radius: 28.982025
+		height: 3.8195062
+	}
+	{
+		x: 201.82784
+		z: -5140.835
+		radius: 6.880388
+		height: 0.5949273
+	}
+	{
+		x: 158.72002
+		z: -4209.652
+		radius: 44.843884
+		height: 1.572598
+	}
+	{
+		x: 194.69524
+		z: -1855.1119
+		radius: 47.574883
+		height: 6.431307
+	}
+	{
+		x: 192.75941
+		z: -1989.2386
+		radius: 1.3200215
+		height: 0.06018611
+	}
+	{
+		x: 67.91019
+		z: -4987.6367
+		radius: 6.319059
+		height: 0.06165117
+	}
+	{
+		x: 25.170755
+		z: -2802.3547
+		radius: 9.817185
+		height: 1.0498977
+	}
+	{
+		x: 222.87706
+		z: -3396.779
+		radius: 34.124775
+		height: -1.0299553
+	}
+	{
+		x: 176.2369
+		z: -5180.533
+		radius: 42.30421
+		height: 0.09760094
+	}
+	{
+		x: 66.9416
+		z: -4255.1777
+		radius: 8.721622
+		height: 1.1922584
+	}
+	{
+		x: 164.74808
+		z: -1664.3113
+		radius: 12.922155
+		height: 0.04359579
+	}
+	{
+		x: 16.45966
+		z: -474.49048
+		radius: 3.0704484
+		height: -0.0586828
+	}
+	{
+		x: 16.621996
+		z: -7396.1953
+		radius: 29.543829
+		height: -0.64402616
+	}
+	{
+		x: 242.51141
+		z: -786.8842
+		radius: 30.17391
+		height: 0.73431253
+	}
+	{
+		x: 213.62984
+		z: -260.98782
+		radius: 6.102906
+		height: 0.6972569
+	}
+	{
+		x: 22.932453
+		z: -4764.5127
+		radius: 11.254296
+		height: -0.30768466
+	}
+	{
+		x: 83.40058
+		z: -7854.7285
+		radius: 39.013065
+		height: 1.1828022
+	}
+	{
+		x: 139.33418
+		z: -7058.2334
+		radius: 26.869015
+		height: -0.81627095
+	}
+	{
+		x: 106.87526
+		z: -2563.498
+		radius: 13.497366
+		height: 0.11570716
+	}
+	{
+		x: 32.784805
+		z: -5136.81
+		radius: 23.03397
+		height: -0.14109719
+	}
+	{
+		x: 194.3829
+		z: -4033.3357
+		radius: 18.148256
+		height: 1.5498047
+	}
+	{
+		x: 106.82332
+		z: -2807.857
+		radius: 6.925226
+		height: 0.45340306
+	}
+	{
+		x: 156.51035
+		z: -6312.5195
+		radius: 8.538434
+		height: -0.6210766
+	}
+	{
+		x: 141.47801
+		z: -3801.7708
+		radius: 29.229206
+		height: 2.25148
+	}
+	{
+		x: 270.9375
+		z: -4947.46
+		radius: 23.202963
+		height: -1.2685885
+	}
+	{
+		x: 156.96152
+		z: -7699.897
+		radius: 12.711771
+		height: -0.4822182
+	}
+	{
+		x: 221.41005
+		z: -1313.4592
+		radius: 17.81291
+		height: 0.3561939
+	}
+	{
+		x: 240.71423
+		z: -6488.189
+		radius: 49.076485
+		height: 2.475855
+	}
+	{
+		x: 160.02168
+		z: -7461.5776
+		radius: 45.8608
+		height: 3.8579743
+	}
+	{
+		x: 126.468124
+		z: -6017.605
+		radius: 48.682373
+		height: 6.7384043
+	}
+	{
+		x: 218.97728
+		z: -4762.87
+		radius: 26.678265
+		height: -0.77141106
+	}
+	{
+		x: 289.00238
+		z: -2652.4902
+		radius: 40.191494
+		height: -0.075274706
+	}
+	{
+		x: 273.00928
+		z: -3631.2346
+		radius: 4.1061106
+		height: 0.53968114
+	}
+	{
+		x: 93.26341
+		z: -7388.2
+		radius: 29.716623
+		height: -0.91459036
+	}
+	{
+		x: 28.618977
+		z: -1606.1174
+		radius: 11.63721
+		height: 0.5742334
+	}
+	{
+		x: 11.520586
+		z: -3719.2114
+		radius: 41.53939
+		height: 4.250787
+	}
+	{
+		x: 191.31476
+		z: -7076.3423
+		radius: 22.352446
+		height: -0.27818418
+	}
+	{
+		x: 297.22968
+		z: -7538.97
+		radius: 24.969152
+		height: 1.5480392
+	}
+	{
+		x: 137.01884
+		z: -1926.2927
+		radius: 24.470085
+		height: 0.41644144
+	}
+	{
+		x: 279.27597
+		z: -7352.729
+		radius: 24.412914
+		height: -0.3907752
+	}
+	{
+		x: 188.81474
+		z: -6385.716
+		radius: 25.828856
+		height: 0.12874627
+	}
+	{
+		x: 115.26914
+		z: -5084.624
+		radius: 22.226645
+		height: 0.21026433
+	}
+	{
+		x: 175.20709
+		z: -3364.3826
+		radius: 3.1250544
+		height: -0.24154827
+	}
+	{
+		x: 17.560976
+		z: -3760.237
+		radius: 26.418262
+		height: -1.1659815
+	}
+	{
+		x: 121.065956
+		z: -1552.8662
+		radius: 24.223995
+		height: 2.94304
+	}
+	{
+		x: 140.65895
+		z: -6345.8984
+		radius: 37.772625
+		height: -1.8052976
+	}
+	{
+		x: 297.42703
+		z: -6570.6826
+		radius: 34.366116
+		height: 4.5817747
+	}
+	{
+		x: 193.70656
+		z: -4025.977
+		radius: 43.468822
+		height: -2.8927515
+	}
+	{
+		x: 31.320354
+		z: -7443.041
+		radius: 9.588036
+		height: 1.2437012
+	}
+	{
+		x: 16.702797
+		z: -6199.409
+		radius: 46.760098
+		height: 4.0520678
+	}
+	{
+		x: 151.7985
+		z: -7687.4644
+		radius: 43.17892
+		height: 1.2988136
+	}
+	{
+		x: 34.132526
+		z: -6476.715
+		radius: 4.786691
+		height: 0.13748407
+	}
+	{
+		x: 223.33696
+		z: -4291.5146
+		radius: 43.492397
+		height: 2.099211
+	}
+	{
+		x: 274.67957
+		z: -4958.7544
+		radius: 9.091955
+		height: 0.6661759
+	}
+	{
+		x: 92.77811
+		z: -3862.891
+		radius: 33.934418
+		height: 2.8332174
+	}
+	{
+		x: 20.694494
+		z: -1078.4707
+		radius: 5.912002
+		height: -0.28626567
+	}
+	{
+		x: 50.990643
+		z: -7233.1313
+		radius: 8.447292
+		height: 0.16381365
+	}
+	{
+		x: 226.08884
+		z: -1286.8705
+		radius: 15.809244
+		height: 1.1072812
+	}
+	{
+		x: 285.41663
+		z: -7796.185
+		radius: 8.310295
+		height: 0.5185463
+	}
+	{
+		x: 116.32782
+		z: -7864.496
+		radius: 24.7201
+		height: 2.3266208
+	}
+	{
+		x: 74.67778
+		z: -2863.0935
+		radius: 48.577076
+		height: 3.7950869
+	}
+	{
+		x: 159.1932
+		z: -5139.6323
+		radius: 30.987211
+		height: 1.7430348
+	}
+	{
+		x: 251.41295
+		z: -3314.0403
+		radius: 34.97024
+		height: -2.3771465
+	}
+	{
+		x: 269.9884
+		z: -1394.5034
+		radius: 45.44648
+		height: 1.9385047
+	}
+	{
+		x: 234.5187
+		z: -4829.0054
+		radius: 24.55341
+		height: 3.3877308
+	}
+	{
+		x: 189.85754
+		z: -2740.7087
+		radius: 4.1391826
+		height: 0.37881777
+	}
+	{
+		x: 206.96498
+		z: -5978.292
+		radius: 46.00102
+		height: 4.878234
+	}
+	{
+		x: 50.890358
+		z: -5245.145
+		radius: 15.719581
+		height: -1.2179903
+	}
+	{
+		x: 190.35724
+		z: -454.1614
+		radius: 7.7862487
+		height: 0.60840356
+	}
+	{
+		x: 116.68506
+		z: -5587.667
+		radius: 28.128231
+		height: 0.42509675
+	}
+	{
+		x: 142.41763
+		z: -724.83154
+		radius: 35.10734
+		height: 0.62131023
+	}
+	{
+		x: 262.04056
+		z: -531.73944
+		radius: 11.601366
+		height: 1.0514055
+	}
+	{
+		x: 178.55672
+		z: -392.09012
+		radius: 38.87263
+		height: 1.8363924
+	}
+	{
+		x: 130.4504
+		z: -3489.3235
+		radius: 17.586678
+		height: 1.4160928
+	}
+	{
+		x: 93.70737
+		z: -533.7711
+		radius: 32.56459
+		height: -1.4691507
+	}
+	{
+		x: 83.07003
+		z: -4461.253
+		radius: 35.635723
+		height: -0.6827266
+	}
+	{
+		x: 135.59337
+		z: -3312.3428
+		radius: 25.303272
+		height: -1.300859
+	}
+	{
+		x: 127.82935
+		z: -1634.3496
+		radius: 32.843407
+		height: 3.6233802
+	}
+	{
+		x: 255.60388
+		z: -6130.8613
+		radius: 31.929314
+		height: 2.054246
+	}
+	{
+		x: 92.36232
+		z: -2916.5254
+		radius: 22.904686
+		height: 2.9105337
+	}
+	{
+		x: 238.44623
+		z: -7617.5356
+		radius: 3.4269962
+		height: 0.21231312
+	}
+	{
+		x: 179.4257
+		z: -1691.124
+		radius: 24.358978
+		height: 1.1282293
+	}
+	{
+		x: 186.7485
+		z: -6720.1567
+		radius: 43.507534
+		height: 3.9057593
+	}
+	{
+		x: 218.4786
+		z: -5071.7505
+		radius: 30.092442
+		height: 3.5864096
+	}
+	{
+		x: 11.784016
+		z: -2191.6404
+		radius: 39.672955
+		height: -2.9011421
+	}
+	{
+		x: 202.09479
+		z: -2938.8376
+		radius: 22.668554
+		height: -1.3618501
+	}
+	{
+		x: 256.4895
+		z: -1747.9319
+		radius: 49.58091
+		height: -2.0284314
+	}
+	{
+		x: 270.87973
+		z: -39.20356
+		radius: 32.557194
+		height: -1.0859783
+	}
+	{
+		x: 51.9489
+		z: -4179.526
+		radius: 46.03067
+		height: -1.2662897
+	}
+	{
+		x: 185.56398
+		z: -3429.845
+		radius: 48.832657
+		height: -2.0575323
+	}
+	{
+		x: 83.51441
+		z: -7697.8467
+		radius: 36.390675
+		height: -1.6163685
+	}
+	{
+		x: 199.94516
+		z: -3547.22
+		radius: 4.410797
+		height: -0.3308174
+	}
+	{
+		x: 217.73717
+		z: -3797.7476
+		radius: 34.787895
+		height: 1.0051656
+	}
+	{
+		x: 223.35005
+		z: -5183.269
+		radius: 20.395714
+		height: 1.1854026
+	}
+	{
+		x: 116.27891
+		z: -5917.3643
+		radius: 27.879387
+		height: 3.5737906
+	}
+	{
+		x: 236.2888
+		z: -6649.4243
+		radius: 6.606219
+		height: 0.3306167
+	}
+	{
+		x: 137.97675
+		z: -4176.591
+		radius: 37.526268
+		height: 4.6908755
+	}
+	{
+		x: 197.97339
+		z: -3409.8555
+		radius: 27.852434
+		height: 3.9311652
+	}
+	{
+		x: 205.23294
+		z: -3475.4143
+		radius: 46.190514
+		height: -1.1209025
+	}
+	{
+		x: 159.3716
+		z: -6465.2075
+		radius: 8.032827
+		height: 0.4405874
+	}
+	{
+		x: 85.90152
+		z: -233.3608
+		radius: 13.374803
+		height: 0.1064446
+	}
+	{
+		x: 170.46915
+		z: -3768.0737
+		radius: 6.621989
+		height: 0.6712461
+	}
+	{
+		x: 116.84347
+		z: -3051.311
+		radius: 23.925812
+		height: 3.1159582
+	}
+	{
+		x: 245.41115
+		z: -2951.4578
+		radius: 14.6194725
+		height: 0.65030336
+	}
+	{
+		x: 270.3227
+		z: -4576.9224
+		radius: 21.521177
+		height: 0.6252817
+	}
+	{
+		x: 124.19523
+		z: -7651.4736
+		radius: 29.530006
+		height: 3.6609616
+	}
+	{
+		x: 39.4142
+		z: -5854.919
+		radius: 43.160526
+		height: -2.4083962
+	}
+	{
+		x: 144.58807
+		z: -5705.536
+		radius: 31.445385
+		height: -1.7742858
+	}
+	{
+		x: 193.59686
+		z: -4443.492
+		radius: 32.98083
+		height: 2.0176182
+	}
+	{
+		x: 112.93708
+		z: -1507.2863
+		radius: 44.798374
+		height: -1.7047826
+	}
+	{
+		x: 30.702143
+		z: -3578.068
+		radius: 26.216406
+		height: 1.7555099
+	}
+	{
+		x: 37.549343
+		z: -6799.508
+		radius: 32.858894
+		height: 1.0388682
+	}
+	{
+		x: 26.39106
+		z: -5663.6816
+		radius: 6.6238933
+		height: 0.08460122
+	}
+	{
+		x: 63.30948
+		z: -2186.2788
+		radius: 34.542866
+		height: 2.361793
+	}
+	{
+		x: 57.33105
+		z: -3377.2212
+		radius: 3.1925123
+		height: 0.016091138
+	}
+	{
+		x: 21.208462
+		z: -3645.6174
+		radius: 15.603953
+		height: -0.92018044
+	}
+	{
+		x: 249.24463
+		z: -7660.7827
+		radius: 4.459903
+		height: -0.074254155
+	}
+	{
+		x: 281.45514
+		z: -2323.8582
+		radius: 18.778576
+		height: 1.8601414
+	}
+	{
+		x: 176.00182
+		z: -1887.3881
+		radius: 31.253868
+		height: -0.57783055
+	}
+	{
+		x: 273.84247
+		z: -3893.022
+		radius: 9.954474
+		height: 1.4238245
+	}
+	{
+		x: 10.928013
+		z: -1480.3153
+		radius: 21.180351
+		height: -1.1545264
+	}
+	{
+		x: 114.04017
+		z: -3752.4236
+		radius: 29.93315
+		height: -1.1862596
+	}
+	{
+		x: 106.49956
+		z: -267.29382
+		radius: 40.677902
+		height: 3.2306387
+	}
+	{
+		x: 49.485874
+		z: -355.76532
+		radius: 23.856482
+		height: 1.342398
+	}
+	{
+		x: 53.598347
+		z: -2850.813
+		radius: 2.959039
+		height: -0.034371734
+	}
+	{
+		x: 13.546457
+		z: -6944.971
+		radius: 32.867855
+		height: 2.2152085
+	}
+	{
+		x: 146.49782
+		z: -275.7925
+		radius: 32.658707
+		height: 0.13716125
+	}
+	{
+		x: 151.6215
+		z: -7972.0083
+		radius: 45.07808
+		height: 1.0457761
+	}
+	{
+		x: 154.75201
+		z: -4275.8677
+		radius: 30.51024
+		height: 2.6818228
+	}
+	{
+		x: 257.8609
+		z: -489.94656
+		radius: 15.406442
+		height: 0.11323571
+	}
+	{
+		x: 278.15945
+		z: -1379.5349
+		radius: 3.869104
+		height: 0.15525657
+	}
+	{
+		x: 36.1681
+		z: -6794.5073
+		radius: 26.367208
+		height: 3.6724327
+	}
+	{
+		x: 235.97403
+		z: -2157.4172
+		radius: 41.40469
+		height: -0.90403056
+	}
+	{
+		x: 74.16146
+		z: -2597.349
+		radius: 24.371838
+		height: 2.2726393
+	}
+	{
+		x: 16.53445
+		z: -2891.8838
+		radius: 22.78055
+		height: 2.1822124
+	}
+	{
+		x: 193.7649
+		z: -3012.343
+		radius: 28.617271
+		height: -1.1471053
+	}
+	{
+		x: 188.4843
+		z: -6950.2905
+		radius: 16.64335
+		height: -1.1702319
+	}
+	{
+		x: 17.100256
+		z: -6636.085
+		radius: 22.130623
+		height: -1.2639737
+	}
+	{
+		x: 49.754646
+		z: -7143.0796
+		radius: 32.740818
+		height: -1.8466392
+	}
+	{
+		x: 61.353035
+		z: -4003.8977
+		radius: 47.040497
+		height: 5.653022
+	}
+	{
+		x: 65.48077
+		z: -347.9953
+		radius: 6.489052
+		height: 0.12311852
+	}
+	{
+		x: 251.28333
+		z: -2702.5706
+		radius: 38.645355
+		height: -2.0073307
+	}
+	{
+		x: 121.025314
+		z: -3681.6582
+		radius: 6.8095036
+		height: 0.53302807
+	}
+	{
+		x: 13.053903
+		z: -7421.086
+		radius: 45.349167
+		height: 0.103527546
+	}
+	{
+		x: 191.27939
+		z: -3499.76
+		radius: 20.555882
+		height: 1.5354104
+	}
+	{
+		x: 288.0474
+		z: -7220.5864
+		radius: 44.034683
+		height: -0.0409081
+	}
+	{
+		x: 202.41362
+		z: -2507.1143
+		radius: 29.351368
+		height: 2.6251194
+	}
+	{
+		x: 80.34423
+		z: -304.83002
+		radius: 22.944653
+		height: 1.7415322
+	}
+	{
+		x: 137.25108
+		z: -4258.825
+		radius: 7.1564183
+		height: -0.31941652
+	}
+	{
+		x: 26.533466
+		z: -572.3809
+		radius: 16.641275
+		height: -0.84000134
+	}
+	{
+		x: 10.433921
+		z: -333.81882
+		radius: 29.387457
+		height: -1.3773597
+	}
+	{
+		x: 51.528175
+		z: -4231.792
+		radius: 40.11423
+		height: 2.252708
+	}
+	{
+		x: 14.555474
+		z: -3461.9849
+		radius: 46.906784
+		height: 2.042854
+	}
+	{
+		x: 149.05736
+		z: -761.023
+		radius: 31.607565
+		height: 3.0455391
+	}
+	{
+		x: 13.429982
+		z: -3886.1858
+		radius: 40.70404
+		height: -0.5112219
+	}
+	{
+		x: 200.50629
+		z: -2492.349
+		radius: 26.23576
+		height: 3.2654161
+	}
+	{
+		x: 33.671497
+		z: -240.3763
+		radius: 35.589485
+		height: 0.05643463
+	}
+	{
+		x: 220.77701
+		z: -5104.0063
+		radius: 44.959316
+		height: -2.2399635
+	}
+	{
+		x: 180.75406
+		z: -2225.087
+		radius: 13.71941
+		height: 0.64613473
+	}
+	{
+		x: 94.84118
+		z: -1299.8243
+		radius: 45.99012
+		height: 1.706713
+	}
+	{
+		x: 280.72498
+		z: -361.52185
+		radius: 31.274084
+		height: 1.3707743
+	}
+	{
+		x: 43.656693
+		z: -3958.102
+		radius: 48.196976
+		height: 0.52416444
+	}
+	{
+		x: 223.74286
+		z: -4105.518
+		radius: 4.1084027
+		height: 0.58385754
+	}
+	{
+		x: 133.12035
+		z: -5030.9644
+		radius: 48.58151
+		height: 7.123007
+	}
+	{
+		x: 260.6129
+		z: -3602.6199
+		radius: 40.695683
+		height: 0.42517638
+	}
+	{
+		x: 214.72821
+		z: -6475.464
+		radius: 18.394878
+		height: -0.12003279
+	}
+	{
+		x: 278.49036
+		z: -365.5152
+		radius: 13.184822
+		height: 0.862942
+	}
+	{
+		x: 261.61563
+		z: -5497.667
+		radius: 24.965513
+		height: 2.0194097
+	}
+	{
+		x: 156.92491
+		z: -6155.086
+		radius: 19.891207
+		height: 0.7497598
+	}
+	{
+		x: 238.64877
+		z: -2390.9795
+		radius: 38.808224
+		height: 2.301131
+	}
+	{
+		x: 80.41746
+		z: -7346.3213
+		radius: 5.041622
+		height: -0.0771634
+	}
+	{
+		x: 220.23961
+		z: -5249.961
+		radius: 48.08502
+		height: 1.2065167
+	}
+	{
+		x: 58.66114
+		z: -6060.3438
+		radius: 14.093516
+		height: -0.70831555
+	}
+	{
+		x: 44.55599
+		z: -7840.876
+		radius: 14.98789
+		height: 1.6092206
+	}
+	{
+		x: 80.63864
+		z: -3343.8003
+		radius: 25.448917
+		height: 1.0885417
+	}
+	{
+		x: 267.799
+		z: -6910.235
+		radius: 21.113928
+		height: 2.5625734
+	}
+	{
+		x: 3.7474887
+		z: -7676.8657
+		radius: 11.883315
+		height: 0.20238084
+	}
+	{
+		x: 257.21942
+		z: -7212.5728
+		radius: 11.403051
+		height: 0.01291126
+	}
+	{
+		x: 154.1254
+		z: -2091.1062
+		radius: 47.50981
+		height: 0.12730885
+	}
+	{
+		x: 136.54475
+		z: -4538.7144
+		radius: 8.7086735
+		height: -0.5113901
+	}
+	{
+		x: 89.34736
+		z: -5178.4634
+		radius: 38.598885
+		height: -0.9214897
+	}
+	{
+		x: 172.48938
+		z: -3025.7832
+		radius: 33.571613
+		height: -2.5044472
+	}
+	{
+		x: 249.6665
+		z: -3272.5955
+		radius: 19.07403
+		height: -0.5487826
+	}
+	{
+		x: 266.01907
+		z: -5030.191
+		radius: 26.267565
+		height: -0.36710882
+	}
+	{
+		x: 198.97049
+		z: -5083.832
+		radius: 14.003629
+		height: 1.4860256
+	}
+	{
+		x: 187.04224
+		z: -1844.8717
+		radius: 30.698452
+		height: 2.1058495
+	}
+	{
+		x: 131.6253
+		z: -68.995995
+		radius: 36.909355
+		height: 0.62147117
+	}
+	{
+		x: 66.199394
+		z: -3542.001
+		radius: 12.197942
+		height: 0.48136783
+	}
+	{
+		x: 96.37855
+		z: -3817.3362
+		radius: 49.211414
+		height: 5.242316
+	}
+	{
+		x: 132.42294
+		z: -4222.454
+		radius: 43.82148
+		height: -1.0831485
+	}
+	{
+		x: 163.49371
+		z: -7733.822
+		radius: 22.630913
+		height: -1.2147107
+	}
+	{
+		x: 259.93918
+		z: -4953.254
+		radius: 8.191126
+		height: 0.07270825
+	}
+	{
+		x: 36.28771
+		z: -4301.0547
+		radius: 7.869751
+		height: 0.2498821
+	}
+	{
+		x: 263.38416
+		z: -2674.2534
+		radius: 24.465506
+		height: -0.39322054
+	}
+	{
+		x: 283.24323
+		z: -5201.0396
+		radius: 25.388224
+		height: 1.1611726
+	}
+	{
+		x: 154.70557
+		z: -7355.311
+		radius: 22.50521
+		height: 3.3425298
+	}
+	{
+		x: 241.868
+		z: -3578.0706
+		radius: 6.600769
+		height: -0.3496549
+	}
+	{
+		x: 250.52234
+		z: -7685.201
+		radius: 48.803925
+		height: 1.7073538
+	}
+	{
+		x: 20.472713
+		z: -1723.9828
+		radius: 26.310093
+		height: 3.6884966
+	}
+	{
+		x: 193.61389
+		z: -7573.5137
+		radius: 1.2556385
+		height: 0.11421027
+	}
+	{
+		x: 299.03955
+		z: -3467.012
+		radius: 29.700005
+		height: 0.91798544
+	}
+	{
+		x: 227.21086
+		z: -1746.7927
+		radius: 2.3282077
+		height: 0.24263698
+	}
+	{
+		x: 5.353121
+		z: -545.5217
+		radius: 19.70731
+		height: 1.5324968
+	}
+	{
+		x: 35.7592
+		z: -720.1619
+		radius: 32.71361
+		height: 0.6913967
+	}
+	{
+		x: 117.56577
+		z: -247.84258
+		radius: 33.09301
+		height: 2.9544485
+	}
+	{
+		x: 140.82971
+		z: -1425.6901
+		radius: 10.025209
+		height: 0.7650205
+	}
+	{
+		x: 19.369064
+		z: -7599.475
+		radius: 46.03317
+		height: 6.553091
+	}
+	{
+		x: 115.84443
+		z: -1778.7429
+		radius: 9.612296
+		height: -0.30499566
+	}
+	{
+		x: 208.94334
+		z: -5378.904
+		radius: 12.549758
+		height: -0.302719
+	}
+	{
+		x: 258.2923
+		z: -7463.575
+		radius: 37.06229
+		height: 3.4746697
+	}
+	{
+		x: 37.857285
+		z: -1243.2789
+		radius: 1.6017648
+		height: 0.20925994
+	}
+	{
+		x: 233.10564
+		z: -5219.41
+		radius: 24.460852
+		height: 2.2134528
+	}
+	{
+		x: 231.08916
+		z: -5245.2056
+		radius: 11.156891
+		height: 1.276058
+	}
+	{
+		x: 275.86917
+		z: -6908.2544
+		radius: 34.980247
+		height: 4.0573177
+	}
+	{
+		x: 214.34193
+		z: -3021.9016
+		radius: 0.06416054
+		height: -0.002053165
+	}
+	{
+		x: 119.53405
+		z: -6645.71
+		radius: 22.866272
+		height: -0.06303859
+	}
+	{
+		x: 149.82394
+		z: -7937.966
+		radius: 41.047745
+		height: -2.5892868
+	}
+	{
+		x: 183.3082
+		z: -7276.011
+		radius: 8.394058
+		height: -0.38737878
+	}
+	{
+		x: 256.66687
+		z: -5463.01
+		radius: 10.642312
+		height: 1.4736104
+	}
+	{
+		x: 37.394978
+		z: -2472.563
+		radius: 39.863033
+		height: -0.6180196
+	}
+	{
+		x: 267.15314
+		z: -5065.4033
+		radius: 44.390213
+		height: 4.6286144
+	}
+	{
+		x: 32.252274
+		z: -2745.2087
+		radius: 27.201439
+		height: 3.3799682
+	}
+	{
+		x: 144.92458
+		z: -903.3845
+		radius: 48.120834
+		height: -1.2633569
+	}
+	{
+		x: 56.04361
+		z: -3635.4902
+		radius: 44.250565
+		height: -3.1996045
+	}
+	{
+		x: 266.34412
+		z: -4594.779
+		radius: 18.632406
+		height: 2.0943587
+	}
+	{
+		x: 258.95334
+		z: -4381.1455
+		radius: 9.29921
+		height: -0.37021077
+	}
+	{
+		x: 241.1823
+		z: -3346.5874
+		radius: 39.596584
+		height: 4.9973507
+	}
+	{
+		x: 258.03766
+		z: -3331.093
+		radius: 15.938501
+		height: 1.3945247
+	}
+	{
+		x: 123.80085
+		z: -2725.6838
+		radius: 31.006136
+		height: 4.361599
+	}
+	{
+		x: 11.28353
+		z: -2392.1572
+		radius: 48.80749
+		height: -0.44217396
+	}
+	{
+		x: 41.004757
+		z: -3351.8767
+		radius: 42.986027
+		height: 6.057765
+	}
+	{
+		x: 224.547
+		z: -6788.7803
+		radius: 31.299803
+		height: 1.0417864
+	}
+	{
+		x: 37.735012
+		z: -2794.5842
+		radius: 47.288208
+		height: 5.9800653
+	}
+	{
+		x: 230.04323
+		z: -416.97195
+		radius: 14.801674
+		height: -0.4790026
+	}
+	{
+		x: 216.77385
+		z: -3954.373
+		radius: 42.29045
+		height: -0.77226186
+	}
+	{
+		x: 50.05991
+		z: -7073.7485
+		radius: 31.531637
+		height: -1.9089439
+	}
+	{
+		x: 123.63415
+		z: -5210.61
+		radius: 49.819515
+		height: 4.5541363
+	}
+	{
+		x: 234.56581
+		z: -5843.3115
+		radius: 45.552254
+		height: 0.41180658
+	}
+	{
+		x: 2.8052475
+		z: -5616.4756
+		radius: 44.61897
+		height: 4.7447767
+	}
+	{
+		x: 36.386585
+		z: -6921.2095
+		radius: 49.024097
+		height: -0.02534151
+	}
+	{
+		x: 26.526688
+		z: -4422.595
+		radius: 19.781967
+		height: -0.11626375
+	}
+	{
+		x: 262.6195
+		z: -4157.7456
+		radius: 13.2724285
+		height: -1.0272754
+	}
+	{
+		x: 272.26193
+		z: -210.52771
+		radius: 3.9693403
+		height: -0.09777129
+	}
+	{
+		x: 115.959145
+		z: -2601.868
+		radius: 16.736729
+		height: 2.388604
 	}
 ]
 width: 300

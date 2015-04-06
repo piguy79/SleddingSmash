@@ -78,5 +78,8 @@ public class BumpyTerrainModifier implements TerrainModifier {
             this.radius = radius;
             this.height = height;
         }
+
+        public Hill() {
+        }
     }
 }

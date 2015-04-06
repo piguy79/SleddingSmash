@@ -310,12 +310,12 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
         private void createPlane(float width, float length) {
-            this.level.width = width;
-            this.level.length = length;
+            level.width = width;
+            level.length = length;
 
             model = LevelBuilder.generate(width, length, resources);
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put(BumpyTerrainModifier.COUNT, 300);
+            params.put(BumpyTerrainModifier.HILLS, level.hills);
             new BumpyTerrainModifier().modify(model, params);
         }
 
