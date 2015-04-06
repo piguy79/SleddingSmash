@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -57,12 +58,15 @@ import com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.Interpolati
 import com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator;
 import com.railwaygames.sleddingsmash.levels.obstacles.StarObstacleGenerator;
 import com.railwaygames.sleddingsmash.levels.obstacles.TreeObstacleGenerator;
+import com.railwaygames.sleddingsmash.shaders.TerrainShaderProvider;
+import com.railwaygames.sleddingsmash.utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.railwaygames.sleddingsmash.levels.modifiers.BumpyTerrainModifier.Hill;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.EVAL_AXIS;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.EVAL_AXIS_INTERPOLATION_DURATION;
 import static com.railwaygames.sleddingsmash.levels.modifiers.SlopeModifier.EVAL_AXIS_START_RATIO;
@@ -78,16 +82,19 @@ import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.MODEL;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_X;
 import static com.railwaygames.sleddingsmash.levels.obstacles.ObstacleGenerator.START_Z;
+import static com.railwaygames.sleddingsmash.utils.MathUtils.MinMax;
 
 public class SleddingSmashEditor extends ApplicationAdapter {
 
     public Environment lights;
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
+    public ModelBatch terrainModelBatch;
     public Model model;
     public Map<String, Model> treeModelMap;
     public Model star;
     public Array<GameObject> instances;
+    public Array<GameObject> terrainModelInstances;
     public CameraInputController camController;
     GameObject sphere;
     GameObject plane;
@@ -105,16 +112,18 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Group rightMenus;
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
     private Level level = new Level();
+    private Color textColor = new Color(1.0f, 0.0f, 0.0f, 1);
 
     private String[] treeModels = new String[]{"tree_1"};
     private String[] starModels = new String[]{"star"};
 
-    private String[] homeMenu = new String[]{"Add", "Reset", "Camera", "Save"};
+    private String[] homeMenu = new String[]{"Add", "Reset", "Resize", "Camera", "Save"};
 
     @Override
     public void create() {
         Bullet.init();
         instances = new Array<GameObject>();
+        terrainModelInstances = new Array<GameObject>();
 
         lights = new Environment();
         lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
@@ -122,6 +131,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         constructors = new ArrayList<GameObject.Constructor>();
         modelBatch = new ModelBatch();
+        terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
 
         font = new BitmapFont(Gdx.files.internal("data/fonts/font10.fnt"));
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -138,7 +148,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         resources.skin = new UISkin();
         resources.skin.initialize(assetManager);
-        resources.skin.add("default", new Label.LabelStyle(font, Color.WHITE));
+        resources.skin.add("default", new Label.LabelStyle(font, textColor));
 
         TextureRegionDrawable trd = new TextureRegionDrawable(menusAtlas.findRegion("textFieldBg"));
         trd.setLeftWidth(20);
@@ -146,7 +156,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         TextureRegionDrawable cursor = new TextureRegionDrawable(menusAtlas.findRegion("cursor"));
         TextField.TextFieldStyle style = new TextField.TextFieldStyle(font, Color.BLACK, cursor, null, trd);
         resources.skin.add("default", style);
-        resources.skin.add("default", new SelectBox.SelectBoxStyle(font, Color.BLACK, trd, new ScrollPane.ScrollPaneStyle(), new com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle(font, Color.BLUE, Color.WHITE, cursor)));
+        resources.skin.add("default", new SelectBox.SelectBoxStyle(font, Color.BLACK, trd, new ScrollPane.ScrollPaneStyle(), new com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle(font, Color.BLUE, textColor, cursor)));
 
         treeModelMap = new HashMap<String, Model>();
 
@@ -159,6 +169,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("New", createNewRunnable());
         menuHandlerMap.put("Add", createAddRunnable());
         menuHandlerMap.put("Reset", createResetRunnable());
+        menuHandlerMap.put("Resize", createNewRunnable());
         menuHandlerMap.put("Camera", switchToCameraRunnable());
         menuHandlerMap.put("Save", saveLevelRunnable(null));
         menuHandlerMap.put("Load", loadLevelRunnable());
@@ -173,6 +184,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         float width = Gdx.graphics.getWidth();
 
         leftMenus = new Group();
+        leftMenus.setColor(Color.RED);
         leftMenus.setBounds(0.01f * width, 0, width * 0.45f, height);
         stage.addActor(leftMenus);
 
@@ -219,7 +231,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("ok", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.4f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
                     group.addActor(label);
@@ -242,7 +254,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("cancel", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.6f - bounds.width * 0.5f, height * 0.8f, bounds.width, bounds.height);
                     group.addActor(label);
@@ -281,7 +293,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 {
                     String labelText = existingFileName == null ? "save" : "overwrite";
                     Label label = new Label(labelText, resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -311,7 +323,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("cancel", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -353,7 +365,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         float y = height * 0.95f;
         for (final String menu : menus) {
             Label label = new Label(menu, resources.skin, "default");
-            label.setColor(Color.WHITE);
+            label.setColor(textColor);
 
             if (!right) {
                 Button upButton = new Button(resources.skin, Constants.UI.UP_BUTTON);
@@ -442,11 +454,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         }
     }
 
-    private void createPlane(float width, float length, int numberOfStars) {
-        this.level.width = width;
-        this.level.length = length;
-        this.level.numberOfStars = numberOfStars;
-
+    private void createPlane(Level level) {
         TextureLoader.TextureParameter tp = new TextureLoader.TextureParameter();
         tp.magFilter = Texture.TextureFilter.Linear;
         tp.minFilter = Texture.TextureFilter.Linear;
@@ -463,10 +471,22 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         resources.skin = skin;
         resources.assetManager = assetManager;
 
-        model = LevelBuilder.generate(width, length, resources);
+        model = LevelBuilder.generate(level.width, level.length, resources);
+
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(BumpyTerrainModifier.COUNT, 300);
+        params.put(BumpyTerrainModifier.HILLS, level.hills);
         new BumpyTerrainModifier().modify(model, params);
+    }
+
+    private void createPlane(float width, float length, int numberOfStars, int numberOfBumps) {
+        level.width = width;
+        level.length = length;
+        level.numberOfStars = numberOfStars;
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(BumpyTerrainModifier.COUNT, numberOfBumps);
+        level.hills = new BumpyTerrainModifier().generate(width, length, params);
+        createPlane(level);
     }
 
     private void finalizePlane() {
@@ -477,7 +497,17 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         plane.getBody().setWorldTransform(plane.transform);
 
-        instances.add(plane);
+        Mesh mesh = model.meshes.get(0);
+        int vertexSize = mesh.getVertexSize() / 4;
+        float[] vertices = new float[mesh.getNumVertices() * vertexSize];
+        mesh.getVertices(vertices);
+        Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
+        Map<String, Object> userData = new HashMap<String, Object>();
+        userData.put("u_worldMin", new Vector3(minMaxMap.get("x").min, minMaxMap.get("y").min, minMaxMap.get("z").min));
+        userData.put("u_worldMax", new Vector3(minMaxMap.get("x").max, minMaxMap.get("y").max, minMaxMap.get("z").max));
+        plane.userData = userData;
+
+        terrainModelInstances.add(plane);
         dynamicsWorld.addRigidBody(plane.getBody());
     }
 
@@ -521,6 +551,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         for (GameObject obj : instances) {
@@ -528,6 +559,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         }
 
         camController.update();
+
+        terrainModelBatch.begin(cam);
+        terrainModelBatch.render(terrainModelInstances, lights);
+        terrainModelBatch.end();
 
         modelBatch.begin(cam);
         modelBatch.render(instances, lights);
@@ -541,7 +576,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         dispose();
 
         createPhysicsWorld();
-        createPlane(level.width, level.length, level.numberOfStars);
+        createPlane(level);
     }
 
     @Override
@@ -549,6 +584,10 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         for (GameObject obj : instances)
             obj.dispose();
         instances.clear();
+
+        for (GameObject obj : terrainModelInstances)
+            obj.dispose();
+        terrainModelInstances.clear();
 
         for (GameObject.Constructor constructor : constructors)
             constructor.dispose();
@@ -667,7 +706,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private void showError(Group group, String message) {
         Label errorLabel = new Label(message, resources.skin, "default");
-        errorLabel.setColor(Color.WHITE);
+        errorLabel.setColor(textColor);
         float height = Gdx.graphics.getHeight();
         float width = Gdx.graphics.getWidth();
 
@@ -769,7 +808,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("save", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -789,7 +828,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("cancel", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -809,7 +848,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 if (obstacleToEdit != null) {
                     {
                         Label label = new Label("delete", resources.skin, "default");
-                        label.setColor(Color.WHITE);
+                        label.setColor(textColor);
                         BitmapFont.TextBounds bounds = label.getTextBounds();
                         label.setBounds(width * 0.5f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                         group.addActor(label);
@@ -893,7 +932,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("save", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -913,7 +952,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 {
                     Label label = new Label("cancel", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -921,6 +960,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     label.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
+                            if (modToEdit == null) {
+                                level.modifiers.remove(modifier);
+                            }
                             group.remove();
                             showMenus(true, homeMenu);
                             showLeftMenus();
@@ -933,7 +975,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 if (modToEdit != null) {
                     {
                         Label label = new Label("delete", resources.skin, "default");
-                        label.setColor(Color.WHITE);
+                        label.setColor(textColor);
                         BitmapFont.TextBounds bounds = label.getTextBounds();
                         label.setBounds(width * 0.5f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                         group.addActor(label);
@@ -976,7 +1018,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 float y = height * 0.9f;
                 {
                     Label label = new Label("Are you sure?", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.5f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -984,7 +1026,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 y -= height * 0.1f;
                 {
                     Label label = new Label("ok", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -1007,7 +1049,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 }
                 {
                     Label label = new Label("cancel", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -1052,18 +1094,31 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 float y = height * 0.9f;
                 final TextField widthTextField = createLabelWithTextField(group, "width", y, width);
+                if (level.width > 0.0f) {
+                    widthTextField.setText(Integer.toString((int) level.width));
+                }
 
                 y -= height * 0.1f;
                 final TextField lengthTextField = createLabelWithTextField(group, "length", y, width);
+                if (level.length > 0.0f) {
+                    lengthTextField.setText(Integer.toString((int) level.length));
+                }
 
                 y -= height * 0.1f;
                 final TextField numberOfStarsLabel = createLabelWithTextField(group, "stars", y, width);
+                numberOfStarsLabel.setText(Integer.toString((int) level.numberOfStars));
+
+
+                y -= height * 0.1f;
+                final TextField numberOfBumps = createLabelWithTextField(group, "bumps", y, width);
+                numberOfBumps.setText(Integer.toString((int) level.hills.size()));
+
 
                 y -= height * 0.1f;
 
                 {
                     Label label = new Label("ok", resources.skin, "default");
-                    label.setColor(Color.WHITE);
+                    label.setColor(textColor);
                     BitmapFont.TextBounds bounds = label.getTextBounds();
                     label.setBounds(width * 0.5f - bounds.width * 0.5f, y, bounds.width, bounds.height);
                     group.addActor(label);
@@ -1071,8 +1126,12 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                     label.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()), Integer.valueOf(numberOfStarsLabel.getText()));
-                            finalizePlane();
+                            dispose();
+                            createPlane(Integer.valueOf(widthTextField.getText()), Integer.valueOf(lengthTextField.getText()), Integer.valueOf(numberOfStarsLabel.getText()), Integer.valueOf(numberOfBumps.getText()));
+                            for (Obstacle o : level.obstacles) {
+                                o.generatedPositions = null;
+                            }
+                            applyModifiers(group);
                             group.remove();
                             showMenus(true, homeMenu);
                         }
@@ -1084,7 +1143,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private TextField createLabelWithTextField(Group group, String labelText, float y, float width) {
         Label label = new Label(labelText, resources.skin, "default");
-        label.setColor(Color.WHITE);
+        label.setColor(textColor);
         BitmapFont.TextBounds bounds = label.getTextBounds();
         label.setBounds(width * 0.48f - bounds.width, y, bounds.width, bounds.height);
         group.addActor(label);
@@ -1098,7 +1157,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
     private <T> SelectBox<T> createLabelWithSelectBox(Group group, String labelText, float y, float width, Array<T> items) {
         Label label = new Label(labelText, resources.skin, "default");
-        label.setColor(Color.WHITE);
+        label.setColor(textColor);
         BitmapFont.TextBounds bounds = label.getTextBounds();
         label.setBounds(width * 0.48f - bounds.width, y, bounds.width, bounds.height);
         group.addActor(label);
@@ -1122,8 +1181,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     public static class Level {
         public List<Modifier> modifiers = new ArrayList<Modifier>();
         public List<Obstacle> obstacles = new ArrayList<Obstacle>();
-        public float width;
-        public float length;
+        public List<Hill> hills = new ArrayList<Hill>();
+        public float width = 0.0f;
+        public float length = 0.0f;
         public int numberOfStars = 0;
     }
 
@@ -1175,6 +1235,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
             return type + " x(" + params.get(START_X) + ":" + params.get(END_X) + ")z(" + params.get(START_Z) + ", " + params.get(END_Z) + ")" + params.get(DENSITY);
         }
     }
+
 
     private abstract class MenuHandler {
         public String text;

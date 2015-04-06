@@ -20,8 +20,6 @@ import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -388,7 +386,7 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             Mesh mesh = model.meshes.get(0);
             int vertexSize = mesh.getVertexSize() / 4;
-            float[] vertices = new float[mesh.getNumVertices() * mesh.getVertexSize()];
+            float[] vertices = new float[mesh.getNumVertices() * vertexSize];
             mesh.getVertices(vertices);
 
             minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
