@@ -109,6 +109,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Resources resources;
     private Stage stage;
     private Group leftMenus;
+    private ScrollPane scrollPane;
     private Group rightMenus;
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
     private Level level = new Level();
@@ -184,9 +185,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         float width = Gdx.graphics.getWidth();
 
         leftMenus = new Group();
-        leftMenus.setColor(Color.RED);
-        leftMenus.setBounds(0.01f * width, 0, width * 0.45f, height);
-        stage.addActor(leftMenus);
+        leftMenus.setSize(width * 0.45f, 50);
+        scrollPane = new ScrollPane(leftMenus);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setOverscroll(false, true);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setBounds(0.01f * width, 0, width * 0.45f, height);
+        scrollPane.setColor(Color.RED);
+        stage.addActor(scrollPane);
 
         rightMenus = new Group();
         rightMenus.setBounds(0.75f * width, 0, width * 0.25f, height);
@@ -354,15 +360,18 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void showMenus(boolean right, String... menus) {
-        float height = Gdx.graphics.getHeight();
+        float space = Gdx.graphics.getHeight() * 0.04f;
+        float height = Math.max(Gdx.graphics.getHeight(), (menus.length + 1) * space);
 
         if (right) {
             rightMenus.clear();
         } else {
             leftMenus.clear();
+            leftMenus.setHeight(height);
+            scrollPane.layout();
         }
 
-        float y = height * 0.95f;
+        float y = height - space;
         for (final String menu : menus) {
             Label label = new Label(menu, resources.skin, "default");
             label.setColor(textColor);
@@ -403,7 +412,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 }
             });
 
-            y -= height * 0.04f;
+            y -= space;
             if (right) {
                 rightMenus.addActor(label);
             } else {
