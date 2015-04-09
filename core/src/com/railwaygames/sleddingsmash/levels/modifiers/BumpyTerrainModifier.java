@@ -21,10 +21,6 @@ public class BumpyTerrainModifier implements TerrainModifier {
      */
     public static final String HILLS = "hills";
 
-    /**
-     * (Optional) Specify the height of the hill
-     */
-    public static final String HEIGHT = "height";
 
     @Override
     public void modify(Model model, Map<String, Object> params) {
@@ -71,13 +67,15 @@ public class BumpyTerrainModifier implements TerrainModifier {
             float radius = MathUtils.randomInRange(0.0f, 50.0f);
             float height = MathUtils.randomInRange(-radius * 0.08f, radius * 0.15f);
 
-            hills.add(new Hill(x, z, radius, radius, height));
+            hills.add(new Hill(x, z, 0, 0, radius, radius, height));
         }
 
         return hills;
     }
 
     public static class Hill {
+        public float xRatio;
+        public float zRatio;
         public float x;
         public float z;
         public float xRadius;
@@ -85,15 +83,22 @@ public class BumpyTerrainModifier implements TerrainModifier {
         public float radius = -1.0f;
         public float height;
 
-        public Hill(float x, float z, float xRadius, float zRadius, float height) {
+        public Hill(float x, float z, float xRatio, float zRatio, float xRadius, float zRadius, float height) {
             this.x = x;
             this.z = z;
+            this.xRatio = xRatio;
+            this.zRatio = zRatio;
             this.xRadius = xRadius;
             this.zRadius = zRadius;
             this.height = height;
         }
 
         public Hill() {
+        }
+
+        @Override
+        public String toString() {
+            return "(" + xRatio + "," + zRatio + ") " + height;
         }
     }
 }

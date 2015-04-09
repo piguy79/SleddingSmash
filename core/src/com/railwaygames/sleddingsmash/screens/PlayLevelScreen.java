@@ -315,6 +315,9 @@ public class PlayLevelScreen implements ScreenFeedback {
 
             model = LevelBuilder.generate(width, length, resources);
             Map<String, Object> params = new HashMap<String, Object>();
+            params.put(BumpyTerrainModifier.HILLS, level.bumps);
+            new BumpyTerrainModifier().modify(model, params);
+
             params.put(BumpyTerrainModifier.HILLS, level.hills);
             new BumpyTerrainModifier().modify(model, params);
         }
@@ -523,13 +526,14 @@ public class PlayLevelScreen implements ScreenFeedback {
         }
 
 
-        public void rotateStars(){
-            for(GameObject obj : instances){
-                if(obj.isStar()){
-                    obj.transform.rotate(new Vector3(0,0,1), 12);
+        public void rotateStars() {
+            for (GameObject obj : instances) {
+                if (obj.isStar()) {
+                    obj.transform.rotate(new Vector3(0, 0, 1), 12);
                 }
             }
         }
+
         public Vector3 getSphereLocation() {
             return sphere.getLocationInWorld();
         }

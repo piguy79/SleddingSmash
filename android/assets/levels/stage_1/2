@@ -863,7 +863,7 @@ obstacles: [
 		type: TREE
 	}
 ]
-hills: [
+bumps: [
 	{
 		x: 264.02655
 		z: -1337.5073

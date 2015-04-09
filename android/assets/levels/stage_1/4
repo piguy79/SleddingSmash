@@ -1981,7 +1981,7 @@ obstacles: [
 		type: STAR
 	}
 ]
-hills: [
+bumps: [
 	{
 		x: 269.8556
 		z: -1281.6733

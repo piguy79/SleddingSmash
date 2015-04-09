@@ -113,7 +113,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private Group rightMenus;
     private Map<String, Runnable> menuHandlerMap = new HashMap<String, Runnable>();
     private Level level = new Level();
-    private Color textColor = new Color(1.0f, 0.0f, 0.0f, 1);
+    private Color textColor = Color.ORANGE;
 
     private String[] treeModels = new String[]{"tree_1"};
     private String[] starModels = new String[]{"star"};
@@ -134,7 +134,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         modelBatch = new ModelBatch();
         terrainModelBatch = new ModelBatch(new TerrainShaderProvider(Gdx.files.internal("data/shaders/terrain.vertex.glsl"), Gdx.files.internal("data/shaders/terrain.fragment.glsl")));
 
-        font = new BitmapFont(Gdx.files.internal("data/fonts/font10.fnt"));
+        font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         stage = new Stage();
@@ -176,6 +176,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         menuHandlerMap.put("Load", loadLevelRunnable());
         menuHandlerMap.put("Transform", createSlopeModifierRunnable(ModifierType.TRANSFORM, null));
         menuHandlerMap.put("Scale", createSlopeModifierRunnable(ModifierType.SCALE, null));
+        menuHandlerMap.put("Hill", createHillRunnable(null));
         menuHandlerMap.put("Trees", createObstaclesRunnable(ObstacleType.TREE, treeModels, null));
         menuHandlerMap.put("Star", createObstaclesRunnable(ObstacleType.STAR, starModels, null));
 
@@ -426,7 +427,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         int i = Integer.valueOf(split[1]);
         if (split[0].equals("OBSTACLE")) {
-            Obstacle obstacle = level.obstacles.get(i);
+            Obstacle o = level.obstacles.get(i);
             level.obstacles.remove(i);
             if (up) {
                 i--;
@@ -434,9 +435,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 i++;
             }
             i = Math.min(level.obstacles.size(), Math.max(i, 0));
-            level.obstacles.add(i, obstacle);
-        } else {
-            Modifier modifier = level.modifiers.get(i);
+            level.obstacles.add(i, o);
+        } else if (split[0].equals("MODIFIER")) {
+            Modifier o = level.modifiers.get(i);
             level.modifiers.remove(i);
             if (up) {
                 i--;
@@ -444,8 +445,19 @@ public class SleddingSmashEditor extends ApplicationAdapter {
                 i++;
             }
             i = Math.min(level.modifiers.size(), Math.max(i, 0));
-            level.modifiers.add(i, modifier);
+            level.modifiers.add(i, o);
+        } else if (split[0].equals("HILL")) {
+            Hill o = level.hills.get(i);
+            level.hills.remove(i);
+            if (up) {
+                i--;
+            } else {
+                i++;
+            }
+            i = Math.min(level.modifiers.size(), Math.max(i, 0));
+            level.hills.add(i, o);
         }
+
         applyModifiers(null);
         showMenus(true, homeMenu);
         showLeftMenus();
@@ -454,12 +466,16 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     private void edit(String menu) {
         String[] split = menu.split(":");
 
+        int pos = Integer.valueOf(split[1]);
         if (split[0].equals("OBSTACLE")) {
-            Obstacle obstacle = level.obstacles.get(Integer.valueOf(split[1]));
+            Obstacle obstacle = level.obstacles.get(pos);
             createObstaclesRunnable(obstacle.type, obstacle.availableModels, obstacle).run();
-        } else {
-            Modifier modifier = level.modifiers.get(Integer.valueOf(split[1]));
+        } else if (split[0].equals("MODIFIER")) {
+            Modifier modifier = level.modifiers.get(pos);
             createSlopeModifierRunnable(modifier.type, modifier).run();
+        } else {
+            Hill hill = level.hills.get(pos);
+            createHillRunnable(hill).run();
         }
     }
 
@@ -483,6 +499,9 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         model = LevelBuilder.generate(level.width, level.length, resources);
 
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put(BumpyTerrainModifier.HILLS, level.bumps);
+        new BumpyTerrainModifier().modify(model, params);
+
         params.put(BumpyTerrainModifier.HILLS, level.hills);
         new BumpyTerrainModifier().modify(model, params);
     }
@@ -493,7 +512,8 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(BumpyTerrainModifier.COUNT, numberOfBumps);
-        level.hills = new BumpyTerrainModifier().generate(width, length, params);
+
+        level.bumps = new BumpyTerrainModifier().generate(width, length, params);
         createPlane(level);
     }
 
@@ -505,11 +525,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         plane.getBody().setWorldTransform(plane.transform);
 
-        Mesh mesh = model.meshes.get(0);
-        int vertexSize = mesh.getVertexSize() / 4;
-        float[] vertices = new float[mesh.getNumVertices() * vertexSize];
-        mesh.getVertices(vertices);
-        Map<String, MinMax> minMaxMap = MathUtils.calculateAxisMinMax(vertices, vertexSize);
+        Map<String, MinMax> minMaxMap = getMinMaxMap(model);
         Map<String, Object> userData = new HashMap<String, Object>();
         userData.put("u_worldMin", new Vector3(minMaxMap.get("x").min, minMaxMap.get("y").min, minMaxMap.get("z").min));
         userData.put("u_worldMax", new Vector3(minMaxMap.get("x").max, minMaxMap.get("y").max, minMaxMap.get("z").max));
@@ -517,6 +533,14 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
         terrainModelInstances.add(plane);
         dynamicsWorld.addRigidBody(plane.getBody());
+    }
+
+    private Map<String, MinMax> getMinMaxMap(Model model) {
+        Mesh mesh = model.meshes.get(0);
+        int vertexSize = mesh.getVertexSize() / 4;
+        float[] vertices = new float[mesh.getNumVertices() * vertexSize];
+        mesh.getVertices(vertices);
+        return MathUtils.calculateAxisMinMax(vertices, vertexSize);
     }
 
     private void setupCamera() {
@@ -629,7 +653,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         return new Runnable() {
             @Override
             public void run() {
-                showMenus(true, "Transform", "Scale", "Trees", "Star");
+                showMenus(true, "Transform", "Scale", "Trees", "Star", "Hill");
                 showMenus(false);
             }
         };
@@ -876,6 +900,116 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         };
     }
 
+    private Runnable createHillRunnable(final Hill hill) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                float height = Gdx.graphics.getHeight();
+                float width = Gdx.graphics.getWidth();
+                final Group group = new Group();
+                group.setBounds(0, 0, width, height);
+                stage.addActor(group);
+
+                final Map<String, Object> params = new HashMap<String, Object>();
+                if (hill != null) {
+                    params.put("xRatio", hill.xRatio);
+                    params.put("zRatio", hill.zRatio);
+                    params.put("xRadius", hill.xRadius);
+                    params.put("zRadius", hill.zRadius);
+                    params.put("height", hill.height);
+                }
+
+                float y = height * 0.9f;
+                final TextField xTextField = createLabelWithTextField(group, "x (0 - 1)", y, width);
+                xTextField.setTextFieldListener(createTextListener(params, "xRatio", Float.class));
+                if (hill != null) {
+                    xTextField.setText(Float.toString(hill.xRatio));
+                }
+
+                y -= height * 0.07f;
+                final TextField zTextField = createLabelWithTextField(group, "z (0 - 1)", y, width);
+                zTextField.setTextFieldListener(createTextListener(params, "zRatio", Float.class));
+                if (hill != null) {
+                    zTextField.setText(Float.toString(hill.zRatio));
+                }
+
+                y -= height * 0.07f;
+                final TextField xRadiusTextField = createLabelWithTextField(group, "x radius", y, width);
+                xRadiusTextField.setTextFieldListener(createTextListener(params, "xRadius", Float.class));
+                if (hill != null) {
+                    xRadiusTextField.setText(Float.toString(hill.xRadius));
+                }
+
+                y -= height * 0.07f;
+                final TextField zRadiusTextField = createLabelWithTextField(group, "z radius", y, width);
+                zRadiusTextField.setTextFieldListener(createTextListener(params, "zRadius", Float.class));
+                if (hill != null) {
+                    zRadiusTextField.setText(Float.toString(hill.zRadius));
+                }
+
+                y -= height * 0.07f;
+                final TextField heightTextField = createLabelWithTextField(group, "height", y, width);
+                heightTextField.setTextFieldListener(createTextListener(params, "height", Float.class));
+                if (hill != null) {
+                    heightTextField.setText(Float.toString(hill.height));
+                }
+
+                y -= height * 0.07f;
+
+                {
+                    Label label = new Label("save", resources.skin, "default");
+                    label.setColor(textColor);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.4f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Map<String, MinMax> minMaxMap = getMinMaxMap(model);
+                            float xPos = (minMaxMap.get("x").max - minMaxMap.get("x").min) * (Float) params.get("xRatio");
+                            float zPos = (minMaxMap.get("z").max - minMaxMap.get("z").min) * (Float) params.get("zRatio");
+
+                            Hill newHill = new Hill(xPos, -zPos,
+                                    (Float) params.get("xRatio"), (Float) params.get("zRatio"),
+                                    (Float) params.get("xRadius"), (Float) params.get("zRadius"),
+                                    (Float) params.get("height"));
+                            if (hill != null) {
+                                int index = level.hills.indexOf(hill);
+                                level.hills.set(index, newHill);
+                            } else {
+                                level.hills.add(newHill);
+                            }
+
+                            if (applyModifiers(group)) {
+                                group.remove();
+                                showMenus(true, homeMenu);
+                                showLeftMenus();
+                            }
+                        }
+                    });
+                }
+
+                {
+                    Label label = new Label("cancel", resources.skin, "default");
+                    label.setColor(textColor);
+                    BitmapFont.TextBounds bounds = label.getTextBounds();
+                    label.setBounds(width * 0.6f - bounds.width * 0.5f, y, bounds.width, bounds.height);
+                    group.addActor(label);
+
+                    label.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            group.remove();
+                            showMenus(true, homeMenu);
+                            showLeftMenus();
+                        }
+                    });
+                }
+            }
+        };
+    }
+
     private Runnable createSlopeModifierRunnable(final ModifierType type, final Modifier modToEdit) {
         return new Runnable() {
             @Override
@@ -1075,18 +1209,20 @@ public class SleddingSmashEditor extends ApplicationAdapter {
     }
 
     private void showLeftMenus() {
-        String[] strings = new String[level.modifiers.size() + level.obstacles.size()];
+        List<String> strings = new ArrayList<String>();
         for (int i = 0; i < level.modifiers.size(); ++i) {
-            strings[i] = "MODIFIER:" + i + ": " + level.modifiers.get(i).toString();
+            strings.add("MODIFIER:" + i + ": " + level.modifiers.get(i).toString());
         }
 
         for (int i = 0; i < level.obstacles.size(); i++) {
-            int offset = level.modifiers.size() + i;
-            strings[offset] = "OBSTACLE:" + i + ":" + level.obstacles.get(i).toString();
+            strings.add("OBSTACLE:" + i + ":" + level.obstacles.get(i).toString());
         }
 
+        for (int i = 0; i < level.hills.size(); i++) {
+            strings.add("HILL:" + i + ":" + level.hills.get(i).toString());
+        }
 
-        showMenus(false, strings);
+        showMenus(false, strings.toArray(new String[strings.size()]));
     }
 
     private Runnable createNewRunnable() {
@@ -1113,7 +1249,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
 
                 y -= height * 0.1f;
                 final TextField numberOfBumps = createLabelWithTextField(group, "bumps", y, width);
-                numberOfBumps.setText(Integer.toString((int) level.hills.size()));
+                numberOfBumps.setText(Integer.toString((int) level.bumps.size()));
 
                 y -= height * 0.1f;
                 {
@@ -1182,6 +1318,7 @@ public class SleddingSmashEditor extends ApplicationAdapter {
         public List<Modifier> modifiers = new ArrayList<Modifier>();
         public List<Obstacle> obstacles = new ArrayList<Obstacle>();
         public List<Hill> hills = new ArrayList<Hill>();
+        public List<Hill> bumps = new ArrayList<Hill>();
         public float width = 0.0f;
         public float length = 0.0f;
     }
